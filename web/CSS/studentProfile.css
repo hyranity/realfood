@@ -6,6 +6,8 @@
 
 body{
     background-color: black;
+    color: white;
+    font-family: Montserrat, sans-serif;
 }
 
 
@@ -15,6 +17,11 @@ h1{
     font-family: Montserrat, sans-serif;
     text-align: center;
     margin: 50px;
+    margin-bottom: 10px;
+}
+
+h6{
+    
 }
 
 /* Credit css */
@@ -37,7 +44,6 @@ h1{
     margin-top: 100px;
 }
 .mainContainer{
-    background-color: gold;
     padding: 10px;
     border-radius: 20px;
     height: 500px;
@@ -48,8 +54,14 @@ h1{
 }
 
 .mainContainer p{
+    background-color: dimgray;
     font-family: Montserrat, sans-serif;
     font-weight: 800;
+    font-size: 15px;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
 }
 
 .form{
@@ -62,8 +74,26 @@ h1{
     margin: 10px;
 }
 
+/* Fields CSS */
+
+
+
+#name{
+    overflow: hidden;
+    display: inline-block;
+    width: 82px;
+    margin: 0;
+}
+
 .form div input{
-    background-color: black;
+    background-color: gold;
     border-width: 0;
     font-size: 15px;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    outline: none;
 }
