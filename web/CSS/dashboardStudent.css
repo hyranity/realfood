@@ -1,0 +1,64 @@
+body{
+    background-color: black;
+}
+
+h1{
+    display: inline-block;
+    color: white;
+    font-family: Montserrat, sans-serif;
+    text-align: center;
+    margin: 50px;
+}
+
+/* Credit css */
+.credits{
+    background-color: gold;
+    padding: 10px;
+    display: inline-block;
+    position: absolute;
+    color: black;
+    right: 0px;
+    top: 50%;
+    font-size: 20px;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+}
+
+/* Container css */
+.dashboardContainer{
+    text-align: center;
+    margin-top: 100px;
+}
+.buttonsContainer{
+}
+
+/* Button css*/
+.buttonDiv{
+    width: 250px;
+    display: inline-block;
+    margin: 30px;
+    background-color: gold;
+    font-size: 25px;
+    padding: 20px;
+    color: black;
+    font-weight: 500;
+    border-radius: 20px;
+    
+    transition: 0.2s;
+}
+
+.buttonDiv:hover{
+    background-color: darkgoldenrod;
+}
+
+/* Logout CSS */
+
+.logout{
+    color: white;
+    font-size: 20px;
+    display: inline-block;
+    margin-top: 100px;
+}
+
+
+

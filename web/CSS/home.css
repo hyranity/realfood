@@ -1,0 +1,53 @@
+body{
+    background-color: black;
+    font-family: arial, sans-serif;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+/* Titles CSS */
+h1{
+    color: white;
+    font-size: 75px;
+    margin-bottom: 25px;
+    font-family: montserrat, sans-serif;
+    font-weight: 200;
+    margin-top: 150px;
+}
+
+h2{
+    color: white;
+    font-family: montserrat, sans-serif;
+    font-weight: 200;
+    font-size: 22.5px;
+}
+
+/* Container css */
+.container{
+    min-height: 100%;
+}
+
+/* Tile Container */
+.tileContainer{
+    display: inline-block;
+    
+}
+
+/* Each tile's css' */
+.tile{
+    display: inline-block;
+    height: 100px;
+    width: 100px;
+    background-color: darkred;
+    color: white;
+    text-align: center;
+    line-height: 5;
+    font-size: 20px;
+}
+
+/* Images CSS */
+.bigImage{
+    width: 37%;
+}

@@ -1,0 +1,195 @@
+/*Styles that affect the entire page*/
+html, body{
+    margin:  0;
+    padding: 0;
+    height: 100%;
+    background-color: black;
+}
+
+
+
+p{
+    transition: 0.5s;
+}
+
+/*Container styles*/
+.loginContainer{
+    display:  flex;
+    flex-direction: row;
+    height:  100%;
+    text-align: center;
+    color:  white;
+    padding: 0;
+    margin: 0;
+    font-size:  22px;
+    transition: 1s;
+    width: 100%;
+    font-family: verdana, sans-serif;
+    background-color: black;
+    position: relative;
+    overflow: hidden;
+}
+
+.loginContainer:hover > div:hover{
+    width: 100%;
+}
+
+
+.loginContainer:hover > div:hover > p{
+    margin-top: -100px;
+    margin-bottom: 30px;
+    transition: 0.5s;
+}
+
+.loginContainer:hover > div:hover > .staffForm{
+    top: 250px;
+    opacity: 1;
+}
+
+.loginContainer:hover > div:hover > .studentForm{
+    top: 250px;
+    opacity: 1;
+}
+
+.loginContainer:hover > div:hover > .title{
+    top: 250px;
+    opacity: 1;
+}
+
+.loginContainer:hover > div:not(:hover){
+    width: 20%;
+    font-size: 20px;
+}
+
+/*Styles that affect both sections*/
+
+.title{
+    top: 50%;
+    width: 50%;
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    padding: 4px;
+    font-size: 40px;
+}
+
+.textBox{
+    text-align: center;
+    margin: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: white;
+    padding: 5px;
+    font-size: 20px;
+    font-family: trebuchet ms, sans-serif;
+    background-color: Transparent;
+    color: white;
+    margin-top: 10px;
+}
+
+.textBox::placeholder{
+    color: white;
+    opacity: 0.6;
+}
+
+.textBox:focus{
+    outline: none;
+    box-shadow: none;
+    transition: 0.4s;
+    background-color: rgba(255,255,255,0.5);
+    color: black;
+}
+
+button{
+    background-color: Transparent;
+    width: 70%;
+    outline: none;
+    color: white;
+    box-shadow: 0;
+    border: 0;
+    padding: 10px;
+    font-family: trebuchet ms, sans-serif;
+    font-size: 20px;
+    transition: 0.2s;
+    display: inline-block;
+    text-align:center;
+    margin-top: 20px;
+}
+
+button:hover{
+    color: salmon;
+    transition: 0.2s;
+}
+
+.signUpQuestion{
+    font-size: 16px;
+    color: white;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}
+
+/*Staff section styles*/
+
+.staff {
+    flex-grow: 0.5;
+    width: 50%;
+    transition: width 0.4s;
+    background-image: url("../Images/sebastien-marchand-232356-unsplash.jpg"); /* Photo by Sébastien Marchand on Unsplash */
+    background-attachment: fixed;
+    background-size: 1500px;
+    color: white;
+    font-size: 28px;
+    font-family: trebuchet ms, sans-serif;
+    min-height: 100%;
+   -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+   background-size: cover;
+}
+
+
+
+.staffForm {
+    display: inline-block;
+    position: relative;
+    opacity:  0;
+    transition: 0.5s;
+    top: 450px;
+    padding: 50px;
+    
+}
+
+/*Student section styles*/
+
+.student{
+    flex-grow: 0.5;
+    width: 50%;
+    transition: width 0.4s;
+    background-image: url("../Images/natalie-grainger-57861-unsplash.jpg"); /* Photo by Natalie Grainger on Unsplash */
+    background-attachment: fixed;
+    background-size: 2000px;
+    color: white;
+    font-size: 28px;
+    font-family: trebuchet ms, sans-serif;
+    min-height: 100%;
+    -webkit-background-size: cover;
+   -moz-background-size: cover;
+   -o-background-size: cover;
+   background-size: cover;
+}
+
+.studentForm {
+    display: inline-block;
+    position: relative;
+    opacity:  0;
+    transition: 0.5s;
+    top: 450px;
+    padding: 50px;
+}
+
+
+

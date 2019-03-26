@@ -1,0 +1,134 @@
+html, body{
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: montserrat, sans-serif;
+}
+
+/* Title styles */
+.title{
+    display: inline-block;
+    font-family: montserrat, sans-serif;
+    font-weight: 400;
+    color: white;
+    margin-right: 12px;
+}
+
+.dynamicTitle{
+    display: inline-block;
+    color: gold;
+    font-family: montserrat, sans-serif;
+    font-weight: 400;
+}
+
+.instruction{
+    color: white;
+    margin-top: -10px;
+    margin-bottom: 100px;
+}
+
+/* Calendar styles */
+
+.calendarContainer{
+    text-align: center;
+}
+
+.calendar{
+    display: inline-block;
+    text-align: left;
+    animation: intro 2s;
+}
+
+.day{
+    background-color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    color: white;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    line-height: 1.7;
+    margin: 5px;
+    text-align: center;
+    transition: 0.2s;
+}
+
+#weekday:hover{
+    background-color: darkgoldenrod;
+    transition: 0.2s;
+}
+
+.week{
+    color: white;
+    display: inline-block;
+    margin-left: 17px;
+    margin-right: 12.8px;
+}
+
+/* Setting styles */
+.setting{
+    color: white;
+    margin-top: 100px;
+    margin-bottom: 10px;
+}
+
+.setting a{
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    margin: 10px;
+    transition: 0.2s;
+}
+
+.setting a:hover{
+    transition: 0.2s;
+    color: gold;
+}
+
+/* Steps CSS */
+.stepsContainer{
+    background-color: black;
+    text-align: center;
+    
+}
+
+.stepsContainer h1{
+    display: inline-block;
+    position: relative;
+    color: gold;
+    font-size: 20px;
+    margin-bottom: 1px;
+}
+
+.steps{
+    background-color: gold;
+    display: flex;
+    text-align: center;
+    height: 50px;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+    border-width: 10px;
+    border-color: black;
+}
+
+.steps > div{
+    flex: 1;
+    line-height: 3;
+}
+
+.currentStep{
+    background-color: white;
+}
+
+
+
+/* Keyframe animations */
+
+@keyframes intro{
+    from {opacity: 0;}
+    to {opacity: 1;}
+}

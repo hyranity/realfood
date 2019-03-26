@@ -1,0 +1,110 @@
+html, body{
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: montserrat, sans-serif;
+}
+
+/* Form */
+
+.formContainer{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: gold;
+    
+    
+}
+
+.formInnerContainer{
+    height: 500px;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.formContainer input{
+    width: 90%;
+    display: block;
+    background-color: gold;
+    outline: none;
+    border-style: solid;
+    border-width: 0px;
+    border-color: white;
+    position: relative;
+    margin: auto;
+    padding: 10px;
+    border-radius: 10px;
+   font-family: montserrat, sans-serif;
+   font-weight: 800;
+   transition: 0.3s;
+   animation: introInput 0.75s;
+}
+
+.formContainer input:focus{
+    background-color: white;
+}
+
+form {
+    text-align: center;
+}
+
+.formContainer input::placeholder{
+    color: black;
+    
+}
+
+/* Form button */
+
+button{
+    background-color: black;
+    color: gold;
+    outline: none;
+    border-width: 0px;
+    margin: 10px;
+    padding: 5px;
+    font-family: montserrat, sans-serif;
+   font-weight: 400;
+   transition: 0.2s;
+   border-radius: 10px;
+   font-size: 15px;
+   animation: introText 0.75s;
+}
+
+button:hover{
+    font-size: 18px;
+    color: white;
+}
+
+/* Forgot password */
+.passwordForgot{
+    margin-top: 100px;
+    font-size: 14px;
+}
+
+.passwordForgot a{
+    text-decoration: none;
+    color: white;
+}
+
+.passwordForgot a:hover{
+    font-weight: bold;
+}
+
+/* Keyframe animations */
+
+@keyframes introInput{
+    from {width: 0;}
+    to {width: 90%;}
+}
+
+@keyframes introText{
+    from {opacity: 0;}
+    to {opacity: 90%;}
+}

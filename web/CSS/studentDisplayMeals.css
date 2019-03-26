@@ -1,0 +1,136 @@
+html, body{
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: montserrat, sans-serif;
+}
+
+/* Meals CSS */
+
+.mealsContainer{
+    color: white;
+    display: flex;
+    position: relative;
+    flex-wrap: wrap;
+}
+
+.meal{
+    margin: 25px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background-color: rgba(255,255,255,0.2);
+    width: 200px;
+    height: 330px;
+    padding: 10px;
+    border-radius: 20px;
+    position: relative;
+}
+
+
+
+.breakfast{
+    position: absolute;
+    background-color: darkorange;
+    padding: 5px;
+}
+
+.hi{
+    color: red;
+    background-color: darkgoldenrod;
+}
+
+.lunch{
+    position: absolute;
+    background-color: darkcyan;
+    padding: 5px;
+}
+
+.listItem{
+    display: flex;
+}
+
+.meal img{
+    margin-top: 10px;
+    height: 100px;
+}
+
+.meal h5{
+    margin-top: 10px;
+    padding: 0;
+    margin: 0;
+    color: gold;
+}
+
+.componentTitle{
+    position: absolute;
+    bottom: 70px;
+    width: 100%;
+    font-size: 10px;
+    text-align: center;
+    margin-bottom: 5px;
+    color: gold;
+    left: 0;
+}
+
+.description{
+    font-size: 15px;
+}
+
+.component{
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 50px;
+    font-size: 10px;
+    text-align: center;
+    margin: 0;
+}
+
+.price{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Steps CSS */
+.stepsContainer{
+    background-color: black;
+    text-align: center;
+    
+}
+
+.stepsContainer h1{
+    display: inline-block;
+    position: relative;
+    color: gold;
+    font-size: 20px;
+    margin-bottom: 1px;
+}
+
+.steps{
+    background-color: gold;
+    display: flex;
+    text-align: center;
+    height: 50px;
+    width: 100%;
+   
+}
+
+.steps > div{
+    flex: 1;
+    line-height: 3;
+    border-width: 1px;
+    border-style: solid;
+    
+}
+
+.currentStep{
+    background-color: white;
+}
