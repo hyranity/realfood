@@ -1,0 +1,69 @@
+*{
+    padding: 0;
+    margin: 0;
+    
+}
+
+body{
+    background-color: black;
+}
+
+
+h1{
+    display: inline-block;
+    color: white;
+    font-family: Montserrat, sans-serif;
+    text-align: center;
+    margin: 50px;
+}
+
+/* Credit css */
+.credits{
+    background-color: gold;
+    padding: 10px;
+    display: inline-block;
+    position: absolute;
+    color: black;
+    right: 0px;
+    top: 50%;
+    font-size: 20px;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+}
+
+/* Container css */
+.dashboardContainer{
+    text-align: center;
+    margin-top: 100px;
+}
+.mainContainer{
+    background-color: gold;
+    padding: 10px;
+    border-radius: 20px;
+    height: 500px;
+    display: inline-block;
+    width: 500px;
+    text-align: center;
+    
+}
+
+.mainContainer p{
+    font-family: Montserrat, sans-serif;
+    font-weight: 800;
+}
+
+.form{
+    margin: auto;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.form div{
+    margin: 10px;
+}
+
+.form div input{
+    background-color: black;
+    border-width: 0;
+    font-size: 15px;
+}
