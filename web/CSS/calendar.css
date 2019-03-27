@@ -56,8 +56,15 @@ html, body{
     transition: 0.2s;
 }
 
+
+input[type=checkbox]{
+    display: none;
+    margin: 0;
+}
+
 .weekday{
-    background-color: black;
+    color: white;
+     background-color: black;
     border-style: solid;
     border-width: 1px;
     border-color: black;
@@ -72,13 +79,14 @@ html, body{
     
 }
 
-.weekday[type=checkbox]{
-    display:none
-}
-
 .weekday:hover{
     background-color: darkgoldenrod;
     transition: 0.2s;
+}
+
+input:checked + label{
+    background-color: darkgoldenrod;
+    border-radius: 10px;
 }
 
 .week{

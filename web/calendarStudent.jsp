@@ -173,11 +173,11 @@ and open the template in the editor.
                 } else {  // If it's not today, no need to highlight
 
                     // Only the following days can be clicked.
-                    date[i] = cal.get(Calendar.DAY_OF_MONTH) + "-" + cal.get(Calendar.MONTH) + "/";
+                    String dateId = "id" + i;
 
                 %>
-                <div  class="weekday"  data-date="<%=date[i]%>"  data-dow="<%=cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH)%>" data-month="<%=cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)%>"  data-day="<%=cal.get(Calendar.DAY_OF_MONTH)%>" data-hasclicked="false" onclick="appendLink()" on><%=day%></div> 
-
+                <input  type="checkbox" id="<%=dateId%>" > 
+                <label for="<%=dateId%>" class="weekday" data-date="<%=date[i]%>"  data-dow="<%=cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH)%>" data-month="<%=cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)%>"  data-day="<%=cal.get(Calendar.DAY_OF_MONTH)%>" data-hasclicked="false" onclick="appendLink()" ><%=day%></label>
                 <%
                     }
 
