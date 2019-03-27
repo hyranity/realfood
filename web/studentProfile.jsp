@@ -45,7 +45,7 @@
                     </form>
                 </div>
         </div>
-        <div class="logout">logout</div>
+        <div class="back" href="studentDashboard.jsp">back</div>
         <h6 class="credits">1000 credits</h6>
     </div>
 </body>

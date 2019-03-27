@@ -56,7 +56,27 @@ html, body{
     transition: 0.2s;
 }
 
-#weekday:hover{
+.weekday{
+    background-color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    color: white;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    line-height: 1.7;
+    margin: 5px;
+    text-align: center;
+    transition: 0.2s;
+    
+}
+
+.weekday[type=checkbox]{
+    display:none
+}
+
+.weekday:hover{
     background-color: darkgoldenrod;
     transition: 0.2s;
 }

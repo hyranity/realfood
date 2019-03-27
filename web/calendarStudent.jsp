@@ -59,6 +59,7 @@ and open the template in the editor.
             int day = cal.get(Calendar.DAY_OF_MONTH); //used to increment from current day to 30 days later
             int pastDay = 0; //used to increment from the Sunday before until yesterday
             int nextDay = cal.get(Calendar.DAY_OF_MONTH), countDay = 1;
+            
             boolean isToday = true;
             int numOfPastDaysOfWeek = cal.get(Calendar.DAY_OF_WEEK) - adjustmentInt;
 
@@ -117,9 +118,8 @@ and open the template in the editor.
                     //displays extra daily "blocks"  to make sure that today's "block" is correct with the day of the week;
                     //these days are at the past, and are therefore being blocked from ordering meals on
                     for (int i = 0; i < numOfPastDaysOfWeek; i++) {
-                        
                 %>
-                <div class="day" style="color: darkslategray"><%=pastDay%></div>
+                <div class="day" style="color: darkslategray"><%=calDaysBefore.get(Calendar.DAY_OF_MONTH)%></div>
                 <%
                         calDaysBefore.add(Calendar.DATE, 1);
                         countDay++;
@@ -161,7 +161,6 @@ and open the template in the editor.
 
                     // Block the next day so that students cannot order on that day
 %>
-<a href="../../../../../AppData/Local/Temp/Rar$DRa1280.32696/Files for Practical 10a/Practical 10a.pdf"></a>
                 <div class="day" style="color: darkslategray"><%=day%></div>
                 <%
 
@@ -174,10 +173,10 @@ and open the template in the editor.
                 } else {  // If it's not today, no need to highlight
 
                     // Only the following days can be clicked.
-                    date[i] = cal.get(Calendar.DAY_OF_MONTH) + "-" + cal.get(Calendar.MONTH);
+                    date[i] = cal.get(Calendar.DAY_OF_MONTH) + "-" + cal.get(Calendar.MONTH) + "/";
 
                 %>
-                <div class="day" id="weekday" data-date="d"  onclick="appendLink()"><%=day%></div> 
+                <div  class="weekday"  data-date="<%=date[i]%>"  data-dow="<%=cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH)%>" data-month="<%=cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)%>"  data-day="<%=cal.get(Calendar.DAY_OF_MONTH)%>" data-hasclicked="false" onclick="appendLink()" on><%=day%></div> 
 
                 <%
                     }

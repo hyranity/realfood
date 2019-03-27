@@ -97,3 +97,17 @@ h6{
     text-align: center;
     outline: none;
 }
+
+/* Back CSS */
+.back{
+    color: white;
+    font-size: 20px;
+    display: inline-block;
+    margin-top: 100px;
+    transition: 0.2s;
+}
+
+.back:hover{
+    color: gold;
+    font-size: 23px;
+}
