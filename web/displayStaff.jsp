@@ -32,6 +32,7 @@
                 <h6>STU00001</h6>
                 <p>John</p>
                 <p>Cena</p>
+                <span class="badge badge-primary">Canteen Staff</span>
                 <br/>
                 <p class="status" style="color: green; font-weight: bold;">Enrolled</p>
                 <a href=""><div class="editButton">Edit</div></a>
