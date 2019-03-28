@@ -24,9 +24,11 @@
                 <div>4. Payment</div>
             </div>
         </div>
-        <ul class="mealsContainer">
-            <li class="listItem">
-                <div class="meal">
+        <form action="">
+        <div class="mealsContainer">
+            
+           <input type="checkbox" id="cbox1"/>
+            <label class="meal" for="cbox1">
                     <h6 class="breakfast">Breakfast</h6>
                     <h5>Onion Burger</h5>
                     <img src="Images/sebastien-marchand-232356-unsplash.jpg" alt=""/>
@@ -34,10 +36,10 @@
                     <p class="componentTitle">Consists of:</p>
                     <p class="component">Chicken slices, Lettuce, Tomatoes, Pickles, Cheese</p>
                     <p class="price">1200 credits</p>
-                </div>
-            </li>
-            <li class="listItem">
-                <div class="meal">
+            </label>
+            
+            <input type="checkbox" id="cbox2"/>
+            <label class="meal" for="cbox2">
                     <h6 class="lunch">Lunch</h6>
                     <h5>Spaghetti</h5>
                     <img src="Images/jorge-zapata-44723-unsplash.jpg" alt=""/>
@@ -45,9 +47,10 @@
                     <p class="componentTitle">Consists of:</p>
                     <p class="component">Chicken, Cheese powder, Onion, Salt, Vinegar</p>
                     <p class="price">500 credits</p>
-                </div>
-            </li>
-        </ul>
+            </label>
+            
+        </div>
+        </form>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="studentDisplayMeals.js" type="text/javascript"></script>

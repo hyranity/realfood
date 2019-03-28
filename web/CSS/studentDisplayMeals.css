@@ -29,6 +29,14 @@ html, body{
     position: relative;
 }
 
+input:checked + label{
+    background-color: darkgoldenrod;
+}
+
+input[type=checkbox]{
+    display: none;
+    margin: 0;
+}
 
 
 .breakfast{
@@ -134,3 +142,4 @@ html, body{
 .currentStep{
     background-color: white;
 }
+
