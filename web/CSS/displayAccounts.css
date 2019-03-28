@@ -9,9 +9,16 @@ h1{
     margin: 30px;
 }
 
+h4{
+    text-align: center;
+    font-size: 20px;
+    margin-top: -20px;
+}
+
 /* Container CSS */
 .bodyContainer{
     display: inline-block;
+    margin-top: 50px;
 }
 
 /* Individual record CSS */
@@ -58,6 +65,9 @@ h1{
     margin: 0px;
 }
 
+.record:hover .editButton{
+    opacity: 1;
+}
 
 .editButton{
     opacity: 0;

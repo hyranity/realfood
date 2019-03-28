@@ -1,0 +1,213 @@
+*{
+    padding: 0;
+    margin: 0;
+    
+}
+
+body{
+    background-color: black;
+    color: white;
+    font-family: Montserrat, sans-serif;
+    text-align: center;
+}
+
+
+h1{
+    display: inline-block;
+    color: white;
+    font-family: Montserrat, sans-serif;
+    text-align: center;
+    margin: 50px;
+    margin-bottom: 10px;
+}
+
+h6{
+    
+}
+
+/* Credit css */
+.credits{
+    background-color: gold;
+    padding: 10px;
+    display: inline-block;
+    position: absolute;
+    color: black;
+    right: 0px;
+    top: 50%;
+    font-size: 20px;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+}
+
+/* Container css */
+.outsideContainer{
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: -100px;
+}
+.mainContainer{
+    padding: 10px;
+    border-radius: 20px;
+    height: 500px;
+    display: inline-block;
+    width: 500px;
+    text-align: center;
+    
+}
+
+.mainContainer p{
+    background-color: dimgray;
+    font-family: Montserrat, sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.form{
+    margin: auto;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.form div{
+    margin: 10px;
+}
+
+/* Fields CSS */
+
+
+
+#name{
+    overflow: hidden;
+    display: inline-block;
+    width: 82px;
+    margin: 0;
+}
+
+.form div input{
+    background-color: gold;
+    border-width: 0;
+    font-size: 15px;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    outline: none;
+}
+
+/* Back CSS */
+.back{
+    color: white;
+    font-size: 20px;
+    display: inline-block;
+    transition: 0.2s;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.back:hover{
+    color: gold;
+    font-size: 23px;
+}
+
+/* Submit button CSS */
+.submitBtn{
+    background-color: black;
+    color: white;
+    border-width: 0;
+    box-shadow: 0;
+    font-family: Montserrat, sans-serif;
+    font-size: 15px;
+    margin: 20px;
+    transition: 0.2s;
+}
+
+.submitBtn:hover{
+    color: gold;
+    font-size: 17px;
+}
+
+/* Removal CSS */
+
+.removal{
+    color: red;
+    position: relative;
+    text-decoration: none;
+    background-color: black;
+    width: 130px;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.removal:hover{
+    font-size: 20px;
+}
+
+a{
+    text-decoration: none;
+}
+
+.removalConfirmation{
+    text-align: center;
+    display: none;
+    position: absolute;
+    width: 500px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: 40%;
+    background-color: gold;
+    padding: 12px;
+    border-radius: 10px;
+    color: black;
+    
+}
+
+.removalConfirmation h5{
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.removalConfirmation p{
+    margin-bottom: 10px;
+}
+
+.removalConfirm{
+    border-color: gold;
+    border-width: 1px;
+    border-style: solid;
+    padding: 4px;
+    border-radius: 10px;
+    display: inline-block;
+    color: red;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.removalConfirm:hover{
+    border-color: red;
+}
+
+.removalCancel{
+    border-color: gold;
+    border-width: 1px;
+    border-style: solid;
+    padding: 4px;
+    border-radius: 10px;
+    display: inline-block;
+    color: green;
+    font-weight: bold;
+    margin: 10px;
+    margin-bottom: 0;
+}
+
+.removalCancel:hover{
+    border-color: green;
+}

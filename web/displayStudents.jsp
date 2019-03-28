@@ -18,24 +18,48 @@
     </head>
     <body>
         <h1>Manage Students</h1>
+        <h4 id="subtitle">Here you can manage students. Edit students to view their details.</h4>
         <div class="bodyContainer">
             <div class="add">
                 +
             </div>
             <div class="record">
                 <h6>STU00001</h6>
-                <p>John Cena (M)</p>
-                <p>Joined: 6/3/2016</p>
+                <p>John</p>
+                <p>Cena</p>
+                <br/>
+                <p class="status" style="color: green; font-weight: bold;">Enrolled</p>
                 <div class="editButton">Edit</div>
             </div>
-            
+
             <div class="record">
                 <h6>STU00001</h6>
-                <p>John Cena (M)</p>
-                <p>Joined: 6/3/2016</p>
+                <p>Dwayne</p>
+                <p>Johnson</p>
+                <br/>
+                <p class="status" style="color: red; font-weight: bold;">Unenrolled</p>
                 <div class="editButton">Edit</div>
             </div>
-            
+
         </div>
-      
+    </body>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".editButton").hover(function () {
+                $("#subtitle").html("Edit student.");
+                $("#subtitle").css("color", "gold");
+            }, function () {
+                $("#subtitle").html("Here you can manage students. Edit students to view their details.");
+                $("#subtitle").css("color", "white");
+            });
+            $(".add").hover(function () {
+                $("#subtitle").html("Add new student.");
+                $("#subtitle").css("color", "gold");
+            }, function () {
+                $("#subtitle").html("Here you can manage students. Edit students to view their details.");
+                $("#subtitle").css("color", "white");
+            }); 
+        });
+    </script>
 </html>

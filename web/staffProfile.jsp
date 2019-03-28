@@ -18,20 +18,20 @@
 
                     <form action="#" class="form">
                         <div>
-                            <input type="text" value="STU00294" style="background-color: darkgray;"  id="studentid"/>
+                            <input type="text" value="EMP20949" style="background-color: darkgray;"  id="empId"/>
                         </div>
                         <div id="nameDiv">
                             <input type="text" id="name" style="background-color: darkgray;" value="Michael" readonly />
                             <input type="text" id="name" style="background-color: darkgray;" value="McArthur" readonly/>
                         </div>
                         <div>
-                            <input type="text" value="Male" style="background-color: darkgray;" id="gender" readonly />
+                            <input type="text" value="Male" style="background-color: darkgray;" id="gender"  readonly/>
                         </div>
                         <div>
                             <input type="text" value="Joined: 16 March, 2017" style="background-color: darkgray;" id="dateJoined" readonly />
                         </div>
                         <div>
-                            <input type="text" value="michaelm@student.com" style="background-color: darkgray;" id="email" readonly />
+                            <input type="text" value="bolt@staff.com" style="background-color: darkgray;" id="staffEmail" readonly />
                         </div>
                         <div>
                             <input type="text" value="00392-12-5567" style="background-color: darkgray;" id="myKAD" readonly />
@@ -45,8 +45,7 @@
                     </form>
                 </div>
         </div>
-        <div class="back" href="studentDashboard.jsp">back</div>
-        <h6 class="credits">1000 credits</h6>
+        <div class="back" href="dashboardStaff.jsp">back</div>
     </div>
 </body>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -54,7 +53,7 @@
 <!-- Some javascript. It will dynamically change the subtitle based on what the student hovers over. -->
 <script>
                                 $(document).ready(function () {
-                                    $("#studentid").hover(function(){
+                                    $("#empId").hover(function(){
                                         $("#subtitle").html("That's your student ID. It uniquely defines you.");
                                         $("#subtitle").css("color", "gold");
                                     }, function(){
@@ -82,8 +81,8 @@
                                         $("#subtitle").html("Here's your account details. You may only edit your password.");
                                         $("#subtitle").css("color", "white");
                                     });
-                                    $("#email").hover(function(){
-                                        $("#subtitle").html("That's your email given by the school.");
+                                    $("#staffEmail").hover(function(){
+                                        $("#subtitle").html("That's your email given by higher management.");
                                         $("#subtitle").css("color", "gold");
                                     }, function(){
                                         $("#subtitle").html("Here's your account details. You may only edit your password.");
