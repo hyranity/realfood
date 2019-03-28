@@ -1,0 +1,79 @@
+body{
+    background-color: black;
+    color: white;
+    font-family: Montserrat, sans-serif;
+}
+
+h1{
+    text-align: center;
+    margin: 30px;
+}
+
+/* Container CSS */
+.bodyContainer{
+    display: inline-block;
+}
+
+/* Individual record CSS */
+.add{
+    display: inline-block;
+    width: 200px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 13px;
+    padding: 20px;
+    margin: 10px;
+    line-height: 1.2;
+    font-size: 220px;
+    background-color: darkgoldenrod;
+    color: white;
+    text-align: center;
+    position: relative;
+    transition: 0.2s;
+}
+
+
+.record{
+    display: inline-block;
+    width: 200px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 13px;
+    padding: 20px;
+    margin: 10px;
+    background-color: gold;
+    color: black;
+    text-align: center;
+    position: relative;
+    transition: 0.2s;
+    animation: 0.2s;
+}
+
+.record h6{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.record p {
+    margin: 0px;
+}
+
+
+.editButton{
+    opacity: 0;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -50px;
+    background-color: black;
+    padding: 7px;
+    border-radius: 30px;
+    color: white;
+    text-align: center;
+    width: 100px;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.editButton:hover{
+    background-color: darkslategray;
+}
