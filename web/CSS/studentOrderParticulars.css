@@ -1,0 +1,41 @@
+body, html{
+    background-color: black;
+    font-family: Montserrat, sans-serif;
+}
+
+/* Steps CSS */
+.stepsContainer{
+    background-color: black;
+    text-align: center;
+    
+}
+
+.stepsContainer h1{
+    display: inline-block;
+    position: relative;
+    color: gold;
+    font-size: 20px;
+    margin-bottom: 1px;
+}
+
+.steps{
+    background-color: gold;
+    display: flex;
+    text-align: center;
+    height: 50px;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+    border-width: 10px;
+    border-color: black;
+}
+
+.steps > div{
+    flex: 1;
+    line-height: 3;
+}
+
+.currentStep{
+    background-color: white;
+}
+
