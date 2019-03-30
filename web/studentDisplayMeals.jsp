@@ -50,9 +50,97 @@
                     <p class="component">Chicken, Cheese powder, Onion, Salt, Vinegar</p>
                     <p class="price">500 credits</p>
                 </label>
+                
+                                <input type="checkbox" id="cbox1"/>
+                <label class="meal" for="cbox1">
+                    <h6 class="breakfast">Breakfast</h6>
+                    <h5>Onion Burger</h5>
+                    <img src="Images/sebastien-marchand-232356-unsplash.jpg" alt=""/>
+                    <p class="description">Super awesome food, sprinkled with cheese.</p>
+                    <p class="componentTitle">Consists of:</p>
+                    <p class="component">Chicken slices, Lettuce, Tomatoes, Pickles, Cheese</p>
+                    <p class="price">1200 credits</p>
+                </label>
+
+                <input type="checkbox" id="cbox2"/>
+                <label class="meal" for="cbox2">
+                    <h6 class="lunch">Lunch</h6>
+                    <h5>Spaghetti</h5>
+                    <img src="Images/jorge-zapata-44723-unsplash.jpg" alt=""/>
+                    <p class="description">With the power of the flour, this is perfection realized</p>
+                    <p class="componentTitle">Consists of:</p>
+                    <p class="component">Chicken, Cheese powder, Onion, Salt, Vinegar</p>
+                    <p class="price">500 credits</p>
+                </label>
+                
+                                <input type="checkbox" id="cbox1"/>
+                <label class="meal" for="cbox1">
+                    <h6 class="breakfast">Breakfast</h6>
+                    <h5>Onion Burger</h5>
+                    <img src="Images/sebastien-marchand-232356-unsplash.jpg" alt=""/>
+                    <p class="description">Super awesome food, sprinkled with cheese.</p>
+                    <p class="componentTitle">Consists of:</p>
+                    <p class="component">Chicken slices, Lettuce, Tomatoes, Pickles, Cheese</p>
+                    <p class="price">1200 credits</p>
+                </label>
+
+                <input type="checkbox" id="cbox2"/>
+                <label class="meal" for="cbox2">
+                    <h6 class="lunch">Lunch</h6>
+                    <h5>Spaghetti</h5>
+                    <img src="Images/jorge-zapata-44723-unsplash.jpg" alt=""/>
+                    <p class="description">With the power of the flour, this is perfection realized</p>
+                    <p class="componentTitle">Consists of:</p>
+                    <p class="component">Chicken, Cheese powder, Onion, Salt, Vinegar</p>
+                    <p class="price">500 credits</p>
+                </label>
+                
+                                <input type="checkbox" id="cbox1"/>
+                <label class="meal" for="cbox1">
+                    <h6 class="breakfast">Breakfast</h6>
+                    <h5>Onion Burger</h5>
+                    <img src="Images/sebastien-marchand-232356-unsplash.jpg" alt=""/>
+                    <p class="description">Super awesome food, sprinkled with cheese.</p>
+                    <p class="componentTitle">Consists of:</p>
+                    <p class="component">Chicken slices, Lettuce, Tomatoes, Pickles, Cheese</p>
+                    <p class="price">1200 credits</p>
+                </label>
+
+                <input type="checkbox" id="cbox2"/>
+                <label class="meal" for="cbox2">
+                    <h6 class="lunch">Lunch</h6>
+                    <h5>Spaghetti</h5>
+                    <img src="Images/jorge-zapata-44723-unsplash.jpg" alt=""/>
+                    <p class="description">With the power of the flour, this is perfection realized</p>
+                    <p class="componentTitle">Consists of:</p>
+                    <p class="component">Chicken, Cheese powder, Onion, Salt, Vinegar</p>
+                    <p class="price">500 credits</p>
+                </label>
+                
+                                <input type="checkbox" id="cbox1"/>
+                <label class="meal" for="cbox1">
+                    <h6 class="breakfast">Breakfast</h6>
+                    <h5>Onion Burger</h5>
+                    <img src="Images/sebastien-marchand-232356-unsplash.jpg" alt=""/>
+                    <p class="description">Super awesome food, sprinkled with cheese.</p>
+                    <p class="componentTitle">Consists of:</p>
+                    <p class="component">Chicken slices, Lettuce, Tomatoes, Pickles, Cheese</p>
+                    <p class="price">1200 credits</p>
+                </label>
+
+                <input type="checkbox" id="cbox2"/>
+                <label class="meal" for="cbox2">
+                    <h6 class="lunch">Lunch</h6>
+                    <h5>Spaghetti</h5>
+                    <img src="Images/jorge-zapata-44723-unsplash.jpg" alt=""/>
+                    <p class="description">With the power of the flour, this is perfection realized</p>
+                    <p class="componentTitle">Consists of:</p>
+                    <p class="component">Chicken, Cheese powder, Onion, Salt, Vinegar</p>
+                    <p class="price">500 credits</p>
+                </label>
 
             </div>
-            <div style="display: inline-block; width: 100%; text-align: center;">
+            <div style="display: inline-block; text-align: center; border-radius: 50px; position: absolute;left: 42%;">
             <button class="nextButton" href="" type="submit" >Next step</button>
             </div>
         </form>
