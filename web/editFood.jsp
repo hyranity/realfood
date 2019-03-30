@@ -11,33 +11,29 @@
     <body>
         <div class="outsideContainer">
 
-            <h1>Edit Canteen Staff</h1>
-            <h5 id="subtitle">Here's where you can view and edit staff's details.</h5>
+            <h1>Edit Food</h1>
+            <h5 id="subtitle">Here's where you can view and edit food details.</h5>
             <br/>
             <div class="mainContainer">
 
                 <form action="#" class="form">
-                    <a href="#" onclick="confirmRemoval()"> <div class="removal">Dismiss</div></a>
+                    <a href="#" onclick="confirmRemoval()"> <div class="removal">Discontinue</div></a>
                     <div>
-                        <input type="text" value="EMP002994" style="background-color: darkgray;"  id="staffid" readonly/>
-                    </div>
-                    <div id="nameDiv">
-                        <input type="text" id="name" value="Henry" />
-                        <input type="text" id="name" value="Luther"/>
+                        <input type="text" value="F000001" style="background-color: darkgray;"  id="foodid" readonly/>
                     </div>
                     <div>
-                        <input type="text" value="Male" id="gender"  />
+                        <input type="text" id="foodName" value="Chicken Wing" />
                     </div>
                     <div>
-                        <input type="text" value="Joined: 16 March, 2017" id="dateJoined"  style="background-color: darkgray;"  readonly/>
+                        <input type="text" value="200" id="calories" />
                     </div>
                     <div>
-                        <input type="text" value="henryluther@staff.com" id="email" />
+                        <input type="text" value="16 March, 2017" id="dateAdded"  style="background-color: darkgray;"  readonly/>
                     </div>
                     <div>
-                        <input type="text" value="3995-29-5344" id="myKAD" />
+                        <input type="text" value="not discontinued" id="dateDiscontinued"  style="background-color: darkgray; font-weight: 500;"  readonly/>
                     </div>
-
+                    
                     <br/>
                     <button type="submit" class="submitBtn">Submit changes</button>
                 </form>
@@ -46,8 +42,8 @@
         </div>
         <a href="displayStaff.jsp"><div class="back">back</div></a>
         <div class="removalConfirmation">
-            <h5>Dismiss staff?</h5>
-            <p>The staff will not be able to use the system anymore.</p>
+            <h5>Discontinue food?</h5>
+            <p>The food will be discontinued permanently.</p>
             <a href="#"><div class="removalConfirm">Yes</div></a>
             <a href="#"><div class="removalCancel">No</div></a>
         </div>
@@ -55,56 +51,50 @@
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <!-- Some javascript. It will dynamically change the subtitle based on what the staff hovers over. -->
+    <!-- Some javascript. It will dynamically change the subtitle based on what the user hovers over. -->
     <script>
                                 $(document).ready(function () {
-                                    $("#staffid").hover(function () {
-                                        $("#subtitle").html("That's the staff ID. It uniquely defines the staff. It can't be changed.");
+                                    $("#foodid").hover(function () {
+                                        $("#subtitle").html("That's the food ID. It uniquely defines the food. It can't be changed.");
                                         $("#subtitle").css("color", "gold");
                                     }, function () {
-                                        $("#subtitle").html("Here's where you can view and edit staff's details.");
+                                        $("#subtitle").html("Here's where you can view and edit food's details.");
                                         $("#subtitle").css("color", "white");
                                     });
-                                    $("#nameDiv").hover(function () {
-                                        $("#subtitle").html("That's the staff's name.");
+                                    $("#foodName").hover(function () {
+                                        $("#subtitle").html("That's the food's name.");
                                         $("#subtitle").css("color", "gold");
                                     }, function () {
-                                        $("#subtitle").html("Here's where you can view and edit staff's details.");
+                                        $("#subtitle").html("Here's where you can view and edit food's details.");
                                         $("#subtitle").css("color", "white");
                                     });
-                                    $("#gender").hover(function () {
-                                        $("#subtitle").html("That's the staff's gender.");
+                                    $("#calories").hover(function () {
+                                        $("#subtitle").html("That's the number of calories in the food.");
                                         $("#subtitle").css("color", "gold");
                                     }, function () {
-                                        $("#subtitle").html("Here's where you can view and edit staff's details.");
+                                        $("#subtitle").html("Here's where you can view and edit food's details.");
                                         $("#subtitle").css("color", "white");
                                     });
-                                    $("#dateJoined").hover(function () {
-                                        $("#subtitle").html("That's when the staff's first joined. No point in editing it.");
+                                    $("#dateAdded").hover(function () {
+                                        $("#subtitle").html("That's when the food was added. No point in editing it.");
                                         $("#subtitle").css("color", "gold");
                                     }, function () {
-                                        $("#subtitle").html("Here's where you can view and edit staff's details.");
+                                        $("#subtitle").html("Here's where you can view and edit food's details.");
                                         $("#subtitle").css("color", "white");
                                     });
-                                    $("#email").hover(function () {
-                                        $("#subtitle").html("That's the staff's email.");
+                                    $("#dateDiscontinued").hover(function () {
+                                        $("#subtitle").html("That's when the food was discontinued. If it's not discontinued, it will show 'not discontinued'. ");
                                         $("#subtitle").css("color", "gold");
                                     }, function () {
-                                        $("#subtitle").html("Here's where you can view and edit staff's details.");
+                                        $("#subtitle").html("Here's where you can view and edit food's details.");
                                         $("#subtitle").css("color", "white");
                                     });
-                                    $("#myKAD").hover(function () {
-                                        $("#subtitle").html("That's the staff's MyKAD number...you didn't mistype it, right?");
-                                        $("#subtitle").css("color", "gold");
-                                    }, function () {
-                                        $("#subtitle").html("Here's where you can view and edit staff's details.");
-                                        $("#subtitle").css("color", "white");
-                                    });
+                                    
                                     $(".removal").hover(function () {
-                                        $("#subtitle").html("Dismiss the staff");
+                                        $("#subtitle").html("Discontinue the food");
                                         $("#subtitle").css("color", "red");
                                     }, function () {
-                                        $("#subtitle").html("Here's where you can view and edit staff's details.");
+                                        $("#subtitle").html("Here's where you can view and edit food's details.");
                                         $("#subtitle").css("color", "white");
                                     });
 

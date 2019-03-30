@@ -1,0 +1,32 @@
+.stepsContainer{
+    margin-bottom: -100px;
+}
+
+/* Input design */
+input::placeholder{
+    color: black;
+    font-weight: 400;
+}
+
+input:checked + label div{
+    text-decoration: line-through;
+    color: gold;
+}
+
+input[type=checkbox]{
+    display: none;
+    margin: 0;
+}
+
+.mealTime{
+    border-style: solid;
+    border-color: gold;
+    border-radius: 10px;
+    border-width: 1px;
+}
+
+.mealTime p{
+    background-color: black;
+    font-size: 12px;
+}
+

@@ -1,3 +1,45 @@
+/* Steps CSS */
+.stepsContainer{
+    margin-bottom: 20px;
+    background-color: black;
+    text-align: center;
+    color: black;
+}
+
+.stepsContainer h1{
+    display: inline-block;
+    position: relative;
+    color: gold;
+    font-size: 23px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.steps{
+    background-color: gold;
+    display: flex;
+    text-align: center;
+    height: 50px;
+    width: 100%;
+   
+}
+
+.steps > div{
+    flex: 1;
+    line-height: 3;
+    border-width: 1px;
+    border-style: solid;
+    
+}
+
+.currentStep{
+    background-color: white;
+}
+
+
+
+/* Next Button */
+
 .nextButton{
     text-align: center;
     background-color: #ffffff;
@@ -50,3 +92,40 @@
     padding-right: 25px;
 }
 
+.nextButtonDiv{
+    width: 100px;
+    display: inline-block; 
+    text-align: center; 
+    border-radius: 50px; 
+    position: absolute;
+    right: 50%;
+}
+
+/* Search bar */
+
+.searchBar{
+    font-family: Montserrat, sans-serif;
+    margin-top: 50px;
+    background-color: black;
+    color: white;
+    box-shadow: none;
+    width: 200px;
+    text-align: center;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    transition: 0.4s;
+    font-size: 20px;
+}
+
+.searchBar:focus{
+    outline: 0;
+    width: 400px;
+    border-color: gold;
+    color: gold;
+}
+
+.searchBar:hover{
+    width: 400px;
+    
+}

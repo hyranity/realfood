@@ -1,0 +1,28 @@
+.body{
+    text-align: center;
+}
+input:checked + label .record{
+    background-color: darkgoldenrod;
+    color: white;
+}
+
+input[type=checkbox]{
+    display: none;
+    margin: 0;
+}
+
+.name{
+    display: inline-box;
+    font-size: 17px;
+    border-color: black;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.calories{
+    display: inline-box;
+    
+    font-size: 15px;
+}

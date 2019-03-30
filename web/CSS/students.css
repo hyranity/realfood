@@ -3,11 +3,16 @@
     background-color: gold;
     padding: 10px;
     display: inline-block;
-    position: absolute;
+    margin: 0;
+    position: fixed;
     color: black;
-    right: 0px;
-    top: 50%;
+    right: 0;
+    bottom: 50%;
     font-size: 20px;
     font-family: Montserrat, sans-serif;
     font-weight: bold;
+    transition: 0.5s;
+    width: 121px;
+        
 }
+
