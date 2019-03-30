@@ -1,0 +1,13 @@
+/* Credit css */
+.credits{
+    background-color: gold;
+    padding: 10px;
+    display: inline-block;
+    position: absolute;
+    color: black;
+    right: 0px;
+    top: 50%;
+    font-size: 20px;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+}

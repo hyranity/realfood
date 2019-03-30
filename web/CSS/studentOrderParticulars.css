@@ -1,6 +1,88 @@
 body, html{
     background-color: black;
     font-family: Montserrat, sans-serif;
+    margin: 0;
+    text-align: center;
+}
+
+/* Title CSS */
+h1{
+    display: inline-block;
+    color: white;
+    font-family: Montserrat, sans-serif;
+    text-align: center;
+    margin: 50px;
+}
+
+h5{
+    color: white;
+    margin-top: -30px;
+    font-size: 20px;
+}
+
+/* Meal part */
+.mainContainer{
+    overflow: hidden;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.meal{
+    text-align: left;
+    display: inline-block;
+    background-color: gold;
+    padding: 10px;
+    width:  40%;
+    border-radius: 20px;
+    margin: 10px;
+    position: relative;
+}
+
+.meal p{
+    display: inline-block;
+}
+
+.frontPart{
+    margin: 10px;
+    display: inline-block;  
+}
+
+.price{
+    display: inline-block;
+    float: left;
+    text-align: center;
+    margin-right: 30px;
+}
+
+.quantityEditor{
+    float: right;
+    margin: 10px;
+}
+
+.symbol{
+    margin-left: 15px;
+    margin-right: 15px;
+    transition: 0.2s;
+}
+
+.symbol:hover{
+    color: white;
+    
+}
+
+.total{
+    background-color: white;
+    border-radius: 10px;
+    width: 30%;
+    display: inline-block;
+    padding: 7px;
+    margin: 20px;
+}
+
+.name{
+    font-weight: bold;
 }
 
 /* Steps CSS */

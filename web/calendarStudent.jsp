@@ -14,6 +14,7 @@ and open the template in the editor.
     <head>
         <title>TODO supply a title</title>
         <link href="CSS/calendar.css" rel="stylesheet">
+        <link href="CSS/student.css" rel="stylesheet">
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
 

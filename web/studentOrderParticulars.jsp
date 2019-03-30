@@ -3,11 +3,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
+
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link href="CSS/studentOrderParticulars.css" rel="stylesheet">
-        
+        <link href="CSS/students.css" rel="stylesheet">
         <title>Edit Particulars</title>
     </head>
     <body>
@@ -21,9 +21,41 @@
             </div>
         </div>
 
-        <div class="mainContainer">
-            
-        </div>
+        <h1>Edit particulars</h1>
+        <h5 id="subtitle">Modify the quantity of your meals.</h5>
         
+        <div class="mainContainer">
+            <div class="meal">
+                <div class="frontPart">
+                    <p class="name">Spaghetti Bolognese</p>
+                    
+                </div>
+                <div class="quantityEditor">
+                    <p class="price" data-price="1500">1500 Credits</p>
+                    <p class="symbol" id="sub">-</p>
+                    <p class="quantity" data-quantity="5">x2</p>
+                    <p class="symbol" id="add">+</p>
+                </div>
+            </div>
+            <br/>
+            <div class="meal">
+                <div class="frontPart">
+                    <p class="name">Peppermint Ice Cream</p>
+                </div>
+                <div class="quantityEditor">
+                    <p class="price" data-price="500">500 Credits</p>
+                    <p class="symbol" id="sub">-</p>
+                    <p class="quantity" data-quantity="5">x2</p>
+                    <p class="symbol" id="add">+</p>
+                </div>
+            </div>
+            <br/>
+            <div class="total">
+                <p>Total: 4000 Credits</p>
+            </div>
+            <h6 class="credits">1000 credits</h6>
+        </div>
+
     </body>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </html>

@@ -7,12 +7,13 @@
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link href="CSS/profile.css" rel="stylesheet">
+        <link href="CSS/students.css" rel="stylesheet">
     </head>
     <body>
         <div class="outsideContainer">
 
             <h1>My Account</h1>
-            <h5 id="subtitle">Here's your account details. You may only edit your password. Hover over a field to get more info.</h5>
+            <h5 id="subtitle">Here's your account details.</h5>
                 <br/>
                 <div class="mainContainer">
 
@@ -31,7 +32,7 @@
                             <input type="text" value="Joined: 16 March, 2017" style="background-color: darkgray;" id="dateJoined" readonly />
                         </div>
                         <div>
-                            <input type="text" value="michaelm@student.com" style="background-color: darkgray;" id="email" readonly />
+                            <input type="text" value="michaelm@student.com" id="email" />
                         </div>
                         <div>
                             <input type="text" value="00392-12-5567" style="background-color: darkgray;" id="myKAD" readonly />
@@ -58,56 +59,56 @@
                                         $("#subtitle").html("That's your student ID. It uniquely defines you.");
                                         $("#subtitle").css("color", "gold");
                                     }, function(){
-                                        $("#subtitle").html("Here's your account details. You may only edit your password.");
+                                        $("#subtitle").html("Here's your account details. ");
                                         $("#subtitle").css("color", "white");
                                     });
                                     $("#nameDiv").hover(function(){
                                         $("#subtitle").html("That's your name. It's you...right?");
                                         $("#subtitle").css("color", "gold");
                                     }, function(){
-                                        $("#subtitle").html("Here's your account details. You may only edit your password.");
+                                        $("#subtitle").html("Here's your account details. ");
                                         $("#subtitle").css("color", "white");
                                     });
                                     $("#gender").hover(function(){
                                         $("#subtitle").html("That's your gender. Don't go changing genders now.");
                                         $("#subtitle").css("color", "gold");
                                     }, function(){
-                                        $("#subtitle").html("Here's your account details. You may only edit your password.");
+                                        $("#subtitle").html("Here's your account details. ");
                                         $("#subtitle").css("color", "white");
                                     });
                                     $("#dateJoined").hover(function(){
                                         $("#subtitle").html("That's when you first joined. Having fun so far?");
                                         $("#subtitle").css("color", "gold");
                                     }, function(){
-                                        $("#subtitle").html("Here's your account details. You may only edit your password.");
+                                        $("#subtitle").html("Here's your account details. ");
                                         $("#subtitle").css("color", "white");
                                     });
                                     $("#email").hover(function(){
                                         $("#subtitle").html("That's your email given by the school.");
                                         $("#subtitle").css("color", "gold");
                                     }, function(){
-                                        $("#subtitle").html("Here's your account details. You may only edit your password.");
+                                        $("#subtitle").html("Here's your account details. ");
                                         $("#subtitle").css("color", "white");
                                     });
                                     $("#myKAD").hover(function(){
                                         $("#subtitle").html("That's your myKAD number. Don't show it to others.");
                                         $("#subtitle").css("color", "gold");
                                     }, function(){
-                                        $("#subtitle").html("Here's your account details. You may only edit your password.");
+                                        $("#subtitle").html("Here's your account details. ");
                                         $("#subtitle").css("color", "white");
                                     });
                                     $("#password").hover(function(){
                                         $("#subtitle").html("That's your password. You may edit it with a new one.");
                                         $("#subtitle").css("color", "gold");
                                     }, function(){
-                                        $("#subtitle").html("Here's your account details. You may only edit your password.");
+                                        $("#subtitle").html("Here's your account details. ");
                                         $("#subtitle").css("color", "white");
                                     });
                                     $("#cPassword").hover(function(){
                                         $("#subtitle").html("That's where you're supposed to type the confirmation password if you've edited your password..");
                                         $("#subtitle").css("color", "gold");
                                     }, function(){
-                                        $("#subtitle").html("Here's your account details. You may only edit your password.");
+                                        $("#subtitle").html("Here's your account details. ");
                                         $("#subtitle").css("color", "white");
                                     });
                                 });

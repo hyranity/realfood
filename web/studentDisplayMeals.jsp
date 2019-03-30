@@ -11,7 +11,8 @@
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link href="CSS/studentDisplayMeals.css" rel="stylesheet">
-              <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="CSS/student.css" rel="stylesheet">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Choose a Meal.</title>
     </head>
     <body>
@@ -25,10 +26,10 @@
             </div>
         </div>
         <form action="">
-        <div class="mealsContainer">
-            
-           <input type="checkbox" id="cbox1"/>
-            <label class="meal" for="cbox1">
+            <div class="mealsContainer">
+
+                <input type="checkbox" id="cbox1"/>
+                <label class="meal" for="cbox1">
                     <h6 class="breakfast">Breakfast</h6>
                     <h5>Onion Burger</h5>
                     <img src="Images/sebastien-marchand-232356-unsplash.jpg" alt=""/>
@@ -36,10 +37,10 @@
                     <p class="componentTitle">Consists of:</p>
                     <p class="component">Chicken slices, Lettuce, Tomatoes, Pickles, Cheese</p>
                     <p class="price">1200 credits</p>
-            </label>
-            
-            <input type="checkbox" id="cbox2"/>
-            <label class="meal" for="cbox2">
+                </label>
+
+                <input type="checkbox" id="cbox2"/>
+                <label class="meal" for="cbox2">
                     <h6 class="lunch">Lunch</h6>
                     <h5>Spaghetti</h5>
                     <img src="Images/jorge-zapata-44723-unsplash.jpg" alt=""/>
@@ -47,9 +48,9 @@
                     <p class="componentTitle">Consists of:</p>
                     <p class="component">Chicken, Cheese powder, Onion, Salt, Vinegar</p>
                     <p class="price">500 credits</p>
-            </label>
-            
-        </div>
+                </label>
+
+            </div>
         </form>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
