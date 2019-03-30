@@ -15,6 +15,7 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <link href="CSS/calendar.css" rel="stylesheet">
         <link href="CSS/student.css" rel="stylesheet">
+        <link href="CSS/commonStyles.css" rel="stylesheet">
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
 
@@ -60,7 +61,7 @@ and open the template in the editor.
             int day = cal.get(Calendar.DAY_OF_MONTH); //used to increment from current day to 30 days later
             int pastDay = 0; //used to increment from the Sunday before until yesterday
             int nextDay = cal.get(Calendar.DAY_OF_MONTH), countDay = 1;
-            
+
             boolean isToday = true;
             int numOfPastDaysOfWeek = cal.get(Calendar.DAY_OF_WEEK) - adjustmentInt;
 
@@ -82,11 +83,13 @@ and open the template in the editor.
             </div>
         </div>
         <div class="calendarContainer">
-            <h1 class="title">Current day is</h1><h1 class="dynamicTitle"><%=dynamicTitle%></h1>
+            
+            <h1 class="title">Current day is</h1><h1 class="dynamicTitle" data-date="<%=dynamicTitle%>"><%=dynamicTitle%></h1>
             <br>
             <p class="instruction">Select a date. You may select more than one.</p>
             <br>
             <div class="calendar">
+                <form action="#">
                 <%
                     if (firstDayIsSunday) {
                 %>
@@ -128,14 +131,13 @@ and open the template in the editor.
 
                     //displays the daily "block" that can be clicked to pre-order meals
                     for (int i = 0; i < 31; i++) {
-                        
+
                         //If one week already, put <br>
                         if ((countDay - 1) % 7 == 0 && countDay > 0 && countDay >= 7) {
-                            
+
                 %>
                 <br>
-                <%
-                    }
+                <%                    }
                     // If today, block orders from being made on today
                     if (isToday) {
                 %>
@@ -161,14 +163,14 @@ and open the template in the editor.
                     }
 
                     // Block the next day so that students cannot order on that day
-%>
+                %>
                 <div class="day" style="color: darkslategray"><%=day%></div>
                 <%
 
                     isToday = false;
                 } else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
                     // If it is a weekend, block the day
-                %>
+%>
                 <div class="day" style="color: darkslategray"><%=day%></div>
                 <%
                 } else {  // If it's not today, no need to highlight
@@ -219,6 +221,9 @@ and open the template in the editor.
                         countDay++;
                     }
                 %>
+
+                <button class="nextButton" href="" type="submit" >Next step</button>
+            </form>
             </div>
             <div class="setting">Set the first day as: 
                 <br>
@@ -238,9 +243,9 @@ and open the template in the editor.
                 %>
             </div>
         </div>
-            
-            <button id="nextButton" href="">Next</button>
-        
+
+
+
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="calendarStudent.js" type="text/javascript"></script>

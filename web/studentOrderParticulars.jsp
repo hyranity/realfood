@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <h1>Edit particulars</h1>
+        <h1 class="title">Edit particulars</h1>
         <h5 id="subtitle">Modify the quantity of your meals.</h5>
         
         <div class="mainContainer">

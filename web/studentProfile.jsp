@@ -12,7 +12,7 @@
     <body>
         <div class="outsideContainer">
 
-            <h1>My Account</h1>
+            <h1 >My Account</h1>
             <h5 id="subtitle">Here's your account details.</h5>
                 <br/>
                 <div class="mainContainer">

@@ -12,6 +12,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link href="CSS/studentDisplayMeals.css" rel="stylesheet">
         <link href="CSS/student.css" rel="stylesheet">
+        <link href="CSS/commonStyles.css" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Choose a Meal.</title>
     </head>
@@ -50,6 +51,9 @@
                     <p class="price">500 credits</p>
                 </label>
 
+            </div>
+            <div style="display: inline-block; width: 100%; text-align: center;">
+            <button class="nextButton" href="" type="submit" >Next step</button>
             </div>
         </form>
     </body>
