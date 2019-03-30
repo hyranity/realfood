@@ -6,6 +6,8 @@
         <title>My Account</title>
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
+        <link rel="stylesheet" href="CSS/headerFooter.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="CSS/recordInfo.css" rel="stylesheet">
     </head>
     <body>
@@ -22,20 +24,20 @@
                         <input type="text" value="EMP002994" style="background-color: darkgray;"  id="staffid" readonly/>
                     </div>
                     <div id="nameDiv">
-                        <input type="text" id="name" value="Henry" />
-                        <input type="text" id="name" value="Luther"/>
+                        <input type="text" id="name" placeholder="First Name" value="Henry" />
+                        <input type="text" id="name" placeholder="Last Name" value="Luther"/>
                     </div>
                     <div>
-                        <input type="text" value="Male" id="gender"  />
+                        <input type="text" value="Male" placeholder="Gender" id="gender"  />
                     </div>
                     <div>
                         <input type="text" value="Joined: 16 March, 2017" id="dateJoined"  style="background-color: darkgray;"  readonly/>
                     </div>
                     <div>
-                        <input type="text" value="henryluther@staff.com" id="email" />
+                        <input type="text" value="henryluther@staff.com" placeholder="Email" id="email" />
                     </div>
                     <div>
-                        <input type="text" value="3995-29-5344" id="myKAD" />
+                        <input type="text" value="3995-29-5344" placeholder="MyKAD" id="myKAD" />
                     </div>
 
                     <br/>
@@ -121,4 +123,18 @@
                                     });
                                 });
     </script>
+            <!--Footer-->
+    <footer class="footerContainer">
+         
+    <section class="footerBottom">
+
+    <div class="footerBottom" style="border:0px; font-size: 10px;">   
+    Copyright©2019 RealFood - All Rights Reserved -
+    </div>
+<i style="font-size:14px" class="fa">&#xf230</i> <a href="https://www.facebook.com/RealFood-2569784913093353/?ref=br_tf&epa=SEARCH_BOX" style="font-size: 12px">FACEBOOK</a>
+<i style="font-size:14px;color:red" class="fa">&#xf2b3</i> <a href="https://www.google.com/gmail/" style="font-size: 12px">Gmail</a>
+<span style="color: white;font-size: 12px"><b>Email:</b> johannljx-sm17@student.tarc.edu.my | khootw-sm17@student.tarc.edu.my <b>Hotline:</b> 1600 99 8888 <b>Contact Number:</b> +60123456789</span>
+  </section>
+        
+</footer>
 </html>

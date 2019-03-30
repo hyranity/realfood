@@ -6,6 +6,8 @@
         <title>My Account</title>
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
+        <link rel="stylesheet" href="CSS/headerFooter.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="CSS/recordInfo.css" rel="stylesheet">
         <link href="CSS/commonStyles.css" rel="stylesheet">
         <link href="CSS/mealDetails.css" rel="stylesheet">
@@ -31,19 +33,19 @@
                 <form action="#" class="form">
                      <a href="#" onclick="confirmRemoval()"> <div class="removal">Discontinue</div></a>
                     <div>
-                            <input type="text" value="M000001" style="background-color: darkgray;"  id="mealId"/>
+                        <input type="text" value="M000001" style="background-color: darkgray;"  id="mealId" required/>
                         </div>
                     <div>
-                        <input type="text" id="mealName" value="Spaghetti Cabonara" placeholder="name"  />
+                        <input type="text" id="mealName" value="Spaghetti Cabonara" placeholder="Meal Name"  required/>
                     </div>
                     <div>
-                        <input type="text" value="It's a very tasty food" id="description" placeholder="description"/>
+                        <input type="text" value="It's a very tasty food" id="description" placeholder="Meal Description" required/>
                     </div>
                     <div>
-                        <input type="text" value="3894" id="price" placeholder="price"/>
+                        <input type="text" value="3894" id="price" placeholder="Price"/>
                     </div>
                     <div>
-                        <input type="text" value="example.imgur.com/example123" id="imageLink" placeholder="image link"/>
+                        <input type="text" value="example.imgur.com/example123" id="imageLink" placeholder="Image Link" required/>
                     </div>
                      <div>
                         <input type="text" value="1903" id="totalCalories" style="background-color: darkgray;"  readonly/>
@@ -54,7 +56,7 @@
                     <div>
                         <input type="text" value="not discontinued" id="dateDiscontinued"  style="background-color: darkgray; font-weight: 500;"  readonly/>
                     </div>
-                    <div class="mealTime">
+                     <div class="mealTime" style="margin-top: 50px;">
                         <p>Meal will be served during:</p>
                         <input type="checkbox" value="" id="breakfast" name="breakfast"/>
                         <label for="breakfast"><div id="breakfastDiv">Breakfast</div></label>
@@ -62,8 +64,7 @@
                         <input type="checkbox" value="" id="lunch" name="lunch"/>
                          <label for="lunch"><div id="lunchDiv">Lunch</div></label>
                     </div>
-                    <br/>
-                    <button type="submit" class="submitBtn">add meal</button>
+                    <button type="submit" class="submitBtn">Add meal</button>
                 </form>
                 <br/>
             </div>
@@ -168,4 +169,18 @@
                                    
                                 });
     </script>
+    <!--Footer-->
+    <footer class="footerContainer" style="margin-top: 200px;">
+         
+    <section class="footerBottom">
+
+    <div class="footerBottom" style="border:0px; font-size: 10px;">   
+    Copyright©2019 RealFood - All Rights Reserved -
+    </div>
+<i style="font-size:14px" class="fa">&#xf230</i> <a href="https://www.facebook.com/RealFood-2569784913093353/?ref=br_tf&epa=SEARCH_BOX" style="font-size: 12px">FACEBOOK</a>
+<i style="font-size:14px;color:red" class="fa">&#xf2b3</i> <a href="https://www.google.com/gmail/" style="font-size: 12px">Gmail</a>
+<span style="color: white;font-size: 12px"><b>Email:</b> johannljx-sm17@student.tarc.edu.my | khootw-sm17@student.tarc.edu.my <b>Hotline:</b> 1600 99 8888 <b>Contact Number:</b> +60123456789</span>
+  </section>
+        
+</footer>
 </html>

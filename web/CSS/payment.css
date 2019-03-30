@@ -1,0 +1,90 @@
+/*Styles that affect the entire page*/
+html{
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+}
+body{
+    width:100%;
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+h1, legend{
+    font-family: montserrat, sans-serif;
+    font-weight: 400;
+}
+
+
+/*container css*/
+label{
+    font-family: montserrat, sans-serif;
+    font-weight: 400;
+    text-align: left;
+    display: inline-block;
+    color: #FFD700;
+}
+
+.container{
+    min-height: 100%;
+    position: relative;
+    background-color: #000000;
+    background-attachment: fixed;
+    color: #FFD700;
+    text-align: center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+/*Form css*/
+
+form{
+    background-color: #000000;
+    text-align: center;
+    display: inline-block;
+    width: 40%;        /*<!--For adjust the colum the box-->*/
+    padding: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    color: #FFD700;     /*Change the word in form become gold*/
+    border-radius: 20px;
+
+}
+
+
+form input::placeholder{
+    color: #000000;
+}
+
+form input:focus{
+    outline: 0;
+}
+
+.formGroup {
+    overflow: hidden;  /*<!--Line Spacing between the input colum-->*/
+    margin-bottom: 20px; 
+}
+
+.formInput {
+    opacity:0.9;
+    width: 70%;   /*<!--For adjust the colum of input-->*/
+    font-family: montserrat, sans-serif;
+    background-color: #FFD700;
+    border-style: solid;
+    border-color: gray;
+    border-width: 1px;
+    border-radius: 20px;
+    padding: 20px 23px;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.fa{
+  color: blue;
+}

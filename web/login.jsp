@@ -13,6 +13,8 @@
          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
+        <link rel="stylesheet" href="CSS/headerFooter.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
        
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -34,9 +36,9 @@
             <div class="formInnerContainer">
                 <h1 id="title">Login</h1>
                 <form>
-                    <input name="id" id="id" type="text" placeholder="ID" onchange="updateHeading()">
+                    <input name="id" id="id" type="text" placeholder="ID" onchange="updateHeading()" required>
                     <br>
-                    <input name="password" type="password" placeholder="password">
+                    <input name="password" type="password" placeholder="password" required>
                     <button type="submit">let's go</button>
 
                     <p class="passwordForgot">I forgot my password. <a href="#">HELP</a></p>

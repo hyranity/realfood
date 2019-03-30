@@ -12,6 +12,8 @@
         <title>Register</title>
         <link rel="stylesheet" href="CSS/registration.css">
         <link  rel="stylesheet" href="CSS/headerFooter.css">
+        <link rel="stylesheet" href="CSS/headerFooter.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
            <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
