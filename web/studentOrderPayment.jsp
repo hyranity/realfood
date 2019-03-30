@@ -30,8 +30,15 @@
                 <div class="currentStep">4. Payment</div>
             </div>
         </div>
+<!------------>
+                    <div class="formGroup">
+                        <li type="text" value="STU123456" class="formInput" id="userID" name="userID" style="background-color: darkgray;" placeholder="User ID" maxlength="10" ></li>
+                            <li type="text" value="STU123456" class="formInput" id="userID" name="userID" style="background-color: darkgray;" placeholder="User ID" maxlength="10" ></li>
+                            <li type="text" value="STU123456" class="formInput" id="userID" name="userID" style="background-color: darkgray;" placeholder="User ID" maxlength="10" ></li>
+                   </div>
+
                     <div class="container">
-        <form action="">
+                     <form action="">
 
                 <h1 style="text-align: center" >You total is RM xxxx </h1>
                         
