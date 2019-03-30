@@ -72,12 +72,20 @@ input[type=checkbox]{
 
 .breakfast{
     position: absolute;
+    display: inline-block;
+    top: 6px;
+    left: 7px;
+    margin: 0;
     background-color: darkorange;
     padding: 5px;
 }
 
 .lunch{
     position: absolute;
+    display: inline-block;
+    top: 6px;
+    left: 7px;
+    margin: 0;
     background-color: darkcyan;
     padding: 5px;
 }

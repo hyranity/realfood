@@ -11,35 +11,28 @@
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link href="CSS/studentDisplayMeals.css" rel="stylesheet">
-        <link href="CSS/student.css" rel="stylesheet">
         <link href="CSS/commonStyles.css" rel="stylesheet">
-        <link href="CSS/students.css" rel="stylesheet">
+        <link href="CSS/manageMeals.css" rel="stylesheet">
+        <link href="CSS/manageRecords.css" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Choose meals.</title>
     </head>
     <body>
-        <div class="stepsContainer">
-            <h1>steps</h1>
-            <div class="steps">
-                <div>1. Select a date</div>
-                <div class="currentStep">2. Choose meals.</div>
-                <div>3. Edit particulars</div>
-                <div>4. Payment</div>
-            </div>
-        </div>
-        <h1 class="title">Choose meals.</h1>
-        <h5 id="subtitle">Click on the meals you would like to have.</h5>
-        
+        <h1 class="title">Manage meals.</h1>
+        <h5 id="subtitle">Here you can add or edit meals. To view meals' specific info, you will need to press "edit" first.</h5>
         <!-- Search bar -->
         <form class="searchForm">
             <input type="text" name="query" placeholder="search..." class="searchBar"/>
         </form>
-        
+
         <!-- Table -->
         <form action="#" method="post" id="mealOrder">
             <div class="mealsContainer">
                 <table>
                     <tr>
+                        <td>
+                            <label class="meal" id="add">+</label>
+                        </td>
                         <td>
                             <input type="checkbox" id="cbox1"/>
                             <label class="meal" for="cbox1">
@@ -50,12 +43,13 @@
                                 </div>
                                 <p class="description">Super awesome food, sprinkled with cheese.</p>
                                 <p class="calories">1920 Calories</p>
-
+                                <a href=""><div class="editButton">Edit</div></a>
                                 <div class="foodPart">
                                     <p class="componentTitle">Consists of:</p>
                                     <p class="component">Chicken slices, Lssssssss sssssssssssssssssettuce, Tomatoes, Pickles, Cheese</p>
                                 </div>
                                 <p class="price">1200 credits</p>
+                                <a href=""><div class="editMealButton">Edit</div></a>
                             </label>
                         </td>
                         <td>
@@ -74,6 +68,7 @@
                                     <p class="component">Chicken slices, Lssssssss sssssssssssssssssettuce, Tomatoes, Pickles, Cheese</p>
                                 </div>
                                 <p class="price">500 credits</p>
+                                <a href=""><div class="editMealButton">Edit</div></a>
                             </label>
                         </td>
                         <td>
@@ -92,17 +87,14 @@
                                     <p class="component">Chicken slices, Lssssssss sssssssssssssssssettuce, Tomatoes, Pickles, Cheese</p>
                                 </div>
                                 <p class="price">500 credits</p>
+                                <a href=""><div class="editMealButton">Edit</div></a>
                             </label>
                         </td>
                     </tr>
                 </table>
 
             </div>
-            <div class="nextButtonDiv">
-                <button class="nextButton">Next step</button>
-            </div>
         </form>
-        <h6 class="credits">1000 credits</h6>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="studentDisplayMeals.js" type="text/javascript"></script>
