@@ -1,3 +1,109 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
 body{
     background-color: black;
+    color: white;
+    text-align: center;
+    font-family: Montserrat, sans-serif;
+}
+
+h1{
+    display: inline-block;
+    color: white;
+    font-family: Montserrat, sans-serif;
+    text-align: center;
+    margin: 50px;
+    margin-bottom: 10px;
+}
+
+/*Notification CSS*/
+.notificationContainer{
+    margin: 10px;
+    
+}
+
+.notification{
+    display: inline-block;
+    background-color: gold;
+    color: black;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.notification h5{
+    font-size: 15px;
+    display: inline-block;
+    background-color: darkred;
+    margin: 0;
+    padding: 10px;
+    color: white;
+    
+}
+
+.notification p{
+    display: inline-block;
+    padding: 5px;
+}
+
+.notification .date{
+    font-size: 15px;
+    display: inline-block;
+    background-color: darkcyan;
+    margin: 0;
+    padding: 10px;
+    color: white;
+}
+
+.notificationOverlay{
+    background-color: gold;
+    color: black;
+    position: absolute;
+    display: none;
+    height: 200px;
+    top: 40%;
+    padding: 10px;
+}
+
+.notificationOverlay .date{
+    margin-bottom: 20px;
+}
+
+.notificationOverlay .readBt{
+    width: 300px;
+    position: absolute;
+    bottom: 10px;
+    display: inline-block;
+    left: 30%;
+    color: black;
+    padding: 10px;
+    background-color: green;
+    transition: 0.2s;
+}
+
+.notificationOverlay .readBt:hover{
+    background-color: lime;
+}
+
+.notificationOverlay .close{
+    background-color: red;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    padding: 5px;
+    width: 18px;
+    height: 18px;
+}
+
+.coverOverlay{
+    background-color: rgba(0,0,0,0.7);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: none;
 }
