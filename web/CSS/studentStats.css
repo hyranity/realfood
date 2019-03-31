@@ -1,0 +1,21 @@
+.sectionContainer{
+    color: white;
+    border-style: solid;
+    border-color: gold;
+    border-radius: 14px;
+    padding: 10px;
+    margin: 20px;
+}
+
+.sectionContainer p{
+    background-color: black;
+    margin: 0;
+}
+
+.number{
+    font-weight: bold;
+    color: white;
+    font-size: 60px;
+    margin: 5px;
+}
+

@@ -27,13 +27,13 @@ h6{
 /* Container css */
 .outsideContainer{
     text-align: center;
-    margin-top: 100px;
-    margin-bottom: -100px;
+    margin: 0;
+    margin: 10px;
 }
+
 .mainContainer{
     padding: 10px;
     border-radius: 20px;
-    height: 500px;
     display: inline-block;
     width: 500px;
     text-align: center;
@@ -87,11 +87,6 @@ h6{
 
 /* Back CSS */
 .back{
-    color: white;
-    font-size: 20px;
-    transition: 0.2s;
-    text-align: center;
-    margin-top: 40px;
 }
 
 .back:hover{
