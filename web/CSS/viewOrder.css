@@ -1,0 +1,114 @@
+body, html{
+    text-align: center;
+    margin: 0;
+}
+
+.orderContainer{
+    display: inline-block;
+    border-radius: 20px;
+    text-align: center;
+   
+}
+
+.orderContainer p{
+    background-color: dimgray;
+    font-family: Montserrat, sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: white;
+    padding: 10px;
+    margin: 10px;
+}
+
+.orderDetails{
+    display: inline-block;
+    border-style: solid;
+    border-color: gold;
+    border-radius: 14px;
+    padding: 13px;
+    width: 700px;
+}
+
+.orderDetails .totalPrice{
+    background-color: black;
+    font-size: 28px;
+    font-weight: bold;
+    color: gold;
+    margin: 0;
+}
+
+.orderDetails p{
+    background-color: gold;
+    color: black;
+    display: inline-block;
+}
+
+.orderDetails .smallText{
+    background-color: black;
+    color: white;
+    margin: 0;
+    margin-bottom: -20px;
+    font-size: 12px;
+}
+
+.orderDetails .chosenDate{
+    background-color: black;
+    font-size: 28px;
+    font-weight: bold;
+    color: darkcyan;
+    margin: 0;
+}
+
+.orderDetails .quantity{
+    display: inline-block;
+    background-color: darkslategray;
+    color: white;
+    margin-left: 0;
+    width: 10%;
+}
+
+.orderDetails .mealItem{
+    margin-right: 0;
+    margin: 0;
+    width: 70%;
+}
+
+.orderDetails .couponCode{
+    background-color: black;
+    font-size: 28px;
+    font-weight: bold;
+    color:  green;
+    margin: 0;
+}
+
+.couponPage{
+    display: inline-block;
+    color: darkgoldenrod;
+    border-radius: 10px;
+    background-color: black;
+    transition: 0.2s;
+    width: 200px;
+    margin: 20px;
+    padding: 10px;
+}
+
+.couponPage:hover{
+    background-color: darkgoldenrod;
+    color: white;
+    font-weight: bold;
+}
+
+/* Breakfast/lunch status */
+
+.orderDetails .breakfast{
+    display: inline-block;
+    margin: 0;
+    background-color: darkorange;
+}
+
+.orderDetails .lunch{
+    display: inline-block;
+    margin: 0;
+    background-color: darkcyan;
+}
+
