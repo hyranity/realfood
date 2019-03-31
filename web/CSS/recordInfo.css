@@ -37,7 +37,6 @@ h6{
     display: inline-block;
     width: 500px;
     text-align: center;
-    
 }
 
 .mainContainer p{
@@ -123,10 +122,12 @@ h6{
     padding: 5px;
     border-radius: 10px;
     transition: 0.2s;
+    margin: 10px;
 }
 
 .removal:hover{
-    font-size: 20px;
+    background-color: red;
+    color: white;
 }
 
 a{
@@ -190,3 +191,8 @@ a{
 .removalCancel:hover{
     border-color: green;
 }
+
+a{
+    color: white;
+}
+
