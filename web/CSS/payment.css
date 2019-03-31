@@ -96,5 +96,6 @@ form input:focus{
     color: gold;
     font-size: 14px;
     font-weight: 400;
+    border:1px solid;
     
 }
