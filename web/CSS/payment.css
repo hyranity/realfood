@@ -90,3 +90,11 @@ form input:focus{
   color: blue;
 }
 
+.purchaseHistory{
+    border-color: gold;
+    box-sizing: border-box;
+    color: gold;
+    font-size: 14px;
+    font-weight: 400;
+    
+}

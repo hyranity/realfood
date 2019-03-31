@@ -31,10 +31,18 @@
             </div>
         </div>
 <!------------>
-                    <div class="formGroup">
-                        <li type="text" value="STU123456" class="formInput" id="userID" name="userID" style="background-color: darkgray;" placeholder="User ID" maxlength="10" ></li>
-                            <li type="text" value="STU123456" class="formInput" id="userID" name="userID" style="background-color: darkgray;" placeholder="User ID" maxlength="10" ></li>
-                            <li type="text" value="STU123456" class="formInput" id="userID" name="userID" style="background-color: darkgray;" placeholder="User ID" maxlength="10" ></li>
+                    <div class="purchaseHistory">
+                                    <div class="recordQuantity">
+                <div class="frontPart">
+                    <p class="name">Peppermint Ice Cream</p>
+                </div>
+                <div class="quantityEditor">
+                    <p class="value">500 Credits</p>
+                    <p class="symbol" id="sub">-</p>
+                    <p class="quantity" data-quantity="5">x23</p>
+                    <p class="symbol" id="add">+</p>
+                </div>
+            </div>
                    </div>
 
                     <div class="container">
@@ -74,7 +82,7 @@
 <i style="font-size:14px;color:red" class="fa">&#xf2b3</i> <a href="https://www.google.com/gmail/" style="font-size: 12px">Gmail</a>
 <span style="color: white;font-size: 12px"><b>Email:</b> johannljx-sm17@student.tarc.edu.my | khootw-sm17@student.tarc.edu.my <b>Hotline:</b> 1600 99 8888 <b>Contact Number:</b> +60123456789</span>
   </section>
-        
+        0
 </footer>
 </html>
 
