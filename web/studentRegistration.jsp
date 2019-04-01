@@ -39,7 +39,7 @@
                 <div class="signupContent">
                     
                     <form action="RegistrationServlet" method="POST" id="" class="">
-                        <h1 style="text-align: center" >Staff Registration</h1>
+                        <h1 style="text-align: center" >Student Registration</h1>
                         <h5>Fill in the blanks with your personal details.</h5>
                         
                         <div class="formGroup">

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : payment
-    Created on : Mar 30, 2019, 3:26:59 PM
+    Document   : studentOrderUpdateConfirmation
+    Created on : Apr 1, 2019, 11:22:13 PM
     Author     : Richard Khoo
 --%>
 
@@ -8,6 +8,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link rel="stylesheet" href="CSS/headerFooter.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -16,21 +18,19 @@
         <link href="CSS/students.css" rel="stylesheet">
         <link href="CSS/commonStyles.css" rel="stylesheet">
         <link href="CSS/payment.css" rel="stylesheet">
-        <title>Payment.</title>
+        <title>Edit Particulars</title>
     </head>
     <body>
         <div class="stepsContainer">
             <h1>steps</h1>
-            <div class="steps">
-                <div>1. Select a date</div>
-                <div>2. Choose a meal</div>
-                <div>3. Edit particulars</div>
-                <div class="currentStep">4. Payment</div>
+             <div class="steps">
+                <div>1. Update meal selection.</div>
+                <div>2. Update particulars</div>
+                <div class="currentStep">3. Confirm update</div>
             </div>
         </div>
-<!------------>
 
-        <h1 class="title">Payment Confirmation</h1>
+        <h1 class="title">Confirmation Update</h1>
         <h5 id="subtitle"></h5>
 
         <div class="mainContainer2">
@@ -101,4 +101,3 @@
         
 </footer>
 </html>
-

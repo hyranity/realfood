@@ -71,9 +71,6 @@
                         </div>
                         
                         <!---->
-                        <div class="formGroup">
-                            <input type="date" class="formInput" name="joinedDate" id="date" placeholder="Joined Date" required/>
-                        </div>
                         
                         <div class="formGroup">
                             <input type="text" class="formInput" name="myKad" id="myKAD" placeholder="MyKAD" maxlength="12" required/>
