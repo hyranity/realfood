@@ -97,11 +97,66 @@ button:hover{
     font-weight: bold;
 }
 
+/* Forgot password overlay */
+.forgotPasswordOverlay .closeBt{
+     background-color: red;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    padding: 5px;
+    width: 18px;
+    height: 18px;
+    color: white;
+}
+.forgotPasswordOverlay{
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background-color: gold;
+    padding: 30px;
+    width: 600px;
+}
+
+.forgotPasswordOverlay h2{
+    margin: 0;
+}
+
+.forgotPasswordOverlay input{
+    width: 400px;
+    display: block;
+    background-color: black;
+    outline: none;
+    border-style: solid;
+    border-width: 0px;
+    border-color: white;
+    position: relative;
+    margin: auto;
+    padding: 10px;
+    border-radius: 10px;
+   font-family: montserrat, sans-serif;
+   font-weight: 800;
+   transition: 0.3s;
+   animation: introInputForgotPassword 0.75s;
+   color: white;
+}
+
+.forgotPasswordOverlay input::placeholder{
+    color: white;
+}
+
 /* Keyframe animations */
 
 @keyframes introInput{
     from {width: 0;}
     to {width: 90%;}
+}
+
+@keyframes introInputForgotPassword{
+    from {width: 0;}
+    to {width: 400px;}
 }
 
 @keyframes introText{

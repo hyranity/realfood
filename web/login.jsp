@@ -15,7 +15,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link rel="stylesheet" href="CSS/headerFooter.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        
+        <link rel="stylesheet" href="CSS/commonStyles.css">
        
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
@@ -45,6 +45,18 @@
                 </form>
             </div>
         </div>
+        <div class="coverOverlay"></div>
+        
+        <!-- Reset password overlay -->
+        <div class="forgotPasswordOverlay">
+            <form action="" method="POST">
+                <div class='closeBt'>x</div>
+                <h2>Reset Password</h2>
+                <h5>Please enter your personal email that you've used to register your account.</h5>
+                <input type="text" placeholder="email">
+            </form>
+        </div>
+        
     </body>
      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="login.js" type="text/javascript"></script>
