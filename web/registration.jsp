@@ -56,6 +56,8 @@
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
+                            <input type="text" class="formInput" name="fname" placeholder="First name" maxlength="25" required/>
+                            <input type="text" class="formInput" name="lname" placeholder="Last name" maxlength="25" required/>
                         </div>
                         
                         <div class="formGroup">
