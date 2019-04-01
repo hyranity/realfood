@@ -47,8 +47,8 @@
                         </div>
                         
                         <div class="formGroup">
-                            <input type="text" class="formInput2" name="firstName" placeholder="First Name" maxlength="25" required/>
-                            <input type="text" class="formInput2" name="lastName" placeholder="Last Name" maxlength="25" required/>
+                            <input type="text" class="formInput2" name="fname" placeholder="First Name" maxlength="25" required/>
+                            <input type="text" class="formInput2" name="lname" placeholder="Last Name" maxlength="25" required/>
                         </div>
                         
                         <div class="formGroup">
@@ -56,8 +56,6 @@
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
-                            <input type="text" class="formInput" name="fname" placeholder="First name" maxlength="25" required/>
-                            <input type="text" class="formInput" name="lname" placeholder="Last name" maxlength="25" required/>
                         </div>
                         
                         <div class="formGroup">
