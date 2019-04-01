@@ -6,8 +6,8 @@
 package Model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -70,7 +70,7 @@ public class Food implements Serializable {
     @Column(name = "CALORIES")
     private int calories;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "foodid")
-    private Collection<Mealfood> mealfoodCollection;
+    private List<Mealfood> mealfoodList;
 
     public Food() {
     }
@@ -136,12 +136,12 @@ public class Food implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Mealfood> getMealfoodCollection() {
-        return mealfoodCollection;
+    public List<Mealfood> getMealfoodList() {
+        return mealfoodList;
     }
 
-    public void setMealfoodCollection(Collection<Mealfood> mealfoodCollection) {
-        this.mealfoodCollection = mealfoodCollection;
+    public void setMealfoodList(List<Mealfood> mealfoodList) {
+        this.mealfoodList = mealfoodList;
     }
 
     @Override

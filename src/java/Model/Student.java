@@ -6,8 +6,7 @@
 package Model;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,8 +16,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,8 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Student.findByPasswordsalt", query = "SELECT s FROM Student s WHERE s.passwordsalt = :passwordsalt")
     , @NamedQuery(name = "Student.findByPassword", query = "SELECT s FROM Student s WHERE s.password = :password")
     , @NamedQuery(name = "Student.findByGender", query = "SELECT s FROM Student s WHERE s.gender = :gender")
-    , @NamedQuery(name = "Student.findByIsenrolled", query = "SELECT s FROM Student s WHERE s.isenrolled = :isenrolled")
-    , @NamedQuery(name = "Student.findByDatejoined", query = "SELECT s FROM Student s WHERE s.datejoined = :datejoined")
     , @NamedQuery(name = "Student.findByMykad", query = "SELECT s FROM Student s WHERE s.mykad = :mykad")
     , @NamedQuery(name = "Student.findByCredits", query = "SELECT s FROM Student s WHERE s.credits = :credits")})
 public class Student implements Serializable {
@@ -85,15 +80,6 @@ public class Student implements Serializable {
     private Character gender;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "ISENROLLED")
-    private Boolean isenrolled;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "DATEJOINED")
-    @Temporal(TemporalType.DATE)
-    private Date datejoined;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 13)
     @Column(name = "MYKAD")
     private String mykad;
@@ -102,9 +88,9 @@ public class Student implements Serializable {
     @Column(name = "CREDITS")
     private int credits;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentid")
-    private Collection<Studentorder> studentorderCollection;
+    private List<Studentorder> studentorderList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentid")
-    private Collection<Notificationstudent> notificationstudentCollection;
+    private List<Notificationstudent> notificationstudentList;
 
     public Student() {
     }
@@ -113,7 +99,7 @@ public class Student implements Serializable {
         this.studentid = studentid;
     }
 
-    public Student(String studentid, String firstname, String lastname, String email, String passwordsalt, String password, Character gender, Boolean isenrolled, Date datejoined, String mykad, int credits) {
+    public Student(String studentid, String firstname, String lastname, String email, String passwordsalt, String password, Character gender, String mykad, int credits) {
         this.studentid = studentid;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -121,8 +107,6 @@ public class Student implements Serializable {
         this.passwordsalt = passwordsalt;
         this.password = password;
         this.gender = gender;
-        this.isenrolled = isenrolled;
-        this.datejoined = datejoined;
         this.mykad = mykad;
         this.credits = credits;
     }
@@ -183,22 +167,6 @@ public class Student implements Serializable {
         this.gender = gender;
     }
 
-    public Boolean getIsenrolled() {
-        return isenrolled;
-    }
-
-    public void setIsenrolled(Boolean isenrolled) {
-        this.isenrolled = isenrolled;
-    }
-
-    public Date getDatejoined() {
-        return datejoined;
-    }
-
-    public void setDatejoined(Date datejoined) {
-        this.datejoined = datejoined;
-    }
-
     public String getMykad() {
         return mykad;
     }
@@ -216,21 +184,21 @@ public class Student implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Studentorder> getStudentorderCollection() {
-        return studentorderCollection;
+    public List<Studentorder> getStudentorderList() {
+        return studentorderList;
     }
 
-    public void setStudentorderCollection(Collection<Studentorder> studentorderCollection) {
-        this.studentorderCollection = studentorderCollection;
+    public void setStudentorderList(List<Studentorder> studentorderList) {
+        this.studentorderList = studentorderList;
     }
 
     @XmlTransient
-    public Collection<Notificationstudent> getNotificationstudentCollection() {
-        return notificationstudentCollection;
+    public List<Notificationstudent> getNotificationstudentList() {
+        return notificationstudentList;
     }
 
-    public void setNotificationstudentCollection(Collection<Notificationstudent> notificationstudentCollection) {
-        this.notificationstudentCollection = notificationstudentCollection;
+    public void setNotificationstudentList(List<Notificationstudent> notificationstudentList) {
+        this.notificationstudentList = notificationstudentList;
     }
 
     @Override

@@ -38,7 +38,7 @@
             <div class="container">           
                 <div class="signupContent">
                     
-                    <form method="POST" id="" class="">
+                    <form action="RegistrationServlet" method="POST" id="" class="">
                         <h1 style="text-align: center" >Registration</h1>
                         
                         <div class="formGroup">
