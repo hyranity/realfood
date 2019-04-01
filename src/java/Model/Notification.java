@@ -6,8 +6,8 @@
 package Model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Notification.findAll", query = "SELECT n FROM Notification n")
     , @NamedQuery(name = "Notification.findByNotificationid", query = "SELECT n FROM Notification n WHERE n.notificationid = :notificationid")
-    , @NamedQuery(name = "Notification.findByNotificationname", query = "SELECT n FROM Notification n WHERE n.notificationname = :notificationname")
+    , @NamedQuery(name = "Notification.findByTitle", query = "SELECT n FROM Notification n WHERE n.title = :title")
     , @NamedQuery(name = "Notification.findByDescription", query = "SELECT n FROM Notification n WHERE n.description = :description")
     , @NamedQuery(name = "Notification.findByDateissued", query = "SELECT n FROM Notification n WHERE n.dateissued = :dateissued")})
 public class Notification implements Serializable {
@@ -49,8 +49,8 @@ public class Notification implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
-    @Column(name = "NOTIFICATIONNAME")
-    private String notificationname;
+    @Column(name = "TITLE")
+    private String title;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -62,7 +62,7 @@ public class Notification implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dateissued;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "notificationid")
-    private Collection<Notificationstudent> notificationstudentCollection;
+    private List<Notificationstudent> notificationstudentList;
 
     public Notification() {
     }
@@ -71,9 +71,9 @@ public class Notification implements Serializable {
         this.notificationid = notificationid;
     }
 
-    public Notification(String notificationid, String notificationname, String description, Date dateissued) {
+    public Notification(String notificationid, String title, String description, Date dateissued) {
         this.notificationid = notificationid;
-        this.notificationname = notificationname;
+        this.title = title;
         this.description = description;
         this.dateissued = dateissued;
     }
@@ -86,12 +86,12 @@ public class Notification implements Serializable {
         this.notificationid = notificationid;
     }
 
-    public String getNotificationname() {
-        return notificationname;
+    public String getTitle() {
+        return title;
     }
 
-    public void setNotificationname(String notificationname) {
-        this.notificationname = notificationname;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -111,12 +111,12 @@ public class Notification implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Notificationstudent> getNotificationstudentCollection() {
-        return notificationstudentCollection;
+    public List<Notificationstudent> getNotificationstudentList() {
+        return notificationstudentList;
     }
 
-    public void setNotificationstudentCollection(Collection<Notificationstudent> notificationstudentCollection) {
-        this.notificationstudentCollection = notificationstudentCollection;
+    public void setNotificationstudentList(List<Notificationstudent> notificationstudentList) {
+        this.notificationstudentList = notificationstudentList;
     }
 
     @Override

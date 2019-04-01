@@ -6,8 +6,8 @@
 package Model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -97,9 +97,9 @@ public class Meal implements Serializable {
     @Column(name = "ISLUNCH")
     private Boolean islunch;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mealid")
-    private Collection<Mealfood> mealfoodCollection;
+    private List<Mealfood> mealfoodList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mealid")
-    private Collection<Ordermeal> ordermealCollection;
+    private List<Ordermeal> ordermealList;
 
     public Meal() {
     }
@@ -210,21 +210,21 @@ public class Meal implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Mealfood> getMealfoodCollection() {
-        return mealfoodCollection;
+    public List<Mealfood> getMealfoodList() {
+        return mealfoodList;
     }
 
-    public void setMealfoodCollection(Collection<Mealfood> mealfoodCollection) {
-        this.mealfoodCollection = mealfoodCollection;
+    public void setMealfoodList(List<Mealfood> mealfoodList) {
+        this.mealfoodList = mealfoodList;
     }
 
     @XmlTransient
-    public Collection<Ordermeal> getOrdermealCollection() {
-        return ordermealCollection;
+    public List<Ordermeal> getOrdermealList() {
+        return ordermealList;
     }
 
-    public void setOrdermealCollection(Collection<Ordermeal> ordermealCollection) {
-        this.ordermealCollection = ordermealCollection;
+    public void setOrdermealList(List<Ordermeal> ordermealList) {
+        this.ordermealList = ordermealList;
     }
 
     @Override

@@ -6,8 +6,8 @@
 package Model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -81,7 +81,7 @@ public class Studentorder implements Serializable {
     @ManyToOne(optional = false)
     private Student studentid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderid")
-    private Collection<Ordermeal> ordermealCollection;
+    private List<Ordermeal> ordermealList;
 
     public Studentorder() {
     }
@@ -165,12 +165,12 @@ public class Studentorder implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Ordermeal> getOrdermealCollection() {
-        return ordermealCollection;
+    public List<Ordermeal> getOrdermealList() {
+        return ordermealList;
     }
 
-    public void setOrdermealCollection(Collection<Ordermeal> ordermealCollection) {
-        this.ordermealCollection = ordermealCollection;
+    public void setOrdermealList(List<Ordermeal> ordermealList) {
+        this.ordermealList = ordermealList;
     }
 
     @Override

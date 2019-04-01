@@ -1,0 +1,63 @@
+.body{
+    text-align: center;
+}
+
+.couponContainer{
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    padding: 20px;
+}
+
+h1{
+    font-weight: 200;
+}
+
+p{
+    display: inline-block;
+    margin: 17px;
+}
+
+/* Coupon code */
+h3, h5{
+    display: inline-block;
+}
+
+h5{
+    margin-bottom: -50px;
+}
+
+h3{
+    font-size: 50px;
+    font-weight: 400;
+    margin-top: -10px;
+}
+
+/* Order details */
+.quantity{
+    float: right;
+    font-weight: bold;
+}
+
+.mealTime{
+    float: right;
+    margin-right: 100px;
+}
+
+.orders{
+    text-align: left;
+    display: inline-block;
+    width: 70%;
+}
+
+/* Total cost CSS */
+.cost{
+    display: inline-block;
+    margin-top: 0px;
+    font-size: 40px;
+}
+
+.smallText{
+    margin-bottom: -60px;
+}
+

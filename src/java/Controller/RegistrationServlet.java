@@ -3,30 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package Controller;
 
+import Model.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import util.Auto;
 
 /**
  *
  * @author mast3
  */
-public class FoodRegistration extends HttpServlet {
+@WebServlet(name = "RegistrationServlet", urlPatterns = {"/RegistrationServlet"})
+public class RegistrationServlet extends HttpServlet {
+    
     @PersistenceContext
     EntityManager em;
     @Resource
     UserTransaction utx;
-
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,19 +42,16 @@ public class FoodRegistration extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         try {
+        
+        try{
             utx.begin();
-            Food food = new Food();
-            food.setFoodname("Spaghetti");
-            food.setCalories(100);
-            food.setDateadded(Auto.getToday());
-            food.setFoodid("ASDASD");
-            food.setIsdiscontinued(false);
-            em.persist(food);
-            utx.commit();
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-    }
+            Student student = new Student();
+            student.setStudentid(request.getParameter("userID"));
+            System.out.println(student.getStudentid());
+        }
+        catch(Exception ex){
+            System.out.println("Couldn't register user: "+ ex.getMessage());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
