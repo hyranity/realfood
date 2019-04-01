@@ -40,9 +40,10 @@
                     
                     <form action="RegistrationServlet" method="POST" id="" class="">
                         <h1 style="text-align: center" >Registration</h1>
+                        <h5>Fill in the blanks with your personal details.</h5>
                         
                         <div class="formGroup">
-                            <input type="text" class="formInput" id="userID" name="userID" placeholder="User ID" maxlength="10" required/>
+                            <input type="text" class="formInput" id="userID" name="userID" placeholder="User ID (or existing Student ID)" maxlength="10" required/>
                         </div>
                         
                         <div class="formGroup">
@@ -62,8 +63,8 @@
                         </div>
                         
                         <div class="formGroup" >
-                            <label style="text-align: center;"/><input type="checkbox" onclick="myFunction()" >Show Password </lable><br>
-                            <input type="checkbox" onchange="document.getElementById('submit').disabled = !this.checked;" /><label class="termService"/>You Agree To Our<a href="#" class="clickHere"> Terms & service</a>                          
+                            <input type="checkbox" onclick="myFunction()" id="showPass" /><label style="text-align: center;" for="showPass" id="showPassLabel">Click here to show password</label><br>
+                            <input type="checkbox" onchange="document.getElementById('submit').disabled = !this.checked;" id="acceptTerm"/><label class="termService" for="acceptTerm">Click here to Agree To Our <a style="color: white;">Terms & Conditions</a> </label>
                         </div>
                         
                         <div class="formButton" style="text-align: center">
@@ -72,15 +73,18 @@
                         
                     </form>
                     
-                    <p class="loginhere">
-                        <label>Already Have An Account ? </label><a href="#" class="clickHere">Login here</a>
+                    <p class="loginhere" style="color: gold;">
+                        Already Have An Account? <a href="#" class="clickHere">Login here</a>
                     </p>
                 </div>
             </div>
     <!-- JS -->
+ <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script src="registration.js" type="text/javascript"></script>
-
+    <script>
+        
+        </script>
     </body>
     
     <!--Footer-->

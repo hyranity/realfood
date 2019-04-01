@@ -140,3 +140,10 @@
     left: 0;
     display: none;
 }
+
+
+/* Alerts */
+.errorMsg{
+    color: red;
+    margin: 10px;
+}

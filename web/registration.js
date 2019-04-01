@@ -24,7 +24,16 @@ function myFunction() {
     x.type = "password";
     y.type = "password";
   }
+  
+  
+   if( document.getElementById("showPass").checked){
+        $("#showPassLabel").html("Click here to hide password");
+        }
+        else{
+            $("#showPassLabel").html("Click here to show password");
+        }
 }
+
 
 /*under contruct*/
 /*var userID = document.getElementById("userID").value == "";
