@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Staff.findByStaffrole", query = "SELECT s FROM Staff s WHERE s.staffrole = :staffrole")
     , @NamedQuery(name = "Staff.findByMykad", query = "SELECT s FROM Staff s WHERE s.mykad = :mykad")
     , @NamedQuery(name = "Staff.findByPasswordsalt", query = "SELECT s FROM Staff s WHERE s.passwordsalt = :passwordsalt")
-    , @NamedQuery(name = "Staff.findByPassword", query = "SELECT s FROM Staff s WHERE s.password = :password")})
+    , @NamedQuery(name = "Staff.findByPassword", query = "SELECT s FROM Staff s WHERE s.password = :password")
+    , @NamedQuery(name = "Staff.findByEmail", query = "SELECT s FROM Staff s WHERE s.email = :email")})
 public class Staff implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -91,6 +92,12 @@ public class Staff implements Serializable {
     @Size(min = 1, max = 40)
     @Column(name = "PASSWORD")
     private String password;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "EMAIL")
+    private String email;
 
     public Staff() {
     }
@@ -99,7 +106,7 @@ public class Staff implements Serializable {
         this.staffid = staffid;
     }
 
-    public Staff(String staffid, String firstname, String lastname, Character gender, Boolean ishired, Date datejoined, String staffrole, String mykad, String passwordsalt, String password) {
+    public Staff(String staffid, String firstname, String lastname, Character gender, Boolean ishired, Date datejoined, String staffrole, String mykad, String passwordsalt, String password, String email) {
         this.staffid = staffid;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -110,6 +117,7 @@ public class Staff implements Serializable {
         this.mykad = mykad;
         this.passwordsalt = passwordsalt;
         this.password = password;
+        this.email = email;
     }
 
     public String getStaffid() {
@@ -190,6 +198,14 @@ public class Staff implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
