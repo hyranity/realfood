@@ -39,16 +39,23 @@
                 <div class="signupContent">
                     
                     <form action="RegistrationServlet" method="POST" id="" class="">
-                        <h1 style="text-align: center" >Registration</h1>
+                        <h1 style="text-align: center" >Staff Registration</h1>
                         <h5>Fill in the blanks with your personal details.</h5>
                         
                         <div class="formGroup">
-                            <input type="text" class="formInput" id="userID" name="userID" placeholder="User ID (or existing Student ID)" maxlength="10" required/>
+                            <input type="text" class="formInput" id="userID" name="staffID" placeholder="User ID (or existing Student ID)" maxlength="10" required/>
                         </div>
                         
                         <div class="formGroup">
-                            <input type="text" class="formInput" name="fname" placeholder="First name" maxlength="25" required/>
-                            <input type="text" class="formInput" name="lname" placeholder="Last name" maxlength="25" required/>
+                            <input type="text" class="formInput2" name="fname" placeholder="First Name" maxlength="25" required/>
+                            <input type="text" class="formInput2" name="lname" placeholder="Last Name" maxlength="25" required/>
+                        </div>
+                        
+                        <div class="formGroup">
+                            <select class="formInput">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
                         </div>
                         
                         <div class="formGroup">
@@ -62,6 +69,17 @@
                         <div class="formGroup">
                             <input type="password" class="formInput" name="re_password" id="confirmationPassword" placeholder="Repeat your password" maxlength="20" required/>
                         </div>
+                        
+                        <!---->
+                        <div class="formGroup">
+                            <input type="date" class="formInput" name="joinedDate" id="password" placeholder="Joined Date" required/>
+                        </div>
+                        
+                        <div class="formGroup">
+                            <input type="text" class="formInput" name="myKad" id="confirmationPassword" placeholder="MyKAD" maxlength="12" required/>
+                        </div>
+                    
+                        <!---->
                         
                         <div class="formGroup" >
                             <input type="checkbox" onclick="myFunction()" id="showPass" /><label style="text-align: center;" for="showPass" id="showPassLabel">Click here to show password</label><br>

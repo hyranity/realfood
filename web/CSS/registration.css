@@ -101,6 +101,21 @@ form input:focus{
     font-weight: bold;
 }
 
+.formInput2 {
+    opacity:0.9;
+    width: 35%;   /*<!--For adjust the colum of input-->*/
+    font-family: Montserrat, sans-serif;
+    background-color: #FFD700;
+    border-style: solid;
+    border-color: gray;
+    border-width: 0px;
+    border-radius: 12px;
+    padding: 20px 23px;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline;
+}
 .submitButton{
     
     background-color: white;
