@@ -43,7 +43,7 @@
                         <h5>Fill in the blanks with your personal details.</h5>
                         
                         <div class="formGroup">
-                            <input type="text" class="formInput" id="userID" name="userID" placeholder="User ID (or existing Student ID)" maxlength="10" required/>
+                            <input type="text" class="formInput" id="userID" name="staffID" placeholder="User ID (or existing Student ID)" maxlength="10" required/>
                         </div>
                         
                         <div class="formGroup">
