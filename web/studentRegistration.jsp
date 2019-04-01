@@ -1,7 +1,7 @@
 <%-- 
-    Document   : registerStudent
-    Created on : Mar 7, 2019, 9:51:48 AM
-    Author     : mast3
+    Document   : studentRegistration
+    Created on : Apr 1, 2019, 8:18:34 PM
+    Author     : Richard Khoo
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -43,21 +43,9 @@
                         <h5>Fill in the blanks with your personal details.</h5>
                         
                         <div class="formGroup">
-                            <input type="text" class="formInput" id="userID" name="staffID" placeholder="User ID (or existing Student ID)" maxlength="10" required/>
+                            <input type="text" class="formInput" id="userID" name="studentID" placeholder="Student ID (or existing Student ID)" maxlength="10" required/>
                         </div>
-                        
-                        <div class="formGroup">
-                            <input type="text" class="formInput2" name="fname" placeholder="First Name" maxlength="25" required/>
-                            <input type="text" class="formInput2" name="lname" placeholder="Last Name" maxlength="25" required/>
-                        </div>
-                        
-                        <div class="formGroup">
-                            <select class="formInput">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                        </div>
-                        
+                                             
                         <div class="formGroup">
                             <input type="email" class="formInput" name="email" placeholder="Email" maxlength="30" required/>
                         </div>
@@ -69,17 +57,6 @@
                         <div class="formGroup">
                             <input type="password" class="formInput" name="re_password" id="confirmationPassword" placeholder="Repeat your password" maxlength="20" required/>
                         </div>
-                        
-                        <!---->
-                        <div class="formGroup">
-                            <input type="date" class="formInput" name="joinedDate" id="date" placeholder="Joined Date" required/>
-                        </div>
-                        
-                        <div class="formGroup">
-                            <input type="text" class="formInput" name="myKad" id="myKAD" placeholder="MyKAD" maxlength="12" required/>
-                        </div>
-                    
-                        <!---->
                         
                         <div class="formGroup" >
                             <input type="checkbox" onclick="myFunction()" id="showPass" /><label style="text-align: center;" for="showPass" id="showPassLabel">Click here to show password</label><br>
@@ -122,3 +99,4 @@
 </footer>
     
 </html>
+

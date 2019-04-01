@@ -37,13 +37,6 @@ html{
   float: left;
 }
 
-.topupForm-col5 {
-  padding-left: 15px;
-  padding-top: 15px;
-  width: 20%;
-  float: left;
-}
-
 .area {
   width: 30%;
   float: left;
@@ -163,13 +156,6 @@ html{
     font-size: 18px;
     line-height: 1.5;
     padding-left: 40px;
-  }
-  .topupForm-col5 {
-    width: 50%;
-  }
-  .topupForm-col5:nth-child(odd) {
-    clear: left;
-    padding-left: 0;
   }
 }
 
