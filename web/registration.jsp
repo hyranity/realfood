@@ -47,7 +47,8 @@
                         </div>
                         
                         <div class="formGroup">
-                            <input type="text" class="formInput" name="name" placeholder="Username" maxlength="50" required/>
+                            <input type="text" class="formInput" name="fname" placeholder="First name" maxlength="25" required/>
+                            <input type="text" class="formInput" name="lname" placeholder="Last name" maxlength="25" required/>
                         </div>
                         
                         <div class="formGroup">

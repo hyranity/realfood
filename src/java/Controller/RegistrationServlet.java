@@ -5,9 +5,12 @@
  */
 package Controller;
 
+import Model.Schoolsystem;
 import Model.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,6 +19,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 /**
@@ -24,7 +29,7 @@ import javax.transaction.UserTransaction;
  */
 @WebServlet(name = "RegistrationServlet", urlPatterns = {"/RegistrationServlet"})
 public class RegistrationServlet extends HttpServlet {
-    
+
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -42,16 +47,29 @@ public class RegistrationServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+
+        //Creates an object. This is where the new details will be temporarily stored.
         
-        try{
-            utx.begin();
-            Student student = new Student();
-            student.setStudentid(request.getParameter("userID"));
-            System.out.println(student.getStudentid());
+        String userType = request.getParameter("userType");
+        
+        if(userType.equalsIgnoreCase("student")){
+            try {
+                Schoolsystem ss = new Schoolsystem();
+                utx.begin();
+                
+                //Searches the "external database" School System for the student ID.
+                ss = em.find(Schoolsystem.class, request.getParameter("studentId"));
+                
+                if(ss.getStudentid() == null)
+                    System.out.println("ERROR!");
+            } catch (Exception ex) {
+                System.out.println("ERROR: Unable to create student object: " + ex.getMessage());
+            }
         }
-        catch(Exception ex){
-            System.out.println("Couldn't register user: "+ ex.getMessage());
+        else{
+            
         }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
