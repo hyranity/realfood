@@ -14,14 +14,44 @@
 <div class="containerBox">
 	<!--<h2>Reset Password Form</h2>-->
 	<div class="forgetPassword">
-		<h1>Forgot Password</h1>
-		<p> Please Enter Your Email To Reset Your Password.</p>
+		<h1>Reset Password</h1>
+		<p> Please Enter New Password To Reset Your Password.</p>
 		<form>
-                    <input type="email" value="Email address" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email address';}" required>
-			<input type="submit" value="Reset my Password">
+                    <input type="password" id="password" value="" placeholder="New Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email address';}" required>
+                    <input type="password" value="" id="confirmationPassword" placeholder="Confirmation Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email address';}" required>
+                    <label><input type="checkbox" onclick="myFunction()" >Show Password</label>
+                    <input type="submit" value="Reset my Password"/>
 		</form>
 	</div>
 </div>
+    <script>
+/*Show The Password*/
+function myFunction() {
+  var x = document.getElementById("password");
+  var y = document.getElementById("confirmationPassword");
+  if (x.type === "password" && y.type === "password") {
+    x.type = "text";
+    y.type = "text";
+  } else {
+    x.type = "password";
+    y.type = "password";
+  }
+}
 
+/* Check Both Password is same or Not */
+var password = document.getElementById("password")
+  , confirm_password = document.getElementById("confirmationPassword");
+
+function validatePassword(){
+  if(password.value != confirmationPassword.value) {
+    confirmationPassword.setCustomValidity("Your Passwords Does Not Match");
+  } else {
+    confirmationPassword.setCustomValidity('');
+  }
+}
+
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+    </script>
 </body>
 </html>
