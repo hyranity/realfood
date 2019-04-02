@@ -12,6 +12,7 @@
         <title>RealFood</title>
         <link rel="stylesheet" href="CSS/home.css">
         <link rel="stylesheet" href="CSS/headerFooter.css">
+        <link rel="stylesheet" href="CSS/commonStyles.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
@@ -20,7 +21,9 @@
     <header>
         <div>
             <ul>
-            <a href="#"  class="right">Log In</a>
+                <a href="#"  class="right">Login</a>
+                <a href="#"  class="right">Register</a>
+                <a href="#"  class="right" style="background-color: #ffffff; color: #000000;">Home</a>
             </ul>
         </div>
 </header>

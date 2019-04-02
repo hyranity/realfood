@@ -67,7 +67,8 @@
                         </td>
                     </tr>
                 </table>
-                <div class="nextButtonDiv">
+                <div>
+                    <button class="nextButton">Back</button>
                     <button class="nextButton">Next step</button>
                 </div>
             </form>

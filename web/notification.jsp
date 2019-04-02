@@ -37,7 +37,7 @@
                 <div class="close" data-notificationid="no1">x</div>
                 <a href=""><div class="readBt">I have read and understood this.</div></a>
             </div>
-
+            <div><br/><br/><button class="nextButton" href="" type="submit" >Back</button></div>
         </div>
         <div class="coverOverlay"></div>
     </body>
