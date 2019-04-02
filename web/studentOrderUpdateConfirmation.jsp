@@ -56,7 +56,8 @@
             </div>
             <br/>
             <div class="total2">
-                <p>Total Payment Is 4000 Credits Point</p>
+                <p>total credits</p>
+                <p class="totalPrice">4000</p>
             </div>
            
         </div>

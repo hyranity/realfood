@@ -40,6 +40,7 @@ h5{
     width:  70%;
     border: 3px solid;
     border-color: gold;
+    border-radius: 40px;
 }
 /*Update Payment & Payment part End*/
 
@@ -61,12 +62,11 @@ h5{
 .recordQuantity2{
     text-align: left;
     display: inline-block;
-    background-color: gold;
-    width:  40%;
+    background-color: black;
+    color: white;
+    width:  60%;
     border-radius: 20px;
-    margin: 10px;
     position: relative;
-    background-color: darkgray;
 }
 
 .recordQuantity2 p{
@@ -81,9 +81,9 @@ h5{
 
 .value{
     display: inline-block;
-    float: left;
-    text-align: center;
-    margin-right: 30px;
+    position: absolute;
+    left: 60%;
+    text-align: left;
 }
 
 .quantityEditor{
@@ -125,7 +125,7 @@ h5{
     border-radius: 10px;
     border-width: 1px;
     border: none;
-    color: gold;
+    color: white;
     width: 30%;
     display: inline-block;
     padding: 7px;
@@ -136,6 +136,7 @@ h5{
 /*Update Payment & Payment part End*/
 .name{
     font-weight: bold;
+    color: gold;
 }
 
 /* Steps CSS */
@@ -172,5 +173,13 @@ h5{
 
 .currentStep{
     background-color: white;
+}
+
+.totalPrice{
+    font-size: 60px;
+    margin: 0;
+    margin-top: -10px;
+    font-weight: 200;
+    color: gold;
 }
 
