@@ -24,6 +24,7 @@
             <h1>Welcome, Jacob <span class="badge badge-primary">Canteen Staff</span></h1>
             <h4 id="subtitle">Here's your dashboard.</h4>
             <div class="buttonsContainer">
+                <a href="#"><div class="buttonDiv" id="topup">Top Up</div></a>
                 <a href="#"><div class="buttonDiv" id="meal">manage meal</div></a>
                 <a href="#"><div class="buttonDiv" id="food">manage food</div></a>
                 <br/>
@@ -36,6 +37,11 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
+            $("#topup").hover(function () {
+                $("#subtitle").html("That is where you can top up credit point.");
+            }, function () {
+                $("#subtitle").html("Here's your dashboard.");
+            });
             $("#meal").hover(function () {
                 $("#subtitle").html("That is where you can add, edit, and discontinue meals.");
             }, function () {
