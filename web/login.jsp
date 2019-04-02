@@ -40,17 +40,17 @@
             <div class="formInnerContainer">
                 
                 <!-- Error message -->
-                <div class="errorMsg"></div>
+                <div class="errorMsg">${errorMsg}</div>
                 
                 <!-- Login part -->
                 <h1 id="title">Login</h1>
-                <form>
+                <form method="POST" action="LoginServlet">
                     <input name="id" id="id" type="text" placeholder="ID" onchange="updateHeading()" required>
                     <br>
                     <input name="password" type="password" placeholder="password" required>
                     <button type="submit">let's go</button>
 
-                    <p class="passwordForgot">I forgot my password. <a href="#" id="forgotPasswordTrigger">HELP</a></p>
+                    <p class="passwordForgot">I forgot my password. <a href="#" id="forgotPasswordTrigger" onclick="">HELP</a></p>
                 </form>
             </div>
         </div>

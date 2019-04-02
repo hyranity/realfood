@@ -146,4 +146,7 @@
 .errorMsg{
     color: red;
     margin: 10px;
+    text-align: center;
+    background-color: black;
+    width: 120%;
 }
