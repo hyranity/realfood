@@ -29,6 +29,19 @@ h5{
     margin-top: 30px;
     margin-bottom: 50px;
 }
+/*Update Payment & Payment part Start*/
+.mainContainer2{
+    overflow: hidden;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 50px;
+    width:  70%;
+    border: 3px solid;
+    border-color: gold;
+}
+/*Update Payment & Payment part End*/
 
 .recordQuantity{
     text-align: left;
@@ -43,6 +56,23 @@ h5{
 .recordQuantity p{
     display: inline-block;
 }
+
+/*Update Payment & Payment part Start*/
+.recordQuantity2{
+    text-align: left;
+    display: inline-block;
+    background-color: gold;
+    width:  40%;
+    border-radius: 20px;
+    margin: 10px;
+    position: relative;
+    background-color: darkgray;
+}
+
+.recordQuantity2 p{
+    display: inline-block;
+}
+/*Update Payment & Payment part End*/
 
 .frontPart{
     margin: 10px;
@@ -89,6 +119,21 @@ h5{
     margin: 20px;
 }
 
+/*Update Payment & Payment part Start*/
+.total2{
+    background-color: black;
+    border-radius: 10px;
+    border-width: 1px;
+    border: none;
+    color: gold;
+    width: 30%;
+    display: inline-block;
+    padding: 7px;
+    margin: 20px;
+    font-weight: 700;
+    font-size: 18px;
+}
+/*Update Payment & Payment part End*/
 .name{
     font-weight: bold;
 }

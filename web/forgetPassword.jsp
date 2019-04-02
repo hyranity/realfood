@@ -19,12 +19,13 @@
 		<form>
                     <input type="password" id="password" value="" placeholder="New Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email address';}" required>
                     <input type="password" value="" id="confirmationPassword" placeholder="Confirmation Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email address';}" required>
-                    <label><input type="checkbox" onclick="myFunction()" >Show Password</label>
+                    <input type="checkbox" onclick="myFunction()" id="showPass" /><label style="margin-left: 130px;" for="showPass" id="showPassLabel">Click here to show password</label><br>
                     <input type="submit" value="Reset my Password"/>
 		</form>
 	</div>
 </div>
     <script>
+        
 /*Show The Password*/
 function myFunction() {
   var x = document.getElementById("password");
@@ -36,6 +37,14 @@ function myFunction() {
     x.type = "password";
     y.type = "password";
   }
+  
+  
+   if( document.getElementById("showPass").checked){
+        $("#showPassLabel").html("Click here to hide password");
+        }
+        else{
+            $("#showPassLabel").html("Click here to show password");
+        }
 }
 
 /* Check Both Password is same or Not */

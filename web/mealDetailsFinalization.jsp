@@ -23,7 +23,7 @@
             </div>
         </div>
         
-        <div class="outsideContainer">
+        <div class="outsideContainer"><br/><br/><br/>
 
             <h1>Finalize meal details</h1>
             <h5 id="subtitle">Complete the meal creation by filling in its details.</h5>

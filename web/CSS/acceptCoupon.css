@@ -1,4 +1,3 @@
-/*--login start here--*/
 
  body{
    font-size: 100%;
@@ -23,7 +22,7 @@ a:hover {
     font-weight: 700;
 
 }
-.forgetPassword {
+.acceptCoupon {
     width:27%;
     background-color: #000000;
     margin: 150px auto 0px;
@@ -31,20 +30,20 @@ a:hover {
     padding:3em 2em;
 
 }
-.forgetPassword h1 {
+.acceptCoupon h1 {
     text-align: center;
     font-size: 28px;
     color:gold;
     font-weight: 700;
 }
-.forgetPassword p {
+.acceptCoupon p {
     font-size: 16px;
     color: gold;
     line-height: 24px;
     margin: 24px 0px;
     text-align:center;
 }
-.forgetPassword input[type=password] {
+.acceptCoupon input[type=password] {
     font-size: 12px;
     color: #000000;
     padding: 20px 12px;
@@ -57,7 +56,7 @@ a:hover {
     background-color: gold;
     margin-bottom: 10px;
 }
-.forgetPassword input[type=text] {
+.acceptCoupon input[type=text] {
     font-size: 12px;
     color: #000000;
     padding: 20px 12px;
@@ -71,7 +70,7 @@ a:hover {
     margin-bottom: 10px;
 }
 
-.forgetPassword input[type=submit] {
+.acceptCoupon input[type=submit] {
     font-size: 16px;
     color: #000000;
     background-color:#ffffff;
@@ -85,7 +84,7 @@ a:hover {
     display: block;
     margin: 18px auto 0;
 }
-.forgetPassword input[type=submit]:hover{
+.acceptCoupon input[type=submit]:hover{
     background-color:#000000;  
     transition: 0.1s all;
     color: gold;
@@ -114,26 +113,26 @@ label{
     margin-top: 24px;	
 }
 
-.forgetPassword {
+.acceptCoupon {
     width: 30%;
 }
 }
 @media(max-width:1024px){
-.forgetPassword {
+.acceptCoupon {
     width: 37%;	
 }
 }
 @media(max-width:768px){
-.forgetPassword {
+.acceptCoupon {
     width: 49%;
 }	
 .containerBox h2 {
     font-size: 2em;
 }
-.forgetPassword {
+.acceptCoupon {
     width: 60%;
 }
-.forgetPassword h1 {
+.acceptCoupon h1 {
     font-size: 2em;
 }
 }
@@ -141,7 +140,7 @@ label{
 	
 }
 @media(max-width:480px){
-.forgetPassword {
+.acceptCoupon {
     width: 80%;
     padding: 3em 1.5em;
 }	
@@ -150,44 +149,23 @@ label{
 .containerBox h2 {
     font-size: 1.5em;
 }
-.forgetPassword h1 {
+.acceptCoupon h1 {
     font-size: 1.5em;
 }
-.forgetPassword {
+.acceptCoupon {
     width: 80%;
     margin: 2em auto 0em;
     padding: 1.5em 1.5em;
 }
-.forgetPassword p {
+.acceptCoupon p {
     font-size: 0.9em;	
 }
-.forgetPassword input[type=submit] {
+.acceptCoupon input[type=submit] {
     font-size:0.9em;
     width: 75%;
 }
-.forgetPassword input[type=text] {
+.acceptCoupon input[type=text] {
     font-size: 0.9em;
     padding: 0.8em 0.5em;
 }
-}
-
-input:checked + label{
-    color: green;
-    
-}
-
-input[type=checkbox]{
-    display: none;
-}
-
-label{
-    color: gold;
-    font-weight: bold;
-    text-align: center;
-    margin: 10px;
-    border-radius: 13px;
-    padding: 10px;
-    font-size: 15px;
-    background-color: black;
-    
 }
