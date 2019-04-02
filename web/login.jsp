@@ -56,7 +56,7 @@
         <div class="forgotPasswordOverlay">
             <form action="" method="POST">
                 <div class='closeBt'>x</div>
-                <h2>Stay calm!</h2>
+                <h2>Stay calm! Help is here.        </h2>
                 <h5>Please enter your personal email that you've used to register your account. We'll email you a link which you can click to reset your password.</h5>
                 <input type="text" placeholder="email">
                 <br/>

@@ -29,6 +29,8 @@
 </header>
 <body>
     <div class="container">
+        <!-- Error message -->
+        <div class="errorMsg">${errorMsg}</div>
     <h1>RealFood</h1>
     <h2>Food. Perfected.</h2>
     <img class="bigImage" src="Images/ronaldo-de-oliveira-1053413-unsplash.jpg"/> <!-- Photo by Ronaldo de Oliveira on Unsplash -->

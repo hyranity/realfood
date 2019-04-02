@@ -147,6 +147,7 @@
     color: red;
     margin: 10px;
     text-align: center;
+    display: inline-block;
     background-color: black;
-    width: 120%;
+    width: 600px;
 }
