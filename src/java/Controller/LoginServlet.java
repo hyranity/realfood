@@ -46,9 +46,18 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        // Get the required values
-        String id = request.getParameter("id");
         
+        // Get the required values
+        String id = ""; 
+        String password = ""; 
+        
+        try{
+            id = request.getParameter("id");
+            password = request.getParameter("password");
+        }
+        catch(NullPointerException ex){
+            System.out.println("ERROR: Unable to obtain id & password: " + ex.getMessage());
+        }
         //If the ID is too short, send an error message
         if(id.length() < 4){
             System.out.println("ID entered is not recognized. User entered: " + id);    // Do appropriate error messages
@@ -56,7 +65,7 @@ public class LoginServlet extends HttpServlet {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
         }
         
-        String password = request.getParameter("password");
+        
         String prefix = id.substring(0, 3); //This will either be STU (student login) or EMP (employee login)
 
         // Create objects
@@ -78,8 +87,8 @@ public class LoginServlet extends HttpServlet {
                 } else {
 
                     // Following block of code is to validate student's enrolment status
-                    Schoolsystem ss = new Schoolsystem();
-                    ss = em.find(Schoolsystem.class, id);
+                    Schoolsystemstudent ss = new Schoolsystemstudent();
+                    ss = em.find(Schoolsystemstudent.class, id);
                     if (!ss.getIsenrolled() || ss == null) {
                         System.out.println("ERROR: Student is no longer enrolled or does not exist in School system."); // Do appropriate error messages
                         request.setAttribute("errorMsg", "Oh no, this student is no longer enrolled to this school. We only allow existing students....sorry.");
@@ -93,6 +102,9 @@ public class LoginServlet extends HttpServlet {
                         if (hasher.getHashedPassword().equals(stud.getPassword())) {
 
                             //Password is correct, grant access by creating a session by creating a session for STUDENT
+                            System.out.println("SUCCESS: Student login is successful.");
+                            
+                            
                         } else {
                             // Password is not the same; perform error messages
                             System.out.println("ERROR: Incorrect password");

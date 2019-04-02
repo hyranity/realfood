@@ -25,19 +25,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author mast3
  */
 @Entity
-@Table(name = "SCHOOLSYSTEM")
+@Table(name = "SCHOOLSYSTEMSTUDENT")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Schoolsystem.findAll", query = "SELECT s FROM Schoolsystem s")
-    , @NamedQuery(name = "Schoolsystem.findByStudentid", query = "SELECT s FROM Schoolsystem s WHERE s.studentid = :studentid")
-    , @NamedQuery(name = "Schoolsystem.findByFirstname", query = "SELECT s FROM Schoolsystem s WHERE s.firstname = :firstname")
-    , @NamedQuery(name = "Schoolsystem.findByLastname", query = "SELECT s FROM Schoolsystem s WHERE s.lastname = :lastname")
-    , @NamedQuery(name = "Schoolsystem.findByStudentemail", query = "SELECT s FROM Schoolsystem s WHERE s.studentemail = :studentemail")
-    , @NamedQuery(name = "Schoolsystem.findByGender", query = "SELECT s FROM Schoolsystem s WHERE s.gender = :gender")
-    , @NamedQuery(name = "Schoolsystem.findByIsenrolled", query = "SELECT s FROM Schoolsystem s WHERE s.isenrolled = :isenrolled")
-    , @NamedQuery(name = "Schoolsystem.findByDatejoined", query = "SELECT s FROM Schoolsystem s WHERE s.datejoined = :datejoined")
-    , @NamedQuery(name = "Schoolsystem.findByMykad", query = "SELECT s FROM Schoolsystem s WHERE s.mykad = :mykad")})
-public class Schoolsystem implements Serializable {
+    @NamedQuery(name = "Schoolsystemstudent.findAll", query = "SELECT s FROM Schoolsystemstudent s")
+    , @NamedQuery(name = "Schoolsystemstudent.findByStudentid", query = "SELECT s FROM Schoolsystemstudent s WHERE s.studentid = :studentid")
+    , @NamedQuery(name = "Schoolsystemstudent.findByFirstname", query = "SELECT s FROM Schoolsystemstudent s WHERE s.firstname = :firstname")
+    , @NamedQuery(name = "Schoolsystemstudent.findByLastname", query = "SELECT s FROM Schoolsystemstudent s WHERE s.lastname = :lastname")
+    , @NamedQuery(name = "Schoolsystemstudent.findByStudentemail", query = "SELECT s FROM Schoolsystemstudent s WHERE s.studentemail = :studentemail")
+    , @NamedQuery(name = "Schoolsystemstudent.findByGender", query = "SELECT s FROM Schoolsystemstudent s WHERE s.gender = :gender")
+    , @NamedQuery(name = "Schoolsystemstudent.findByIsenrolled", query = "SELECT s FROM Schoolsystemstudent s WHERE s.isenrolled = :isenrolled")
+    , @NamedQuery(name = "Schoolsystemstudent.findByDatejoined", query = "SELECT s FROM Schoolsystemstudent s WHERE s.datejoined = :datejoined")
+    , @NamedQuery(name = "Schoolsystemstudent.findByMykad", query = "SELECT s FROM Schoolsystemstudent s WHERE s.mykad = :mykad")})
+public class Schoolsystemstudent implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -76,18 +76,18 @@ public class Schoolsystem implements Serializable {
     private Date datejoined;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 13)
+    @Size(min = 1, max = 14)
     @Column(name = "MYKAD")
     private String mykad;
 
-    public Schoolsystem() {
+    public Schoolsystemstudent() {
     }
 
-    public Schoolsystem(String studentid) {
+    public Schoolsystemstudent(String studentid) {
         this.studentid = studentid;
     }
 
-    public Schoolsystem(String studentid, String firstname, String lastname, String studentemail, Character gender, Boolean isenrolled, Date datejoined, String mykad) {
+    public Schoolsystemstudent(String studentid, String firstname, String lastname, String studentemail, Character gender, Boolean isenrolled, Date datejoined, String mykad) {
         this.studentid = studentid;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -172,10 +172,10 @@ public class Schoolsystem implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Schoolsystem)) {
+        if (!(object instanceof Schoolsystemstudent)) {
             return false;
         }
-        Schoolsystem other = (Schoolsystem) object;
+        Schoolsystemstudent other = (Schoolsystemstudent) object;
         if ((this.studentid == null && other.studentid != null) || (this.studentid != null && !this.studentid.equals(other.studentid))) {
             return false;
         }
@@ -184,7 +184,7 @@ public class Schoolsystem implements Serializable {
 
     @Override
     public String toString() {
-        return "Model.Schoolsystem[ studentid=" + studentid + " ]";
+        return "Model.Schoolsystemstudent[ studentid=" + studentid + " ]";
     }
     
 }

@@ -12,6 +12,7 @@
         <title>RealFood</title>
         <link rel="stylesheet" href="CSS/home.css">
         <link rel="stylesheet" href="CSS/headerFooter.css">
+        <link rel="stylesheet" href="CSS/commonStyles.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
@@ -26,6 +27,8 @@
 </header>
 <body>
     <div class="container">
+        <!-- Error message -->
+        <div class="errorMsg">${errorMsg}</div>
     <h1>RealFood</h1>
     <h2>Food. Perfected.</h2>
     <img class="bigImage" src="Images/ronaldo-de-oliveira-1053413-unsplash.jpg"/> <!-- Photo by Ronaldo de Oliveira on Unsplash -->

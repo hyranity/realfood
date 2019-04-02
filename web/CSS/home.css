@@ -27,6 +27,7 @@ h2{
 /* Container css */
 .container{
     min-height: 100%;
+    text-align: center;
 }
 
 /* Tile Container */
