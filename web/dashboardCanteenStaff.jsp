@@ -4,6 +4,7 @@
     Author     : Johann
 --%>
 
+<%@page import="Model.Staff"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -18,8 +19,21 @@
         <title>My Dashboard</title>
     </head>
     <body>
+        <%
+            
+            session = request.getSession(false);
+            // If user is not logged in, redirect to login page
+            if( session.getAttribute("staff") == null){
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+            else{
+           Staff staff = (Staff) session.getAttribute("staff");
+           String fname = staff.getFirstname();
+            
+        %>
         <div class="dashboardContainer">
-            <h1>Welcome, Jacob <span class="badge badge-primary">Canteen Staff</span></h1>
+            <h1>Welcome, <%=fname%> <span class="badge badge-primary">Canteen Staff</span></h1>
             <h4 id="subtitle">Here's your dashboard.</h4>
             <div class="buttonsContainer">
                 <a href="#"><div class="buttonDiv" id="topup">Top Up</div></a>
@@ -29,8 +43,9 @@
                 <a href="#"><div class="buttonDiv" id="prep">order preparation</div></a>
                 <a href="#"><div class="buttonDiv" id="account">my account</div></a>
             </div>
-            <a href="#"><div class="logout">logout</div></a>
+            <a href="LogoutServlet"><div class="logout">logout</div></a>
         </div>
+            <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>

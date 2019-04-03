@@ -46,26 +46,23 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        
         // Get the required values
-        String id = ""; 
-        String password = ""; 
-        
-        try{
+        String id = "";
+        String password = "";
+
+        try {
             id = request.getParameter("id");
             password = request.getParameter("password");
-        }
-        catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.out.println("ERROR: Unable to obtain id & password: " + ex.getMessage());
         }
         //If the ID is too short, send an error message
-        if(id.length() < 4){
+        if (id.length() < 4) {
             System.out.println("ID entered is not recognized. User entered: " + id);    // Do appropriate error messages
-                request.setAttribute("errorMsg", "Oops! We don't know what that ID means. Make sure you've entered it correctly.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.setAttribute("errorMsg", "Oops! We don't know what that ID means. Make sure you've entered it correctly.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
-        
-        
+
         String prefix = id.substring(0, 3); //This will either be STU (student login) or EMP (employee login)
 
         // Create objects
@@ -92,7 +89,7 @@ public class LoginServlet extends HttpServlet {
                     if (!ss.getIsenrolled() || ss == null) {
                         System.out.println("ERROR: Student is no longer enrolled or does not exist in School system."); // Do appropriate error messages
                         request.setAttribute("errorMsg", "Oh no, this student is no longer enrolled to this school. We only allow existing students....sorry.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                        request.getRequestDispatcher("login.jsp").forward(request, response);
                     } else {
 
                         // Compare password
@@ -103,8 +100,10 @@ public class LoginServlet extends HttpServlet {
 
                             //Password is correct, grant access by creating a session by creating a session for STUDENT
                             System.out.println("SUCCESS: Student login is successful.");
-                            
-                            
+                            HttpSession session = request.getSession(true);
+                            session.setAttribute("stud", stud);
+                            request.getRequestDispatcher("dashboardStudent.jsp").forward(request, response);
+
                         } else {
                             // Password is not the same; perform error messages
                             System.out.println("ERROR: Incorrect password");
@@ -117,7 +116,7 @@ public class LoginServlet extends HttpServlet {
                 // If prefix = EMP, look from staff table
                 staff = em.find(Staff.class, id);
 
-                // If there's no student record, return error message
+                // If there's no staff record, return error message
                 if (staff == null) {
                     System.out.println("ERROR: Staff does not exist.");    // Do appropriate error messages
                     request.setAttribute("errorMsg", "Oops! Seems like you've entered an incorrect staff ID or password.");
@@ -131,11 +130,15 @@ public class LoginServlet extends HttpServlet {
                     if (hasher.getHashedPassword().equals(staff.getPassword())) {
 
                         //Password is correct, grant access by creating a session for STAFF
+                        HttpSession session = request.getSession(true);
+                        session.setAttribute("staff", staff);
+                        request.getRequestDispatcher("dashboardCanteenStaff.jsp").forward(request, response);
+
                     } else {
                         // Password is not the same; perform error messages
                         System.out.println("ERROR: Incorrect password");
                         request.setAttribute("errorMsg", "Oops! Seems like you've entered an incorrect staff ID or password.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                        request.getRequestDispatcher("login.jsp").forward(request, response);
                     }
                 }
             } else {

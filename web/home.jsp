@@ -21,16 +21,15 @@
     <header>
         <div>
             <ul>
-                <a href="#"  class="right">Login</a>
-                <a href="#"  class="right">Register</a>
-                <a href="#"  class="right" style="background-color: #ffffff; color: #000000;">Home</a>
+                <a href="login.jsp"  class="right">Login</a>
+                <a href="studentRegistration.jsp"  class="right">Register</a>
+                <a href="home.jsp"  class="right" style="background-color: #ffffff; color: #000000;">Home</a>
             </ul>
         </div>
 </header>
 <body>
     <div class="container">
-        <!-- Error message -->
-        <div class="errorMsg">${errorMsg}</div>
+        
     <h1>RealFood</h1>
     <h2>Food. Perfected.</h2>
     <img class="bigImage" src="Images/ronaldo-de-oliveira-1053413-unsplash.jpg"/> <!-- Photo by Ronaldo de Oliveira on Unsplash -->

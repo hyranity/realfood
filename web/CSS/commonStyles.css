@@ -150,4 +150,21 @@
     display: inline-block;
     background-color: black;
     width: 600px;
+    position: absolute;
+    top: 160px;
+    left: 50%;
+    margin-left: -300px;
+}
+
+.logout{
+    color: white;
+    margin: 10px;
+    text-align: center;
+    display: inline-block;
+    background-color: black;
+    width: 600px;
+    position: absolute;
+    top: 160px;
+    left: 50%;
+    margin-left: -300px;
 }

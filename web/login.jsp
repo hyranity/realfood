@@ -37,7 +37,8 @@
                 
                 <!-- Error message -->
                 <div class="errorMsg">${errorMsg}</div>
-                
+                <!-- Logout message -->
+                <div class="logout">${logoutMsg}</div>
                 <!-- Login part -->
                 <h1 id="title">Login</h1>
                 <form method="POST" action="LoginServlet">

@@ -4,6 +4,7 @@
     Author     : mast3
 --%>
 
+<%@page import="Model.Student"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,8 +20,20 @@
     </head>
     <body>
         
+        <%
+         session = request.getSession(false);
+            // If user is not logged in, redirect to login page
+            if( session.getAttribute("stud") == null){
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+            else{
+           Student stud = (Student) session.getAttribute("stud");
+           String fname = stud.getFirstname();
+        %>
+        
         <div class="dashboardContainer">
-            <h1>Welcome, Michael <span class="badge badge-success">Student</span></h1>
+            <h1>Welcome, <%=fname%> <span class="badge badge-success">Student</span></h1>
             <h4 id="subtitle">Here's your dashboard.</h4>
             <div class="credits">1000 Credits</div>
             <div class="buttonsContainer">
@@ -30,8 +43,9 @@
                 <a href="#"><div class="buttonDiv" id="makeOrder">make an order</div></a>
                 <a href="studentProfile.jsp"><div class="buttonDiv" id="account">my account</div></a>
             </div>
-            <a href="#"><div class="logout">logout</div></a>
+            <a href="LogoutServlet"><div class="logout">logout</div></a>
         </div>
+            <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
