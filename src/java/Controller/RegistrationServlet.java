@@ -150,12 +150,12 @@ public class RegistrationServlet extends HttpServlet {
                     System.out.println("ERROR! No staff found!");
                 } else {
                     //Transfer existing student details into the new account
-                    staff.setStaffid(request.getParameter("studentId"));
-                    staff.setFirstname(staff.getFirstname());
-                    staff.setLastname(staff.getLastname());
+                    staff.setStaffid(request.getParameter("id"));
+                    staff.setFirstname(request.getParameter("fname"));
+                    staff.setLastname(request.getParameter("lname"));
                     staff.setEmail(request.getParameter("email")); //Email can be student's personal email
-                    staff.setGender(staff.getGender());
-                    staff.setMykad(staff.getMykad());
+                    staff.setGender(request.getParameter("gender").charAt(0));
+                    staff.setMykad(request.getParameter("myKad"));
 
                     // Set fixed values
                     staff.setDatejoined(Auto.getToday());
