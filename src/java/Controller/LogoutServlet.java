@@ -40,7 +40,7 @@ public class LogoutServlet extends HttpServlet {
             session.invalidate();
         
         //redirect
-        request.setAttribute("logoutMsg", "You have successfully logged out.");
+        request.setAttribute("accountMsg", "You have successfully logged out.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 

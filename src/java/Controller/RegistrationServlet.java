@@ -59,10 +59,16 @@ public class RegistrationServlet extends HttpServlet {
         String id = "";
         String password = "";
         String email = "";
+        String previousUrl ="";
         
-        URL referer = new URL(request.getHeader("referer"));
-        String previousUrl = referer.getPath().substring(request.getContextPath().length());
-        
+        try {
+            URL referer = new URL(request.getHeader("referer"));
+            previousUrl = referer.getPath().substring(request.getContextPath().length());
+        } catch (Exception ex) {
+            request.setAttribute("errorMsg", "Oops! Please don't access that page directly.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
 
         // Test for NULL values
         try {
@@ -74,6 +80,7 @@ public class RegistrationServlet extends HttpServlet {
             //If the values are null
             request.setAttribute("errorMsg", "Oops! It seems that your values are empty. Ensure that all fields are filled.");
             request.getRequestDispatcher(previousUrl).forward(request, response);
+            return;
         }
 
         if (userType == null) {
@@ -81,6 +88,7 @@ public class RegistrationServlet extends HttpServlet {
             System.out.println("userType is null");
             request.setAttribute("errorMsg", "Oops! Registration failed. Please try again without repeatedly refreshing the page.");
             request.getRequestDispatcher("home.jsp").forward(request, response);
+            return;
         }
 
         // If entered from student registration form
@@ -102,12 +110,22 @@ public class RegistrationServlet extends HttpServlet {
                     System.out.println("ERROR! No student found!");
                     request.setAttribute("errorMsg", "Oops! This student does not exist at the school. Are you sure that the ID is correct?");
                     request.getRequestDispatcher(previousUrl).forward(request, response);
+                    return;
                 } else if (!ss.getIsenrolled()) {  // If student is no longer enrolled
                     System.out.println("ERROR! The student is no longer enrolled.");
                     request.setAttribute("errorMsg", "Oops! This student is no longer enrolled. We only accept enrolled students.");
                     request.getRequestDispatcher(previousUrl).forward(request, response);
+                    return;
 
                 } else {
+                     // Find existing student details to prevent duplicate records
+                    if(em.find(Student.class, id) != null){
+                        request.setAttribute("errorMsg", "Hold on! You have already registered. Please login!");
+                        request.getRequestDispatcher(previousUrl).forward(request, response);
+                        return;
+                    }
+                    
+                    
                     //Transfer existing student details into the new account
                     Student stud = new Student();
                     stud.setStudentid(id);
@@ -126,16 +144,22 @@ public class RegistrationServlet extends HttpServlet {
                     stud.setPassword(hasher.getHashedPassword());
                     stud.setPasswordsalt(hasher.getSalt());
 
-                   
+                   // Insert the student object
                     em.persist(stud);
                     utx.commit();
+                    
+                    //Login successful message
+                    request.setAttribute("accountMsg", "Your registration is successful! You may login now.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
                 }
 
             } catch (Exception  ex) {
                 System.out.println("ERROR: Unable to create student object: " + ex.getMessage());
                 // This will be triggered if something went wrong.
                 request.setAttribute("errorMsg", "Oops! We couldn't register you for some reason.");
-                request.getRequestDispatcher("studentRegistration.jsp").forward(request, response);
+               request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
+               return;
             }
         } else {
             try {
@@ -152,6 +176,7 @@ public class RegistrationServlet extends HttpServlet {
                      // This will be triggered if something went wrong.
                 request.setAttribute("errorMsg", "Oops! This staff has already been registered.");
                 request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
+                return;
                 } else {
                     staff = new Staff();
                     //Transfer existing student details into the new account
@@ -175,6 +200,11 @@ public class RegistrationServlet extends HttpServlet {
                     //Insert the staff object
                     em.persist(staff);
                     utx.commit();
+                    
+                    //Login successful message
+                    request.setAttribute("accountMsg", "Your registration is successful! You may login now.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
                 }
 
             } catch (Exception ex) {
@@ -182,6 +212,7 @@ public class RegistrationServlet extends HttpServlet {
                 System.out.println("ERROR: Unable to create staff object: " + ex.getMessage());
                 request.setAttribute("errorMsg", "Oops! We couldn't register the staff for some reason.");
                 request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
+                return;
                 // This will be triggered if the student ID is incorrect or student is no longer enrolled.
             }
         }

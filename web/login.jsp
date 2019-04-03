@@ -25,7 +25,7 @@
         <div>
             <ul>
                 <a href="#"  class="right" style="background-color: #ffffff; color: #000000;">Login</a>
-                <a href="#"  class="right">Register</a>
+                <a href="studentRegistration.jsp"  class="right">Register</a>
                 <a href="#"  class="right">Home</a>
             </ul>
         </div>
@@ -37,8 +37,8 @@
                 
                 <!-- Error message -->
                 <div class="errorMsg">${errorMsg}</div>
-                <!-- Logout message -->
-                <div class="logout">${logoutMsg}</div>
+                <!-- Account message -->
+                <div class="accountMsg">${accountMsg}</div>
                 <!-- Login part -->
                 <h1 id="title">Login</h1>
                 <form method="POST" action="LoginServlet">

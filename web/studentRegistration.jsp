@@ -36,7 +36,7 @@
         <!-- Main container -->
         <div class="container">           
             <!-- Error message -->
-        <div class="errorMsg">${errorMsg}</div>
+        <div class="errorMsg" style="position: relative; margin: 0; left: 0; top: 80px;">${errorMsg}</div>
             <div class="signupContent">
                 
                 
