@@ -4,6 +4,7 @@
     Author     : mast3
 --%>
 
+<%@page import="Model.Staff"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,7 +18,20 @@
         <link href="CSS/commonStyles.css" rel="stylesheet">
         <title>Manage canteen staff</title>
     </head>
+    
     <body>
+        <%
+            
+            session = request.getSession(false);
+            // If user is not logged in, redirect to login page
+            if( session.getAttribute("staff") == null){
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            }
+            else{
+           Staff staff = (Staff) session.getAttribute("staff");
+            
+        %>
         <h1>Manage Staff</h1><br><br>
         <h4 id="subtitle">Here you can manage staff. Edit staff to view their details.</h4>
         
@@ -65,6 +79,7 @@
                     
         </div>
         <div><button class="nextButton" href="" type="submit" >Back</button></div>
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>

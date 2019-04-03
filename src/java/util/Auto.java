@@ -12,7 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 
 public class Auto {
@@ -33,6 +33,17 @@ public class Auto {
             return true;
         else
             return false;
+    }
+    
+    public static String dateToString(Date date){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        String month = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
+        int year = cal.get(Calendar.YEAR);
+        
+        return  day + " " + month + ", " + year;
     }
     
     //Generate ID based on total existing records

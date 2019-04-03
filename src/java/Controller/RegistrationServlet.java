@@ -116,6 +116,7 @@ public class RegistrationServlet extends HttpServlet {
                     stud.setEmail(email); //Email can be student's personal email
                     stud.setGender(ss.getGender());
                     stud.setMykad(ss.getMykad());
+                    stud.setDatejoined(Auto.getToday());
 
                     //Set fixed values
                     stud.setCredits(1000);

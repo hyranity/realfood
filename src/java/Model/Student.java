@@ -6,6 +6,7 @@
 package Model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -16,6 +17,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -38,7 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Student.findByPassword", query = "SELECT s FROM Student s WHERE s.password = :password")
     , @NamedQuery(name = "Student.findByGender", query = "SELECT s FROM Student s WHERE s.gender = :gender")
     , @NamedQuery(name = "Student.findByMykad", query = "SELECT s FROM Student s WHERE s.mykad = :mykad")
-    , @NamedQuery(name = "Student.findByCredits", query = "SELECT s FROM Student s WHERE s.credits = :credits")})
+    , @NamedQuery(name = "Student.findByCredits", query = "SELECT s FROM Student s WHERE s.credits = :credits")
+    , @NamedQuery(name = "Student.findByDatejoined", query = "SELECT s FROM Student s WHERE s.datejoined = :datejoined")})
 public class Student implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -87,6 +91,11 @@ public class Student implements Serializable {
     @NotNull
     @Column(name = "CREDITS")
     private int credits;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "DATEJOINED")
+    @Temporal(TemporalType.DATE)
+    private Date datejoined;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentid")
     private List<Studentorder> studentorderList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentid")
@@ -99,7 +108,7 @@ public class Student implements Serializable {
         this.studentid = studentid;
     }
 
-    public Student(String studentid, String firstname, String lastname, String email, String passwordsalt, String password, Character gender, String mykad, int credits) {
+    public Student(String studentid, String firstname, String lastname, String email, String passwordsalt, String password, Character gender, String mykad, int credits, Date datejoined) {
         this.studentid = studentid;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -109,6 +118,7 @@ public class Student implements Serializable {
         this.gender = gender;
         this.mykad = mykad;
         this.credits = credits;
+        this.datejoined = datejoined;
     }
 
     public String getStudentid() {
@@ -181,6 +191,14 @@ public class Student implements Serializable {
 
     public void setCredits(int credits) {
         this.credits = credits;
+    }
+
+    public Date getDatejoined() {
+        return datejoined;
+    }
+
+    public void setDatejoined(Date datejoined) {
+        this.datejoined = datejoined;
     }
 
     @XmlTransient

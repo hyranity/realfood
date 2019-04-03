@@ -1,3 +1,5 @@
+<%@page import="util.Auto"%>
+<%@page import="Model.Student"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -11,6 +13,29 @@
         <link href="CSS/students.css" rel="stylesheet">
     </head>
     <body>
+        <%
+         session = request.getSession(false);
+            // If user is not logged in, redirect to login page
+            if (session.getAttribute("staff") == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+            } else {
+                Student student = (Student) session.getAttribute("staff");
+                String id = student.getStudentid();
+                String fname = student.getFirstname();
+                String lname = student.getLastname();
+                String myKad = student.getMykad();
+                String dateJoined = Auto.dateToString(student.getDatejoined());
+                String email = student.getEmail();
+                String gender = "";
+
+                //Gender setting
+                if (student.getGender() == 'M') {
+                    gender = "Male";
+                } else {
+                    gender = "Female";
+                }
+        %>
         <div class="outsideContainer">
 
             <h1 >My Account</h1>

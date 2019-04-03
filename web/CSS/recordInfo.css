@@ -86,6 +86,7 @@ h6{
 
 /* Back CSS */
 .back{
+    transition: 0.2s;
 }
 
 .back:hover{
