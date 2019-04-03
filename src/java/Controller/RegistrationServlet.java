@@ -142,13 +142,17 @@ public class RegistrationServlet extends HttpServlet {
                 utx.begin();
 
                 // Search for existing staff
-                staff = em.find(Staff.class, request.getParameter("staffid"));
+                staff = em.find(Staff.class, request.getParameter("id"));
 
                 // If there's an error, provide appropriate error messages
-                if (staff.getStaffid() != null) // If staff ID already exists
+                if (staff != null) // If staff ID already exists
                 {
-                    System.out.println("ERROR! No staff found!");
+                    System.out.println("ERROR! Existing staff!");
+                     // This will be triggered if something went wrong.
+                request.setAttribute("errorMsg", "Oops! This staff has already been registered.");
+                request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
                 } else {
+                    staff = new Staff();
                     //Transfer existing student details into the new account
                     staff.setStaffid(request.getParameter("id"));
                     staff.setFirstname(request.getParameter("fname"));
@@ -156,6 +160,7 @@ public class RegistrationServlet extends HttpServlet {
                     staff.setEmail(request.getParameter("email")); //Email can be student's personal email
                     staff.setGender(request.getParameter("gender").charAt(0));
                     staff.setMykad(request.getParameter("myKad"));
+                    staff.setIshired(true);
 
                     // Set fixed values
                     staff.setDatejoined(Auto.getToday());
@@ -167,10 +172,15 @@ public class RegistrationServlet extends HttpServlet {
                     staff.setPasswordsalt(hasher.getSalt());
 
                     //Insert the staff object
+                    em.persist(staff);
+                    utx.commit();
                 }
 
             } catch (Exception ex) {
+                ex.printStackTrace();
                 System.out.println("ERROR: Unable to create staff object: " + ex.getMessage());
+                request.setAttribute("errorMsg", "Oops! We couldn't register the staff for some reason.");
+                request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
                 // This will be triggered if the student ID is incorrect or student is no longer enrolled.
             }
         }

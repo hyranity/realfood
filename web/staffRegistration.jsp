@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="CSS/registration.css">
         <link  rel="stylesheet" href="CSS/headerFooter.css">
         <link rel="stylesheet" href="CSS/headerFooter.css">
+        <link rel="stylesheet" href="CSS/commonStyles.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
            <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
@@ -36,14 +37,18 @@
             
             
             <div class="container">           
+                <div class="errorMsg">${errorMsg}</div>
                 <div class="signupContent">
                     
-                    <form action="RegistrationServlet" method="POST" id="" class="">
+                    <form action="RegistrationServlet" method="POST" >
                         <h1 style="text-align: center" >Staff Registration</h1>
                         <h5>Fill in the blanks with your personal details.</h5>
                         
+                        <!-- User type: Staff -->
+                    <input type="hidden" value="staff" name="userType"/>
+                        
                         <div class="formGroup">
-                            <input type="text" class="formInput" id="userID" name="staffID" placeholder="User ID (or existing Student ID)" maxlength="10" required/>
+                            <input type="text" class="formInput" id="userID" name="id" placeholder="Staff ID" maxlength="10" required/>
                         </div>
                         
                         <div class="formGroup">
@@ -52,7 +57,7 @@
                         </div>
                         
                         <div class="formGroup">
-                            <select class="formInput">
+                            <select class="formInput" name="gender">
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
@@ -84,7 +89,7 @@
                         </div>
                         
                         <div class="formButton" style="text-align: center">
-                            <input type="submit" name="submit" id="submit" class="submitButton" value="Sign up" style="text-align: center" disabled/>
+                            <input type="submit" name="submit" id="submit" class="submitButton" value="Sign up" style="text-align: center"/>
                         </div>
                         
                     </form>
