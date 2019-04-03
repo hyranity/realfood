@@ -168,3 +168,12 @@
     left: 50%;
     margin-left: -300px;
 }
+
+.successMsg{
+    color: green;
+    margin: 10px;
+    text-align: center;
+    display: inline-block;
+    background-color: black;
+    width: 600px;
+}

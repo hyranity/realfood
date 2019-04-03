@@ -36,7 +36,7 @@
             <h1>Welcome, <%=fname%> <span class="badge badge-primary">Canteen Staff</span></h1>
             <h4 id="subtitle">Here's your dashboard.</h4>
             <div class="buttonsContainer">
-                <a href="#"><div class="buttonDiv" id="topup">Top Up</div></a>
+                <a href="topUp.jsp"><div class="buttonDiv" id="topup">Top Up</div></a>
                 <a href="#"><div class="buttonDiv" id="meal">manage meal</div></a>
                 <a href="#"><div class="buttonDiv" id="food">manage food</div></a>
                 <br/>

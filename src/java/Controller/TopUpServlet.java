@@ -5,21 +5,31 @@
  */
 package Controller;
 
+import Model.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.UserTransaction;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "LogoutServlet", urlPatterns = {"/LogoutServlet"})
-public class LogoutServlet extends HttpServlet {
+@WebServlet(name = "TopUpServlet", urlPatterns = {"/TopUpServlet"})
+public class TopUpServlet extends HttpServlet {
+    
+    @PersistenceContext
+    EntityManager em;
+    @Resource
+    UserTransaction utx;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,17 +43,50 @@ public class LogoutServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(false);
 
-        //invalidate session
-        if (session != null) {
-            session.invalidate();
+        // Make sure staff is logged in
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute("staff") == null) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
 
-        //redirect
-        request.setAttribute("accountMsg", "You have successfully logged out.");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
-        return;
+        try {
+            String studentId = request.getParameter("studentId");
+            int creditAmt = Integer.parseInt(request.getParameter("cashAmt")) * 100;
+            
+            Student stud = new Student();
+            stud = em.find(Student.class, studentId);
+            
+            // If the student ID is incorrect, show error messages and redirect to the previous page
+            if(stud == null){
+                request.setAttribute("errorMsg", "Oops! This student does not exist. Ensure that the student ID is correct.");
+                request.getRequestDispatcher("topUp.jsp").forward(request, response);
+                return;
+            }
+            
+            
+            // Update the credit amount
+            stud.setCredits(stud.getCredits() + creditAmt);
+            
+            // Save it.
+            utx.begin();
+            em.merge(stud);
+            utx.commit();
+            
+            request.setAttribute("successMsg", "Success! Student " + stud.getStudentid() + "'s credits have been topped up.");
+            request.getRequestDispatcher("topUp.jsp").forward(request, response);
+            return;
+            
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMsg", "Oops! Ensure that you've entered the cash amount in numbers only.");
+            request.getRequestDispatcher("topUp.jsp").forward(request, response);
+            return;
+        } catch (Exception e) {
+            request.setAttribute("errorMsg", "Oops! Something went wrong. Ensure that you've keyed in everything correctly.");
+            request.getRequestDispatcher("topUp.jsp").forward(request, response);
+            return;
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

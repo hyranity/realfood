@@ -32,6 +32,10 @@
     </header>
 
     <body>
+        <%
+            // To ensure that people only login either as staff or student, not both.
+            session.invalidate();
+            %>
         <div class="formContainer">
             <div class="formInnerContainer">
                 
