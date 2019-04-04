@@ -160,6 +160,7 @@ a{
     margin-bottom: 10px;
 }
 
+
 .removalConfirm{
     border-color: gold;
     border-width: 1px;
@@ -197,3 +198,90 @@ a{
     color: white;
 }
 
+/*Add CSS */
+/* Removal CSS */
+
+.adding{
+    color: green;
+    position: relative;
+    text-decoration: none;
+    background-color: black;
+    width: 130px;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 10px;
+    transition: 0.2s;
+    margin: 10px;
+}
+
+.adding:hover{
+    background-color: green;
+    color: white;
+}
+
+a{
+    text-decoration: none;
+}
+
+.addingConfirmation{
+    text-align: center;
+    display: none;
+    position: absolute;
+    width: 500px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: 40%;
+    background-color: gold;
+    padding: 12px;
+    border-radius: 10px;
+    color: black;
+    
+}
+
+.addingConfirmation h5{
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.addingConfirmation p{
+    margin-bottom: 10px;
+}
+
+
+.addingConfirm{
+    border-color: gold;
+    border-width: 1px;
+    border-style: solid;
+    padding: 4px;
+    border-radius: 10px;
+    display: inline-block;
+    color: green;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.addingConfirm:hover{
+    border-color: green;
+}
+
+.addingCancel{
+    border-color: gold;
+    border-width: 1px;
+    border-style: solid;
+    padding: 4px;
+    border-radius: 10px;
+    display: inline-block;
+    color: red;
+    font-weight: bold;
+    margin: 10px;
+    margin-bottom: 0;
+}
+
+.addingCancel:hover{
+    border-color: red;
+}
+
+a{
+    color: white;
+}
