@@ -24,7 +24,7 @@
          session = request.getSession(false);
             // If user is not logged in, redirect to login page
             if( session.getAttribute("stud") == null){
-                request.setAttribute("errorMsg", "Please login.");
+                request.setAttribute("errorMsg", "Oops! Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
             else{
