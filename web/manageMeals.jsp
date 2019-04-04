@@ -94,7 +94,7 @@
                 </table>
                             
             </div>
-            <div><button class="nextButton" href="" type="submit" >Back</button></div><br/><br/>
+            <div><a class="nextButton" href="dashboardCanteenStaff.jsp" type="submit" >Back</a></div><br/><br/>
         </form>
         
     </body>
