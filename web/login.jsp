@@ -24,9 +24,9 @@
     <header>
         <div>
             <ul>
-                <a href="#"  class="right" style="background-color: #ffffff; color: #000000;">Login</a>
+                <a href="login.jsp"  class="right" style="background-color: #ffffff; color: #000000;">Login</a>
                 <a href="studentRegistration.jsp"  class="right">Register</a>
-                <a href="#"  class="right">Home</a>
+                <a href="home.jsp"  class="right">Home</a>
             </ul>
         </div>
     </header>

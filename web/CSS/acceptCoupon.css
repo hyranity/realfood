@@ -88,7 +88,7 @@ a:hover {
     background-color:#000000;  
     transition: 0.1s all;
     color: gold;
-    border: 3px solid;
+    border: 2px solid;
     border-color: gold;
     font-weight: 700;
 }

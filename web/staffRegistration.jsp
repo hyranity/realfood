@@ -24,10 +24,10 @@
     <header>
         <div>
             <ul>
-                <a href="#"  class="right"">Login</a>
-                <a href="#"  class="right" style="background-color: #ffffff; color: #000000;">Register</a>
-                <a href="#"  class="right"">Student</a>
-                <a href="#"  class="right">Home</a>
+                <a href="login.jsp"  class="right"">Login</a>
+                <a href="staffRegistration.jsp"  class="right" style="background-color: #ffffff; color: #000000;">Register</a>
+                <a href="studentRegistration.jsp"  class="right"">Student</a>
+                <a href="home.jsp"  class="right">Home</a>
             </ul>
         </div>
 </header>
