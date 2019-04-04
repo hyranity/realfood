@@ -33,8 +33,12 @@
 
     <body>
         <%
-            // To ensure that people only login either as staff or student, not both.
-            session.invalidate();
+           
+             session = request.getSession(false);
+            // Logs out the user if there's an active session.
+            if( session.getAttribute("staff") != null || session.getAttribute("student") != null){
+                response.sendRedirect("LogoutServlet");
+            }
             %>
         <div class="formContainer">
             <div class="formInnerContainer">

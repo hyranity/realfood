@@ -3,6 +3,10 @@
   <persistence-unit name="RealFoodPU" transaction-type="JTA">
     <jta-data-source>java:app/realfood</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
+    <shared-cache-mode>NONE</shared-cache-mode>
+    <properties>
+        <property name="eclipselink.cache.shared.default" value="false" />
+    </properties>
   </persistence-unit>
+  
 </persistence>

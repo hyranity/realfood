@@ -132,7 +132,14 @@ public class LoginServlet extends HttpServlet {
                         //Password is correct, grant access by creating a session for STAFF
                         HttpSession session = request.getSession(true);
                         session.setAttribute("staff", staff);
-                        request.getRequestDispatcher("dashboardCanteenStaff.jsp").forward(request, response);
+                        session.setAttribute("isManager", true);
+                        
+                        // Redirects manager to his dashboard
+                        if (id.indexOf("EMPMAN") != -1 && staff.getStaffrole().equalsIgnoreCase("manager")) {
+                            request.getRequestDispatcher("dashboardManager.jsp").forward(request, response);
+                        } else {
+                            request.getRequestDispatcher("dashboardCanteenStaff.jsp").forward(request, response);
+                        }
 
                     } else {
                         // Password is not the same; perform error messages
