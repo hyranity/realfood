@@ -59,8 +59,8 @@ public class RegistrationServlet extends HttpServlet {
         String id = "";
         String password = "";
         String email = "";
-        String previousUrl ="";
-        
+        String previousUrl = "";
+
         try {
             URL referer = new URL(request.getHeader("referer"));
             previousUrl = referer.getPath().substring(request.getContextPath().length());
@@ -97,7 +97,7 @@ public class RegistrationServlet extends HttpServlet {
             try {
 
                 Schoolsystemstudent ss = new Schoolsystemstudent();
-                 utx.begin();
+                utx.begin();
 
                 //Searches the "external database" School System for an enrolled student with the given ID.
                 // TypedQuery<Schoolsystemstudent> query = em.createQuery("SELECT ss FROM Schoolsystemstudent ss WHERE ss.studentid = :studentid and ss.isenrolled = true", Schoolsystemstudent.class).setParameter("studentid", request.getParameter("studentId"));
@@ -118,14 +118,13 @@ public class RegistrationServlet extends HttpServlet {
                     return;
 
                 } else {
-                     // Find existing student details to prevent duplicate records
-                    if(em.find(Student.class, id) != null){
+                    // Find existing student details to prevent duplicate records
+                    if (em.find(Student.class, id) != null) {
                         request.setAttribute("errorMsg", "Hold on! You have already registered. Please login!");
                         request.getRequestDispatcher(previousUrl).forward(request, response);
                         return;
                     }
-                    
-                    
+
                     //Transfer existing student details into the new account
                     Student stud = new Student();
                     stud.setStudentid(id);
@@ -144,22 +143,22 @@ public class RegistrationServlet extends HttpServlet {
                     stud.setPassword(hasher.getHashedPassword());
                     stud.setPasswordsalt(hasher.getSalt());
 
-                   // Insert the student object
+                    // Insert the student object
                     em.persist(stud);
                     utx.commit();
-                    
+
                     //Login successful message
                     request.setAttribute("accountMsg", "Your registration is successful! You may login now.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;
                 }
 
-            } catch (Exception  ex) {
+            } catch (Exception ex) {
                 System.out.println("ERROR: Unable to create student object: " + ex.getMessage());
                 // This will be triggered if something went wrong.
                 request.setAttribute("errorMsg", "Oops! We couldn't register you for some reason.");
-               request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
-               return;
+                request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
+                return;
             }
         } else {
             try {
@@ -173,10 +172,10 @@ public class RegistrationServlet extends HttpServlet {
                 if (staff != null) // If staff ID already exists
                 {
                     System.out.println("ERROR! Existing staff!");
-                     // This will be triggered if something went wrong.
-                request.setAttribute("errorMsg", "Oops! This staff has already been registered.");
-                request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
-                return;
+                    // This will be triggered if something went wrong.
+                    request.setAttribute("errorMsg", "Oops! This staff has already been registered.");
+                    request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
+                    return;
                 } else {
                     staff = new Staff();
                     //Transfer existing student details into the new account
@@ -200,7 +199,7 @@ public class RegistrationServlet extends HttpServlet {
                     //Insert the staff object
                     em.persist(staff);
                     utx.commit();
-                    
+
                     //Login successful message
                     request.setAttribute("accountMsg", "Your registration is successful! You may login now.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
