@@ -22,21 +22,22 @@
     <body>
         <%
             session = request.getSession(false);
+            
+            String permission = (String) session.getAttribute("permission");
+            
             // If user is not logged in, redirect to login page
-            if (session.getAttribute("staff") == null) {
-                request.setAttribute("errorMsg", "Oops! Please login.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            } else {
-                //Ensure that this is the manager.
-                Staff staff = (Staff) session.getAttribute("staff");
-
-                //If not manager, log him/her out and give a warning.
-                if (!staff.getStaffrole().equalsIgnoreCase("manager")) {
-                    session.invalidate();
-                    request.setAttribute("errorMsg", "Hey! You are not allowed to visit that page.");
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
-                } else {
-
+                    return;
+                }
+            else {
+                // Allow manager only
+                if(!permission.equalsIgnoreCase("manager")){
+                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
         %>
         <h1>Manage Staff</h1><br><br>
         <h4 id="subtitle">Here you can manage staff. Edit staff to view their details.</h4>
@@ -55,7 +56,7 @@
             <br/>
         </div>
         <a href="dashboardManager.jsp"><div class="nextButton" action="dashboardManager.jsp" type="submit" >Back</div></a>
-        <%}}%>
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>

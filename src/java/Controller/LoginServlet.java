@@ -102,6 +102,7 @@ public class LoginServlet extends HttpServlet {
                             System.out.println("SUCCESS: Student login is successful.");
                             HttpSession session = request.getSession(true);
                             session.setAttribute("stud", stud);
+                            session.setAttribute("permission", "student"); // Set permissions level
                             request.getRequestDispatcher("dashboardStudent.jsp").forward(request, response);
 
                         } else {
@@ -136,8 +137,10 @@ public class LoginServlet extends HttpServlet {
                         
                         // Redirects manager to his dashboard
                         if (id.indexOf("EMPMAN") != -1 && staff.getStaffrole().equalsIgnoreCase("manager")) {
+                            session.setAttribute("permission", "manager"); // Set permissions level
                             request.getRequestDispatcher("dashboardManager.jsp").forward(request, response);
                         } else {
+                            session.setAttribute("permission", "canteenStaff"); // Set permissions level
                             request.getRequestDispatcher("dashboardCanteenStaff.jsp").forward(request, response);
                         }
 
