@@ -37,7 +37,7 @@
              session = request.getSession(false);
             // Logs out the user if there's an active session.
             if( session.getAttribute("staff") != null || session.getAttribute("student") != null){
-                response.sendRedirect("LogoutServlet");
+                session.invalidate();
             }
             %>
         <div class="formContainer">

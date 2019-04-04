@@ -15,12 +15,23 @@
     <body>
         <%
             session = request.getSession(false);
+            
+            String permission = (String) session.getAttribute("permission");
             // If user is not logged in, redirect to login page
-            if (session.getAttribute("student") == null) {
+            if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-            } else {
-                Student student = (Student) session.getAttribute("student");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+            else {
+                // Allow manager only
+                if(!permission.equalsIgnoreCase("student")){
+                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+               
+            } 
+                Student student = (Student) session.getAttribute("stud");
                 String id = student.getStudentid();
                 String fname = student.getFirstname();
                 String lname = student.getLastname();
