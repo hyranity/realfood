@@ -76,7 +76,6 @@
 .nextButton:after {
   content: "\00bb";
   opacity: 0;
-  right: -20px;
   transition: 0.2s;
 }
 

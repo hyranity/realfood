@@ -18,7 +18,7 @@
         <link href="CSS/commonStyles.css" rel="stylesheet">
         <title>Manage canteen staff</title>
     </head>
-    
+
     <body>
         <%
             session = request.getSession(false);
@@ -35,27 +35,26 @@
                     session.invalidate();
                     request.setAttribute("errorMsg", "Hey! You are not allowed to visit that page.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
-                }
-            else{
-            
+                } else {
+
         %>
         <h1>Manage Staff</h1><br><br>
         <h4 id="subtitle">Here you can manage staff. Edit staff to view their details.</h4>
-        
+
         <form class="searchForm">
             <input type="text" name="query" placeholder="search..." class="searchBar"/>
         </form>
-        
+
         <!-- Container of the results -->
         <div class="bodyContainer">
             <div class="add">
                 +
             </div>
-            
+
             ${queryResults}
-                    
+            <br/>
         </div>
-        <div><button class="nextButton" href="dashboardManager" type="submit" >Back</button></div>
+        <a href="dashboardManager.jsp"><div class="nextButton" action="dashboardManager.jsp" type="submit" >Back</div></a>
         <%}}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -74,15 +73,15 @@
             }, function () {
                 $("#subtitle").html("Here you can manage staff. Edit staff to view their details.");
                 $("#subtitle").css("color", "white");
-            }); 
+            });
             $(".searchBar").hover(function () {
                 $("#subtitle").html("Search by ID or name.");
                 $("#subtitle").css("color", "gold");
             }, function () {
                 $("#subtitle").html("Here you can manage staff. Edit staff to view their details.");
                 $("#subtitle").css("color", "white");
-            }); 
+            });
         });
     </script>
-    
+
 </html>

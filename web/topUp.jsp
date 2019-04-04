@@ -14,17 +14,24 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
-        
-        <link href="CSS/commonStyles.css" rel="stylesheet" type="text/css">
-<link href="CSS/topUp.css" rel="stylesheet" type="text/css">
+
+        <link href="CSS/commonStyles.css" rel="stylesheet" type="text/css"> 
+        <link href="CSS/topUp.css" rel="stylesheet" type="text/css">
     </head>
     <body
         <%
             // If user is not logged in, redirect to login page
             session = request.getSession(false);
             if (session.getAttribute("staff") == null) {
-                request.setAttribute("errorMsg", "Please login.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                if (session.getAttribute("stud") != null) {
+                    request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                } else {
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
             } else {
         %>
         <div class="mainContainer">
@@ -33,11 +40,11 @@
             </h1>
 
             <div class="topUpForm">
-                
+
                 <!-- Show alerts if any -->
                 <div class="errorMsg">${errorMsg}</div>
                 <div class="successMsg">${successMsg}</div>
-                
+
                 <form action="TopUpServlet" method="POST" id="topUpForm" name="topUpForm">
                     <input type="text" maxlength="10" placeholder="Student ID" name="studentId" id="studentid" required/>
                     <br/>
@@ -56,7 +63,7 @@
 
         </div>
 
-        <a href="staffDashboard.jsp"><div class="back">Back</div></a>
+        <a href="dashboardCanteenStaff.jsp"><div class="back">Back</div></a>
         <%
             }
         %>

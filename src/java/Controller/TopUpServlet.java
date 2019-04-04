@@ -46,11 +46,23 @@ public class TopUpServlet extends HttpServlet {
 
         // Make sure staff is logged in
         HttpSession session = request.getSession(false);
+        
+        //If staff not logged in
         if (session.getAttribute("staff") == null) {
-            request.setAttribute("errorMsg", "Please login.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
+            
+            //if it is a student, show warning
+            if (session.getAttribute("stud") != null) {
+                    request.setAttribute("errorMsg", "You are not allowed to visit that page..");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                } else {
+                // Tell staff to login
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
         }
+        
 
         try {
             String studentId = request.getParameter("studentId");
