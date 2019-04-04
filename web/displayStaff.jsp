@@ -21,15 +21,22 @@
     
     <body>
         <%
-            
             session = request.getSession(false);
             // If user is not logged in, redirect to login page
-            if( session.getAttribute("staff") == null){
-                request.setAttribute("errorMsg", "Please login.");
+            if (session.getAttribute("staff") == null) {
+                request.setAttribute("errorMsg", "Oops! Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
-            }
+            } else {
+                //Ensure that this is the manager.
+                Staff staff = (Staff) session.getAttribute("staff");
+
+                //If not manager, log him/her out and give a warning.
+                if (!staff.getStaffrole().equalsIgnoreCase("manager")) {
+                    session.invalidate();
+                    request.setAttribute("errorMsg", "Hey! You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                }
             else{
-           Staff staff = (Staff) session.getAttribute("staff");
             
         %>
         <h1>Manage Staff</h1><br><br>
@@ -44,41 +51,11 @@
             <div class="add">
                 +
             </div>
-            <div class="record">
-                <h6>EMP20034</h6>
-                <p>Henry</p>
-                <p>Echo</p>
-                <span class="badge badge-primary">Canteen Staff</span>
-                <br/>
-                <br/>
-                <p class="status" style="color: green; font-weight: bold;">Hired</p>
-                <a href=""><div class="editButton">Edit</div></a>
-            </div>
-
-           <div class="record">
-                <h6>EMP204440634</h6>
-                <p>Holmes</p>
-                <p>Mycroft</p>
-                <span class="badge badge-primary">Canteen Staff</span>
-                <br/>
-                <br/>
-                <p class="status" style="color: green; font-weight: bold;">Hired</p>
-                <a href=""><div class="editButton">Edit</div></a>
-            </div>
             
-            <div class="record">
-                <h6>EMP206806354</h6>
-                <p>Brandon</p>
-                <p>Mycroft</p>
-                <span class="badge badge-primary">Canteen Staff</span>
-                <br/>
-                <br/>
-                <p class="status" style="color: red; font-weight: bold;">Not Hired</p>
-                <a href=""><div class="editButton">Edit</div></a>
-            </div>
+            ${queryResults}
                     
         </div>
-        <div><button class="nextButton" href="" type="submit" >Back</button></div>
+        <div><button class="nextButton" href="dashboardManager" type="submit" >Back</button></div>
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
