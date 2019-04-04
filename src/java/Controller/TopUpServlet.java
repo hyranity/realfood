@@ -49,6 +49,7 @@ public class TopUpServlet extends HttpServlet {
         if (session.getAttribute("staff") == null) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
         }
 
         try {

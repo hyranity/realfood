@@ -46,12 +46,14 @@ public class DisplayStaffServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
         HttpSession session = request.getSession(false);
         // If user is not logged in, redirect to login page
         if (session.getAttribute("staff") == null) {
             request.setAttribute("errorMsg", "Oops! Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+            
         } else {
             //Ensure that this is the manager.
             Staff manager = (Staff) session.getAttribute("staff");
@@ -61,6 +63,7 @@ public class DisplayStaffServlet extends HttpServlet {
                 session.invalidate();
                 request.setAttribute("errorMsg", "Hey! You are not allowed to visit that page.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
             } else {
 
                 List<Staff> staffList = new ArrayList();
