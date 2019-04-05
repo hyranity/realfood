@@ -32,7 +32,7 @@ import util.*;
  * @author mast3
  */
 @WebServlet(name = "CreateMealServlet", urlPatterns = {"/CreateMealServlet"})
-public class FoodSelectionServlet extends HttpServlet {
+public class FoodQuantityServlet extends HttpServlet {
     
     @PersistenceContext
     EntityManager em;
@@ -67,54 +67,53 @@ public class FoodSelectionServlet extends HttpServlet {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-
-            // Get array of food IDs from form
-            String[] componentId = request.getParameterValues("componentId");
+            
+            //Values
+            Meal meal = new Meal(); // This is the meal object
+            List<Mealfood> mealFoodList = (List<Mealfood>) session.getAttribute("mealFoodList");
+ 
             
             // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
             //Hence, redirect to first page.
-            if (componentId[0] == null) {
+            if (mealFoodList.get(0) == null) {
                 response.sendRedirect("foodSelection.jsp");
             }
+            
+            try{
 
-            //Values
-            Meal meal = new Meal(); // This is the meal object
-            List<Mealfood> mealFoodList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
-
-            //STEP 1 - SELECT MEAL COMPONENTS (FOOD)
-            try {
+            for(int i=0; i<mealFoodList.size(); i++){
                 
-                utx.begin();
+                // NOTE: The list will correspond EXACLTY to the one in the form. Eg. Ice cream - ID of F1, Pizza - ID of F2. In the form, it will be Ice cream - ID of F1, quantity of 1, and so on.
+                // Using the selected foods' IDs, their quantities (default is 1) are displayed (as values) on quantity JSP with the name of their IDs.
+                // <div>Spaghetti, F0001<input value="2" name="F0001"/>
+                // In other words, the ID is linked with the quantity when displayed. To update the list object, just 1. get current ID, 2. get the quantity linked with it, 3. update the quantity.
                 
-                for (int i = 0; i < componentId.length; i++) {
-                    //Obtain each food using the foodID from the array.
-                    Food food = em.find(Food.class, componentId[i]);
-                    
-                     // Store the obtained food object into mealFoodList
-                    Mealfood mf = new Mealfood();
-                    mf.setFoodid(food);
-                    mealFoodList.add(mf);
-                }
+                //Get the food ID from the list
+                String foodID = mealFoodList.get(i).getFoodid().getFoodid();
                 
-                utx.commit();
+                // Using the food ID, get its respective quantities from the JSP form
+                int quantity = Integer.parseInt(request.getParameter(foodID));
+                
+                // Insert the obtained quantity into the object from the list
+                mealFoodList.get(i).setQuantity(quantity);
+            }
+            
 
                 //Save into session first
                 meal.setMealfoodList(mealFoodList);
                 session.setAttribute("mealFoodList", mealFoodList);
 
                 //Update step status
-                session.setAttribute("step", "stepTwo");
-                
-                //Print the chosen food for next page
+                session.setAttribute("step", "stepThree");
 
                 //Next step's page
-                response.sendRedirect("foodQuantity.jsp");
+                response.sendRedirect("mealDetailsFinalization.jsp");
 
                 // END OF STEP 1
             } catch (Exception ex) {
-                System.out.println("ERROR: Could not add food into foodList: " + ex.getMessage());
-                request.setAttribute("errorMsg", "Oops! Your food selection failed for some reason.");
-                request.getRequestDispatcher("foodSelection.jsp").forward(request, response);
+                System.out.println("ERROR: Could not calculate food quantity: " + ex.getMessage());
+                request.setAttribute("errorMsg", "Oops! Food quantity did not succeed for some reason.");
+                request.getRequestDispatcher("foodQuantity.jsp").forward(request, response);
                 return;
             }
         }
