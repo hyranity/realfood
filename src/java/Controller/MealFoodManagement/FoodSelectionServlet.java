@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package Controller.MealFoodManagement;
 
 import Model.*;
 import java.io.IOException;
@@ -34,7 +34,6 @@ import util.*;
 @WebServlet(name = "CreateMealServlet", urlPatterns = {"/CreateMealServlet"})
 public class FoodSelectionServlet extends HttpServlet {
     
-
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -52,11 +51,9 @@ public class FoodSelectionServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
         HttpSession session = request.getSession(false);
         String permission = (String) session.getAttribute("permission");
-        
-        
 
         // If user is not logged in, redirect to login page
         if (permission == null) {
@@ -71,48 +68,55 @@ public class FoodSelectionServlet extends HttpServlet {
                 return;
             }
 
+            // Get array of food IDs from form
+            String[] componentId = request.getParameterValues("componentId");
+            
+            // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
+            //Hence, redirect to first page.
+            if (componentId[0] == null) {
+                response.sendRedirect("foodSelection.jsp");
+            }
+
             //Values
-        Meal meal = new Meal(); // This is the meal object
-        List<Food> foodList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
+            Meal meal = new Meal(); // This is the meal object
+            List<Mealfood> mealFoodList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
 
             //STEP 1 - SELECT MEAL COMPONENTS (FOOD)
-                try {
-                    // Get array of food IDs from form
-                    String[] componentId = request.getParameterValues("componentId");
-
-                    utx.begin();
-
-                    for (int i = 0; i < componentId.length; i++) {
-                        //Obtain each food using the foodID from the array.
-                        Food food = em.find(Food.class, componentId[i]);
-
-                        // Store the obtained food object into foodList
-                        foodList.add(food);
-                    }
-
-                    utx.commit();
-
-                    //Save into session first
-                    session.setAttribute("foodList", foodList);
+            try {
+                
+                utx.begin();
+                
+                for (int i = 0; i < componentId.length; i++) {
+                    //Obtain each food using the foodID from the array.
+                    Food food = em.find(Food.class, componentId[i]);
                     
-                    //Update step status
-                    session.setAttribute("step", "stepTwo");
-                    
-                    //Next step's page
-                    response.sendRedirect("foodQuantity.jsp");
-
-                    // END OF STEP 1
-                } catch (Exception ex) {
-                    System.out.println("ERROR: Could not add food into foodList: " + ex.getMessage());
-                    request.setAttribute("errorMsg", "Oops! Your food selection failed for some reason.");
-                    request.getRequestDispatcher("foodSelection.jsp").forward(request, response);
-                    return;
+                     // Store the obtained food object into mealFoodList
+                    Mealfood mf = new Mealfood();
+                    mf.setFoodid(food);
+                    mealFoodList.add(mf);
                 }
+                
+                utx.commit();
+
+                //Save into session first
+                meal.setMealfoodList(mealFoodList);
+                session.setAttribute("mealFoodList", mealFoodList);
+
+                //Update step status
+                session.setAttribute("step", "stepTwo");
+
+                //Next step's page
+                response.sendRedirect("foodQuantity.jsp");
+
+                // END OF STEP 1
+            } catch (Exception ex) {
+                System.out.println("ERROR: Could not add food into foodList: " + ex.getMessage());
+                request.setAttribute("errorMsg", "Oops! Your food selection failed for some reason.");
+                request.getRequestDispatcher("foodSelection.jsp").forward(request, response);
+                return;
+            }
         }
     }
-    
- 
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -154,5 +158,3 @@ public class FoodSelectionServlet extends HttpServlet {
     }// </editor-fold>
 
 }
-
-
