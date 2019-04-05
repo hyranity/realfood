@@ -22,7 +22,7 @@ import util.*;
 
 /**
  *
- * @author mast3
+ * IMPORTANT: This is to be run when admin account is to be set to default settings (eg. when manager is changed)
  */
 @WebServlet(name = "AdminResetServlet", urlPatterns = {"/AdminResetServlet"})
 public class AdminResetServlet extends HttpServlet {
@@ -52,7 +52,6 @@ public class AdminResetServlet extends HttpServlet {
             try {
                 TypedQuery<Staff> query = em.createQuery("SELECT s FROM Staff s WHERE s.staffid = :staffid and s.staffrole = :role", Staff.class).setParameter("staffid", "EMPMAN").setParameter("role", "manager");
                 manager = query.getSingleResult();
-                System.out.println(manager.getFirstname());
                 
                 
             } catch (Exception e) {

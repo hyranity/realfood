@@ -13,10 +13,32 @@
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link href="CSS/recordInfo.css" rel="stylesheet">
-         <link href="CSS/commonStyles.css" rel="stylesheet">
+        <link href="CSS/commonStyles.css" rel="stylesheet">
+        <link href="CSS/createFood.css" rel="stylesheet">
     </head>
     <body>
+        <%
+            session = request.getSession(false);
+
+            String permission = (String) session.getAttribute("permission");
+
+            // If user is not logged in, redirect to login page
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                // Allow staff only
+                if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+                    request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+        %>
         <div class="outsideContainer">
+            <!-- Show alerts if any -->
+                <div class="errorMsg">Test Error Message</div>
+                <div class="successMsg">${successMsg}</div>
 
             <h1>Create Food</h1>
             <h5 id="subtitle">Here's where you can Create Food Details.</h5>
@@ -24,23 +46,14 @@
             <div class="mainContainer">
 
                 <form action="#" class="form">
-                    
+
                     <div>
-                        <input type="text" value="F000001" style="background-color: darkgray;" placeholder="Food ID"  id="foodid" readonly/>
+                        <input type="text" id="foodName" placeholder="Food Name" value="" name="foodName" required/>
                     </div>
-                    <div>
-                        <input type="text" id="foodName" placeholder="Food Name" value="" required/>
+                    <div>   
+                        <input type="number" value="" placeholder="Calories" id="calories" name="calories" oninput="validity.valid || (value = '');" min="0" step="1" maxlength="4" required/>
                     </div>
-                    <div>
-                        <input type="text" value="200" placeholder="Calories" id="calories" required/>
-                    </div>
-                    <div>
-                        <input type="text" value="" placeholder="Credit Point" id="creditPoint" required/>
-                    </div>
-                    <div>
-                        <input type="text" value="16 March, 2017" id="dateAdded"  style="background-color: darkgray;"  readonly/>
-                    </div>
-                    
+
                     <br/>
                     <a href="#" onclick="confirmadding()"><div class="adding">Create</div></a>
                 </form>
@@ -50,11 +63,12 @@
         <a href="displayStaff.jsp"><div class="back">Back</div></a>
         <div class="addingConfirmation">
             <h5>Creating food?</h5>
-            <p>The Food WIll Be Created. Do You Want To Proceed?</p>
+            <p>The Food will be created. Do You Want To Proceed?</p>
             <a href="#"><div class="addingConfirm">Yes</div></a>
             <a href="#"><div class="addingCancel">No</div></a>
         </div>
         <div class="coverOverlay"></div>
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -82,6 +96,7 @@
                                 $("#subtitle").html("Here's where you can Create Food Details.");
                                 $("#subtitle").css("color", "white");
                             });
+
                             $("#dateAdded").hover(function () {
                                 $("#subtitle").html("That's when the food was added. No point in editing it.");
                                 $("#subtitle").css("color", "gold");
@@ -115,7 +130,15 @@
                                 $(".outsideContainer :input").prop("disabled", false);
                             });
 
-<!--  The following code allows a "disabling" overlay -->
+                            $("#calories").on("input", function () {
+                                //Code is possible thanks to Neha Jain @ https://stackoverflow.com/questions/18510845/maxlength-ignored-for-input-type-number-in-chrome
+                                //Checks if the number is too long
+                                if (this.value.length > this.maxLength) {
+                                    this.value = this.value.slice(0, this.maxLength);
+                                }
+                            });
+
+
                             $(".adding").click(function () {
                                 $(".coverOverlay").css("display", "block");
                                 $(".addingConfirmation").css("z-index", "1");
