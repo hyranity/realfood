@@ -21,46 +21,24 @@
                 <div>3. Finalize meal details</div>
             </div>
         </div>
-
+        
         <h1 class="title">Edit food quantity</h1>
         <h5 id="subtitle">Modify the quantity of the food components.</h5>
-
-        <div class="mainContainer">
-            <div class="recordQuantity">
-                <div class="frontPart">
-                    <p class="name" style="color: black;">French Fries</p>
-                </div>
-                <div class="quantityEditor">
-                    <p class="value" id="calF0001" data-calories="500">500 calories</p>
-                    <p class="symbol" id="subF0001" onclick="subtract()">-</p>
-                    <input type="number" class="quantity" id="F0001" value="1" disabled="">
-                    <p class="symbol" id="addF0001">+</p>
-                </div>
-            </div>
-            <br/>
-            <div class="recordQuantity">
-                <div class="frontPart">
-                    <p class="name" style="color: black;">French Fries</p>
-                </div>
-                <div class="quantityEditor">
-                    <p class="value" id="calF0002" data-calories="500">500 calories</p>
-                    <p class="symbol" id="subF0002" onclick="subtract()">-</p>
-                    <input type="number" class="quantity" id="F0002" value="1" disabled="">
-                    <p class="symbol" id="addF0002">+</p>
-                </div>
-            </div>
-            <br/>
+        <form action="FoodQuantityServlet" method="POST" id="foodForm">
+        ${queryResultQuantity}
+        
             <div class="total">
-                <p id="totalCal">Total: 1400 calories</p>
+                <p id="totalCal">Total: ${caloriesSum} calories</p>
             </div>
         </div>
         <div class="nextButtonDiv">
-            <button class="nextButton">Next step</button>
+            <input class="nextButton" form="foodForm" type="submit" value="Next Step">
         </div>
+    </form>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-                        $(document).ready(function () {
+                        $(document).ready(function () {      
                             $(".symbol").click(function (event) {
                                 var id = event.target.id;
                                 symbolId = id.substring(0, 3);

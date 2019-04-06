@@ -30,6 +30,7 @@ import javax.transaction.UserTransaction;
  */
 @WebServlet(name = "SelectFoodServlet", urlPatterns = {"/SelectFoodServlet"})
 public class SelectFoodServlet extends HttpServlet {
+
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -47,8 +48,7 @@ public class SelectFoodServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       
-        
+
         HttpSession session = request.getSession(false);
         String permission = "";
         String previousUrl = "";
@@ -60,7 +60,6 @@ public class SelectFoodServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
-         
 
         // If user is not logged in, redirect to login page
         // Allow staff only
@@ -70,7 +69,6 @@ public class SelectFoodServlet extends HttpServlet {
             return;
         }
 
-        System.out.println("HeyLOL");
         try {
             previousUrl = request.getHeader("referer");
             if (previousUrl.equalsIgnoreCase("foodSelectionForMeal.jsp")) {
@@ -122,18 +120,38 @@ public class SelectFoodServlet extends HttpServlet {
             session.setAttribute("step", "stepTwo");
 
             //Print the chosen food for next page
-            for(Mealfood mf : mealFoodList){
-                System.out.println(mf.getFoodid().getFoodname());
-            }
+            String queryResultQuantity = "";
+
+            int caloriesSum = 0;
             
+            for (Mealfood mf : mealFoodList) {
+                queryResultQuantity += "<div class=\"mainContainer\">\n"
+                        + "            <div class=\"recordQuantity\">\n"
+                        + "                <div class=\"frontPart\">\n"
+                        + "                    <p class=\"name\" style=\"color: black;\">" + mf.getFoodid().getFoodname() + "</p>\n"
+                        + "                </div>\n"
+                        + "                <div class=\"quantityEditor\">\n"
+                        + "                    <p class=\"value\" id=\"cal" + mf.getFoodid().getFoodid() + "\" data-calories=\"" + mf.getFoodid().getCalories() + "\">" + mf.getFoodid().getCalories() + " calories</p>\n"
+                        + "                    <p class=\"symbol\" id=\"sub" + mf.getFoodid().getFoodid() + "\" onclick=\"subtract()\">-</p>\n"
+                        + "                    <input type=\"number\" class=\"quantity\" id=\"" + mf.getFoodid().getFoodid() + "\" id=\"" + mf.getFoodid().getFoodid() + "\" value=\"1\" disabled=\"\">\n"
+                        + "                    <p class=\"symbol\" id=\"add" + mf.getFoodid().getFoodid() + "\">+</p>\n"
+                        + "                </div>\n"
+                        + "            </div>"
+                        + "             <br/>";
+                
+                caloriesSum += mf.getFoodid().getCalories();
+            }
+
             //Next step's page
-            response.sendRedirect("foodQuantity.jsp");
+            request.setAttribute("queryResultQuantity", queryResultQuantity);
+            request.setAttribute("caloriesSum", caloriesSum);
+            request.getRequestDispatcher("foodQuantity.jsp").forward(request, response);
 
             // END OF STEP 1
         } catch (Exception ex) {
             System.out.println("ERROR: Could not add food into foodList: " + ex.getMessage());
             request.setAttribute("errorMsg", "Oops! Your food selection failed for some reason.");
-            request.getRequestDispatcher("foodSelection.jsp").forward(request, response);
+            request.getRequestDispatcher("DisplayFoodSelectionServlet").forward(request, response);
             return;
         }
     }

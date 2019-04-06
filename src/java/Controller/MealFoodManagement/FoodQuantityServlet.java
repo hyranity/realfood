@@ -54,7 +54,7 @@ public class FoodQuantityServlet extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         
-
+        System.out.println("hey");
         // If user is not logged in, redirect to login page
         if (session.getAttribute("permission") == null) {
             request.setAttribute("errorMsg", "Please login.");
@@ -76,8 +76,8 @@ public class FoodQuantityServlet extends HttpServlet {
             
             // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
             //Hence, redirect to first page.
-            if (mealFoodList.get(0) == null) {
-                response.sendRedirect("foodSelection.jsp");
+            if (mealFoodList == null) {
+                response.sendRedirect("DisplayFoodSelectionServlet");
             }
             
             try{
@@ -91,14 +91,17 @@ public class FoodQuantityServlet extends HttpServlet {
                 
                 //Get the food ID from the list
                 String foodID = mealFoodList.get(i).getFoodid().getFoodid();
+                System.out.println(foodID);
                 
                 // Using the food ID, get its respective quantities from the JSP form
-                int quantity = Integer.parseInt(request.getParameter(foodID));
+                int quantity = Integer.parseInt(request.getParameter(foodID).substring(1));
                 
                 // Insert the obtained quantity into the object from the list
                 mealFoodList.get(i).setQuantity(quantity);
+                System.out.println(mealFoodList.get(i).getQuantity());
             }
             
+               
 
                 //Save into session first
                 meal.setMealfoodList(mealFoodList);
@@ -108,13 +111,14 @@ public class FoodQuantityServlet extends HttpServlet {
                 session.setAttribute("step", "stepThree");
 
                 //Next step's page
-                response.sendRedirect("mealDetailsFinalization.jsp");
+                System.out.println("HEY");
 
                 // END OF STEP 1
             } catch (Exception ex) {
                 System.out.println("ERROR: Could not calculate food quantity: " + ex.getMessage());
                 request.setAttribute("errorMsg", "Oops! Food quantity did not succeed for some reason.");
-                request.getRequestDispatcher("foodQuantity.jsp").forward(request, response);
+                ex.printStackTrace();
+                request.getRequestDispatcher("DisplayFoodSelectionServlet").forward(request, response);
                 return;
             }
         }
