@@ -22,13 +22,13 @@
         <h5 id="subtitle">Here you can add or edit meals. To view meals' specific info, you will need to press "edit" first.</h5>
         <!-- Search bar -->
         <form class="searchForm">
-            <input type="text" name="query" placeholder="search..." class="searchBar"/>
+            <input type="text" id="myInput" name="query" onkeyup="myFunction()" placeholder="search..." class="searchBar"/>
         </form>
 
         <!-- Table -->
         <form action="#" method="post" id="mealOrder">
             <div class="mealsContainer">
-                <table>
+                <table id="myTable">
                     <tr>
                         <td>
                             <a href="DisplayFoodSelectionServlet"> <label class="meal" id="add">+</label></a>
@@ -52,6 +52,8 @@
                                 <a href=""><div class="editMealButton">Edit</div></a>
                             </label>
                         </td>
+                      
+
                         <td>
                             <input type="checkbox" id="cbox2"/>
                             <label class="meal" for="cbox2">
@@ -71,6 +73,7 @@
                                 <a href=""><div class="editMealButton">Edit</div></a>
                             </label>
                         </td>
+                        
                         <td>
                             <input type="checkbox" id="cbox2"/>
                             <label class="meal" for="cbox2">
@@ -100,4 +103,5 @@
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="studentDisplayMeals.js" type="text/javascript"></script>
+    <script src="searchFilter.js" type="text/javascript"></script>
 </html>
