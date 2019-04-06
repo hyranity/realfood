@@ -131,6 +131,7 @@ public class SelectFoodServlet extends HttpServlet {
 
             int caloriesSum = 0;
             
+            // Prints the query results and format it 
             for (Mealfood mf : mealFoodList) {
                 queryResultQuantity += "<div class=\"mainContainer\">\n"
                         + "            <div class=\"recordQuantity\">\n"
@@ -140,12 +141,12 @@ public class SelectFoodServlet extends HttpServlet {
                         + "                <div class=\"quantityEditor\">\n"
                         + "                    <p class=\"value\" id=\"cal" + mf.getFoodid().getFoodid() + "\" data-calories=\"" + mf.getFoodid().getCalories() + "\">" + mf.getFoodid().getCalories() + " calories</p>\n"
                         + "                    <p class=\"symbol\" id=\"sub" + mf.getFoodid().getFoodid() + "\" onclick=\"subtract()\">-</p>\n"
-                        + "                    <input type=\"number\" class=\"quantity\" id=\"" + mf.getFoodid().getFoodid() + "\" name=\"" + mf.getFoodid().getFoodid() + "\" value=\"1\" disabled=\"\">\n"
+                        + "                    <input type=\"number\" class=\"quantity\" id=\"" + mf.getFoodid().getFoodid() + "\" name=\"" + mf.getFoodid().getFoodid() + "\" value=\"1\" readonly=\"\">\n"
                         + "                    <p class=\"symbol\" id=\"add" + mf.getFoodid().getFoodid() + "\">+</p>\n"
                         + "                </div>\n"
                         + "            </div>"
                         + "             <br/>";
-                System.out.println(mf.getFoodid().getFoodid());
+                
                 caloriesSum += mf.getFoodid().getCalories();
             }
 

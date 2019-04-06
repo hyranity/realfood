@@ -90,10 +90,10 @@ public class FoodQuantityServlet extends HttpServlet {
                 
                 //Get the food ID from the list
                 String foodID = mealFoodList.get(i).getFoodid().getFoodid();
-                System.out.println(foodID);
                 
                 // Using the food ID, get its respective quantities from the JSP form
-                int quantity = Integer.parseInt(request.getParameter(foodID).substring(1));
+               
+                int quantity = Integer.parseInt(request.getParameter(foodID));
                 
                 // Insert the obtained quantity into the object from the list
                 mealFoodList.get(i).setQuantity(quantity);
@@ -110,13 +110,13 @@ public class FoodQuantityServlet extends HttpServlet {
                 session.setAttribute("step", "stepThree");
 
                 //Next step's page
-                System.out.println("HEY");
+                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                return;
 
                 // END OF STEP 1
             } catch (Exception ex) {
                 System.out.println("ERROR: Could not calculate food quantity: " + ex.getMessage());
                 request.setAttribute("errorMsg", "Oops! Food quantity did not succeed for some reason.");
-                ex.printStackTrace();
                 request.getRequestDispatcher("DisplayFoodSelectionServlet").forward(request, response);
                 return;
             }
