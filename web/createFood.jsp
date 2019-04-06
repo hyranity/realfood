@@ -37,15 +37,15 @@
         %>
         <div class="outsideContainer">
             <!-- Show alerts if any -->
-                <div class="errorMsg">Test Error Message</div>
-                <div class="successMsg">${successMsg}</div>
+            <div class="errorMsg" style="position: relative;"></div>
+            <div class="successMsg">${successMsg}</div>
 
             <h1>Create Food</h1>
             <h5 id="subtitle">Here's where you can Create Food Details.</h5>
             <br/>
             <div class="mainContainer">
 
-                <form action="#" class="form">
+                <form action="CreateFoodServlet" method="POST" class="form" id="createForm">
 
                     <div>
                         <input type="text" id="foodName" placeholder="Food Name" value="" name="foodName" required/>
@@ -53,20 +53,21 @@
                     <div>   
                         <input type="number" value="" placeholder="Calories" id="calories" name="calories" oninput="validity.valid || (value = '');" min="0" step="1" maxlength="4" required/>
                     </div>
-
+                    <input type="submit" value="Yes" style="color: green;" form="createForm">
                     <br/>
                     <a href="#" onclick="confirmadding()"><div class="adding">Create</div></a>
+                    <div class="addingConfirmation">
+                        <h5>Creating food?</h5>
+                        <p>The Food will be created. Do You Want To Proceed?</p>
+                        
+                        <a href="#"><div class="addingCancel">No</div></a>
+                    </div>
                 </form>
                 <br/>
             </div>
         </div>
         <a href="displayStaff.jsp"><div class="back">Back</div></a>
-        <div class="addingConfirmation">
-            <h5>Creating food?</h5>
-            <p>The Food will be created. Do You Want To Proceed?</p>
-            <a href="#"><div class="addingConfirm">Yes</div></a>
-            <a href="#"><div class="addingCancel">No</div></a>
-        </div>
+
         <div class="coverOverlay"></div>
         <%}%>
     </body>

@@ -3,34 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package Controller.MealFoodManagement;
 
+import Model.Food;
+import Model.Meal;
+import Model.Mealfood;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import Model.*;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
-import javax.validation.ConstraintViolationException;
-import util.*;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "CreateFoodServlet", urlPatterns = {"/CreateFoodServlet"})
-public class CreateFoodServlet extends HttpServlet {
-
+@WebServlet(name = "SelectFoodServlet", urlPatterns = {"/SelectFoodServlet"})
+public class SelectFoodServlet extends HttpServlet {
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -48,9 +47,11 @@ public class CreateFoodServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+       
+        
         HttpSession session = request.getSession(false);
-
         String permission = "";
+        String previousUrl = "";
 
         try {
             permission = (String) session.getAttribute("permission");
@@ -59,7 +60,9 @@ public class CreateFoodServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
+         
 
+        // If user is not logged in, redirect to login page
         // Allow staff only
         if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
@@ -67,63 +70,73 @@ public class CreateFoodServlet extends HttpServlet {
             return;
         }
 
-        Food food = new Food();
-        food.setFoodname(request.getParameter("foodName").trim()); // Uses trim() to remove any unexpected whitespaces (spaces)
-        food.setDateadded(Auto.getToday()); // Set the date of food added to today
-        food.setIsdiscontinued(false);
-        food.setDatediscontinued(null);
-
+        System.out.println("HeyLOL");
         try {
-            food.setCalories(Integer.parseInt(request.getParameter("calories"))); // Convert calories to int
-        } catch (NullPointerException | NumberFormatException e) {
-            // This is highly unlikely to be triggered due to measures we've taken to ensure validity of input. But this is for "just in case".
-            request.setAttribute("errorMsg", "Oops! The number of calories is not numerical. Please ensure that it is a number.");
-            request.getRequestDispatcher("createFood.jsp").forward(request, response);
+            previousUrl = request.getHeader("referer");
+            System.out.println("HeyLOL");
+            System.out.println("Hey");
+            System.out.println(previousUrl);
+            if (previousUrl.equalsIgnoreCase("foodSelectionForMeal.jsp")) {
+                response.sendRedirect("dashboardCanteenStaff");
+                return;
+            }
+        } catch (Exception ex) {
+            request.setAttribute("errorMsg", "Oops! Please don't access that page directly.");
+            request.getRequestDispatcher("dashboardCanteenStaff.jsp").forward(request, response);
             return;
         }
 
+        // Get array of food IDs from form
+        String[] componentId = request.getParameterValues("componentId");
+
+        // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
+        //Hence, redirect to first page.
+        if (componentId == null) {
+            response.sendRedirect("foodSelectionForMeal.jsp");
+            return;
+        }
+
+        //Values
+        Meal meal = new Meal(); // This is the meal object
+        List<Mealfood> mealFoodList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
+
+        //STEP 1 - SELECT MEAL COMPONENTS (FOOD)
         try {
 
             utx.begin();
-            Food foodChecking = new Food();
-            boolean existsAlready = true;
-            
-            TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f WHERE f.foodname = :foodname", Food.class).setParameter("foodname", food.getFoodname().trim()); // Query for getting food with the same name
-            
-            try {
-                foodChecking = query.getSingleResult();
-            } catch (NoResultException ex) {
-                existsAlready = false;
+
+            for (int i = 0; i < componentId.length; i++) {
+                //Obtain each food using the foodID from the array.
+                Food food = em.find(Food.class, componentId[i]);
+
+                // Store the obtained food object into mealFoodList
+                Mealfood mf = new Mealfood();
+                mf.setFoodid(food);
+                mealFoodList.add(mf);
             }
-            // Checks for food with the same name; if there is, show an error to the user
-            if (existsAlready) {
-                request.setAttribute("errorMsg", "Oops! A food with the same name has already been added.");
-                request.getRequestDispatcher("createFood.jsp").forward(request, response);
-                return;
-            } else {
 
-                query = em.createQuery("SELECT f FROM Food f", Food.class);
-                int count = query.getResultList().size();
-                food.setFoodid(Auto.generateID("F", 7, count));
+            utx.commit();
 
-                // Insert new food details
-                em.persist(food);
-                utx.commit();
+            //Save into session first
+            meal.setMealfoodList(mealFoodList);
+            session.setAttribute("mealFoodList", mealFoodList);
 
-                request.setAttribute("successMsg", "Your food has been added successfully!.");
-                request.getRequestDispatcher("createFood.jsp").forward(request, response);
-                return;
-            }
-        } catch (ConstraintViolationException e) {
-            System.out.println(e.getConstraintViolations());
-        } catch (Exception e) {
-            System.out.println("Unable to create food: " + e.getMessage());
-            e.printStackTrace();
-            request.setAttribute("errorMsg", "Oops! The new food couldn't be created for some reason.");
-            request.getRequestDispatcher("createFood.jsp").forward(request, response);
+            //Update step status
+            session.setAttribute("step", "stepTwo");
+
+            //Print the chosen food for next page
+            
+            
+            //Next step's page
+            response.sendRedirect("foodQuantity.jsp");
+
+            // END OF STEP 1
+        } catch (Exception ex) {
+            System.out.println("ERROR: Could not add food into foodList: " + ex.getMessage());
+            request.setAttribute("errorMsg", "Oops! Your food selection failed for some reason.");
+            request.getRequestDispatcher("foodSelection.jsp").forward(request, response);
             return;
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

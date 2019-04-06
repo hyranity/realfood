@@ -30,6 +30,7 @@
                 <div>3. Finalize meal details</div>
             </div>
         </div>
+ 
 
         <h2>Select Food Components</h2>
         <h6 id="subtitle">Select the food that compromises your meal.</h6>
@@ -53,6 +54,7 @@
                                 </div>
                             </label>
                         </td>
+                        
                         <td>
                             <input type="checkbox" id="cbox2"/>
                             <label for="cbox2">

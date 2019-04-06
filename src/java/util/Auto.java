@@ -18,7 +18,11 @@ import java.util.*;
 public class Auto {
     
     public static void main(String[] args){
-       
+        try {
+            System.out.println(generateID("F", 2, 10));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
     
     // Returns today's date as Date object
@@ -53,6 +57,7 @@ public class Auto {
         if(size <= prefix.length())
                 throw new IDGenerationException();
         
+        
         int totalEntries = count;
         totalEntries += 1;
         
@@ -68,17 +73,20 @@ public class Auto {
     
         // Generate ID based on a number of records (Normally used for deletion)
         public static String generateID(String prefix, int size, int count) throws IDGenerationException{
+           String countStr = count + "";
         
         if(size <= prefix.length())
                 throw new IDGenerationException();
+        if(size <= countStr.length() )
+            throw new IDGenerationException();
         
        int totalEntries = count;
-        totalEntries += 1;
         
         String id = "";
         String num = "" + totalEntries;
+            System.out.println(num);
         
-        for(int i=0; i<(8-num.length()); i++){
+        for(int i=0; i<(num.length()-1); i++){
             id +="0";
         }
         
