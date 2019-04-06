@@ -55,6 +55,13 @@ public class SelectFoodServlet extends HttpServlet {
 
         try {
             permission = (String) session.getAttribute("permission");
+            
+            if(permission==null){
+                request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+            }
+            
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
