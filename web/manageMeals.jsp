@@ -31,7 +31,7 @@
                 <table>
                     <tr>
                         <td>
-                            <a href="SelectFoodServlet"> <label class="meal" id="add">+</label></a>
+                            <a href="DisplayFoodSelectionServlet"> <label class="meal" id="add">+</label></a>
                         </td>
                         <td>
                             <input type="checkbox" id="cbox1"/>

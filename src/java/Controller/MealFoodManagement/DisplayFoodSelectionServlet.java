@@ -83,15 +83,13 @@ public class DisplayFoodSelectionServlet extends HttpServlet {
                         fourCount++;
                     }
                     
-                    
-                    
                     String outsideOpen = "<td>";
-                    String checkbox = "<input type=\"checkbox\" id=\"" + food.getFoodid() +"\"/>";
+                    String checkbox = "<input type=\"checkbox\"  name= \"componentId\" value=\"" + food.getFoodid() +"\" id=\"" + food.getFoodid() +"\"/>";
                     String labelOpen = "<label for=\"" + food.getFoodid() +"\">";
                     String divOpen = "<div class=\"record\">";
                     String id = "<h6>" + food.getFoodid() +"</h6>";
                     String breaks = "<br/><br/>";
-                    String calories = "<p class=\"calories\">" + food.getCalories() +"</p>";
+                    String calories = "<p class=\"calories\">" + food.getCalories() +" calories</p>";
                     String name = "<p class=\"name\">" + food.getFoodname() +"</p>";
                     String divClose = "</div>";
                     String labelClose = "</label>";

@@ -28,30 +28,30 @@
         <div class="mainContainer">
             <div class="recordQuantity">
                 <div class="frontPart">
-                    <p class="name">French Fries</p>
+                    <p class="name" style="color: black;">French Fries</p>
                 </div>
                 <div class="quantityEditor">
-                    <p class="value">500 calories</p>
-                    <p class="symbol" id="sub">-</p>
-                    <p class="quantity">x2</p>
-                    <p class="symbol" id="add">+</p>
+                    <p class="value" id="calF0001" data-calories="500">500 calories</p>
+                    <p class="symbol" id="subF0001" onclick="subtract()">-</p>
+                    <input type="number" class="quantity" id="F0001" value="1" disabled="">
+                    <p class="symbol" id="addF0001">+</p>
                 </div>
             </div>
             <br/>
             <div class="recordQuantity">
                 <div class="frontPart">
-                    <p class="name">Cheese Sauce</p>
+                    <p class="name" style="color: black;">French Fries</p>
                 </div>
                 <div class="quantityEditor">
-                    <p class="value">200 calories</p>
-                    <p class="symbol" id="sub">-</p>
-                    <p class="quantity">x23</p>
-                    <p class="symbol" id="add">+</p>
+                    <p class="value" id="calF0002" data-calories="500">500 calories</p>
+                    <p class="symbol" id="subF0002" onclick="subtract()">-</p>
+                    <input type="number" class="quantity" id="F0002" value="1" disabled="">
+                    <p class="symbol" id="addF0002">+</p>
                 </div>
             </div>
             <br/>
             <div class="total">
-                <p>Total: 1400 calories</p>
+                <p id="totalCal">Total: 1400 calories</p>
             </div>
         </div>
         <div class="nextButtonDiv">
@@ -59,4 +59,39 @@
         </div>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+                        $(document).ready(function () {
+                            $(".symbol").click(function (event) {
+                                var id = event.target.id;
+                                symbolId = id.substring(0, 3);
+                                var targetId = id.substring(3);
+                                var quantity = parseInt($("#" + targetId).val());
+
+                                // Update quantity
+                                if (symbolId == "add") {
+                                    quantity++;
+                                } else {
+                                    if (quantity != 1)
+                                        quantity--;
+                                }
+                                $("#" + targetId).val(quantity);
+                                var caloriesId = "#cal" + targetId;
+                                var calories = quantity * parseInt($(caloriesId).data("calories"));
+                                $("#cal" + targetId).text(calories + " calories");
+
+                                var sum = 0;
+
+                                $(".value").each(function () {
+                                    var caloriesId = "#cal" + targetId;
+                                    var calories = quantity * parseInt($(caloriesId).data("calories"));
+
+                                    sum += parseInt($(this).html());
+                                });
+
+
+                                $("#totalCal").html("Total: " + sum + " calories");
+
+                            });
+                        });
+    </script>
 </html>

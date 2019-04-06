@@ -73,9 +73,6 @@ public class SelectFoodServlet extends HttpServlet {
         System.out.println("HeyLOL");
         try {
             previousUrl = request.getHeader("referer");
-            System.out.println("HeyLOL");
-            System.out.println("Hey");
-            System.out.println(previousUrl);
             if (previousUrl.equalsIgnoreCase("foodSelectionForMeal.jsp")) {
                 response.sendRedirect("dashboardCanteenStaff");
                 return;
@@ -125,7 +122,9 @@ public class SelectFoodServlet extends HttpServlet {
             session.setAttribute("step", "stepTwo");
 
             //Print the chosen food for next page
-            
+            for(Mealfood mf : mealFoodList){
+                System.out.println(mf.getFoodid().getFoodname());
+            }
             
             //Next step's page
             response.sendRedirect("foodQuantity.jsp");

@@ -183,3 +183,11 @@ h5{
     color: gold;
 }
 
+.quantity{
+    background-color: gold;
+    border-width: 0;
+    width: 20px;
+    display: inline-block;
+    font-size: 18px;
+    text-align: center;
+}

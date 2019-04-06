@@ -176,3 +176,12 @@
     background-color: black;
     width: 600px;
 }
+
+
+/* This code is possible thanks to sanatsathyan @ https://stackoverflow.com/questions/48443019/is-there-a-way-to-remove-the-increase-decrease-arrows-in-input-type-number-for */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{
+    -webkit-appearance: none;
+    -moz-appearace: none;
+    appearance: none;
+}

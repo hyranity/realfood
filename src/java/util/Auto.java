@@ -19,7 +19,7 @@ public class Auto {
     
     public static void main(String[] args){
         try {
-            System.out.println(generateID("F", 2, 10));
+            System.out.println(generateID("F", 5, 10));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -86,7 +86,7 @@ public class Auto {
         String num = "" + totalEntries;
             System.out.println(num);
         
-        for(int i=0; i<(num.length()-1); i++){
+        for(int i=0; i<(size - num.length() - 1); i++){
             id +="0";
         }
         
