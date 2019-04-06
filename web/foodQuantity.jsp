@@ -26,12 +26,13 @@
         <h5 id="subtitle">Modify the quantity of the food components.</h5>
         <form action="FoodQuantityServlet" method="POST" id="foodForm">
         ${queryResultQuantity}
-        
+        <input name="F000001" value="heBOOOy"/>
             <div class="total">
+                
                 <p id="totalCal">Total: ${caloriesSum} calories</p>
             </div>
-        </div>
         <div class="nextButtonDiv">
+            
             <input class="nextButton" form="foodForm" type="submit" value="Next Step">
         </div>
     </form>

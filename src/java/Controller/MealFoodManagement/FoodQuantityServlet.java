@@ -54,7 +54,6 @@ public class FoodQuantityServlet extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         
-        System.out.println("hey");
         // If user is not logged in, redirect to login page
         if (session.getAttribute("permission") == null) {
             request.setAttribute("errorMsg", "Please login.");
