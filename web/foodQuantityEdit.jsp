@@ -44,40 +44,53 @@
         <h1 class="title">Modify food quantity</h1>
         <h5 id="subtitle">Modify the quantity of the food components.</h5>
 
-        <div class="mainContainer">
-            <div class="recordQuantity">
-                <div class="frontPart">
-                    <p class="name">French Fries</p>
-                </div>
-                <div class="quantityEditor">
-                    <p class="value">500 calories</p>
-                    <p class="symbol" id="sub">-</p>
-                    <input type="number" value="1" minlength="1" maxlength="3" class="quantity" required/>
-                    <p class="symbol" id="add">+</p>
-                </div>
-            </div>
-            <br/>
-            <div class="recordQuantity">
-                <div class="frontPart">
-                    <p class="name">Cheese Sauce</p>
-                </div>
-                <div class="quantityEditor">
-                    <p class="value">200 calories</p>
-                    <p class="symbol" id="sub">-</p>
-                    <input type="number" value="1" minlength="1" maxlength="3" class="quantity" required/>
-                    <p class="symbol" id="add">+</p>
-                </div>
-            </div>
-            <br/>
+        <form action="FoodQuantityServletEdit" method="POST" id="mealForm">
+        ${queryResultQuantity}
             <div class="total">
-                <p>Total: 1400 calories</p>
+                
+                <p id="totalCal">Total: ${caloriesSum} calories</p>
             </div>
+        <div class="nextButtonDiv">
+            
+            <input class="nextButton" form="mealForm" type="submit" value="Next Step">
         </div>
-        <div>
-            <button  type="submit" class="nextButton" href="" >Back</button>
-            <button  type="submit" class="nextButton">Next step</button>
-        </div>
+    </form>
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+                        $(document).ready(function () {      
+                            $(".symbol").click(function (event) {
+                                var id = event.target.id;
+                                symbolId = id.substring(0, 3);
+                                var targetId = id.substring(3);
+                                var quantity = parseInt($("#" + targetId).val());
+
+                                // Update quantity
+                                if (symbolId == "add") {
+                                    quantity++;
+                                } else {
+                                    if (quantity != 1)
+                                        quantity--;
+                                }
+                                $("#" + targetId).val(quantity);
+                                var caloriesId = "#cal" + targetId;
+                                var calories = quantity * parseInt($(caloriesId).data("calories"));
+                                $("#cal" + targetId).text(calories + " calories");
+
+                                var sum = 0;
+
+                                $(".value").each(function () {
+                                    var caloriesId = "#cal" + targetId;
+                                    var calories = quantity * parseInt($(caloriesId).data("calories"));
+
+                                    sum += parseInt($(this).html());
+                                });
+
+
+                                $("#totalCal").html("Total: " + sum + " calories");
+
+                            });
+                        });
+    </script>
 </html>

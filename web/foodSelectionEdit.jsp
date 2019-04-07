@@ -19,6 +19,25 @@
         <title>Manage food</title>
     </head>
     <body>
+        <%
+            session = request.getSession(false);
+            
+            String permission = (String) session.getAttribute("permission");
+            
+            // If user is not logged in, redirect to login page
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+            else {
+                // Allow student only
+                if(!permission.equalsIgnoreCase("student")){
+                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+        %>
         <!-- Steps -->
         <div class="stepsContainer">
             <h1>Edit Meal</h1>
@@ -37,40 +56,17 @@
             <input type="text" name="query" placeholder="search..." class="searchBar"/>
         </form>
         <div class="bodyContainer">
-            <form action="#" method="post">
+            <form action="SelectFoodSerletForEdit" method="post">
                 <table class="recordTable">
-                    <tr>
-                        <td>
-                            <input type="checkbox" id="cbox1" checked/>
-                            <label for="cbox1">
-                                <div class="record">
-                                    <h6>F00001</h6>
-                                    <p class="name">Honey Mustard</p>
-                                    <br/><br/>
-                                    <p class="calories">120 calories</p>
-                                </div>
-                            </label>
-                        </td>
-                        <td>
-                            <input type="checkbox" id="cbox2"/>
-                            <label for="cbox2">
-                                <div class="record">
-                                    <h6>F00002</h6>
-                                    <p class="name">Honey Fries</p>
-                                    <br/><br/>
-                                    <p class="calories">425 calories</p>
-                                    <br/>
-                                </div>
-                            </label>
-                        </td>
-                    </tr>
+                    ${queryResult}
                 </table>
                 <div>
                     <button class="nextButton">Back</button>
-                    <button class="nextButton">Next step</button>
+                    <input type="submit" value="Next step" class="nextButton">
                 </div>
             </form>
         </div>
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
