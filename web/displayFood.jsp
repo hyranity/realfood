@@ -47,10 +47,11 @@
         <table class="recordTable">
             <tr>
                 <td>
-                    
+                    <a href="createFood.jsp">
                         <div class="add">
                             +
                         </div>
+                    </a>
                 </td>
                 <td>
                     <div class="record">

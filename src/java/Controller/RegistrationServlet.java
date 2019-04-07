@@ -165,21 +165,16 @@ public class RegistrationServlet extends HttpServlet {
                 Staff staff = new Staff();
                 utx.begin();
 
-                // Search for existing staff
-                staff = em.find(Staff.class, request.getParameter("id"));
-
-                // If there's an error, provide appropriate error messages
-                if (staff != null) // If staff ID already exists
-                {
-                    System.out.println("ERROR! Existing staff!");
-                    // This will be triggered if something went wrong.
-                    request.setAttribute("errorMsg", "Oops! This staff has already been registered.");
-                    request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
-                    return;
-                } else {
+                
                     staff = new Staff();
+                    
+                    //Generate ID
+                    TypedQuery<Staff> query = em.createQuery("SELECT s FROM Staff s", Staff.class);
+                    int count = query.getResultList().size();
+                    
+                    
                     //Transfer existing student details into the new account
-                    staff.setStaffid(request.getParameter("id"));
+                    staff.setStaffid(Auto.generateID("EMP", 8, count));    // Set staff ID
                     staff.setFirstname(request.getParameter("fname"));
                     staff.setLastname(request.getParameter("lname"));
                     staff.setEmail(request.getParameter("email")); //Email can be student's personal email
@@ -204,7 +199,7 @@ public class RegistrationServlet extends HttpServlet {
                     request.setAttribute("accountMsg", "Your registration is successful! You may login now.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;
-                }
+                
 
             } catch (Exception ex) {
                 ex.printStackTrace();

@@ -19,7 +19,7 @@ public class Auto {
     
     public static void main(String[] args){
         try {
-            System.out.println(generateID("F", 5, 10));
+            System.out.println(generateID("MFsdsd", 12, 10));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -80,13 +80,12 @@ public class Auto {
         if(size <= countStr.length() )
             throw new IDGenerationException();
         
-       int totalEntries = count;
+       int totalEntries = count+1;
         
         String id = "";
         String num = "" + totalEntries;
-            System.out.println(num);
         
-        for(int i=0; i<(size - num.length() - 1); i++){
+        for(int i=0; i<(size - num.length() - prefix.length()); i++){
             id +="0";
         }
         

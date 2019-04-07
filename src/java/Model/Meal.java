@@ -85,7 +85,7 @@ public class Meal implements Serializable {
     private int totalcalories;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 200)
     @Column(name = "MEALIMAGELINK")
     private String mealimagelink;
     @Basic(optional = false)

@@ -18,25 +18,23 @@
         <title>Choose meals.</title>
     </head>
     <body>
-          <%
-            session = request.getSession(false);
-            
+        <%
+            request.getSession(false);
+
+        // If user is not logged in, redirect to login page
+        if (session.getAttribute("permission") == null) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+            // Allow staff only
             String permission = (String) session.getAttribute("permission");
-            
-            // If user is not logged in, redirect to login page
-            if (permission == null) {
-                request.setAttribute("errorMsg", "Please login.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
-            else {
-                // Allow staff only
-                if(!permission.equalsIgnoreCase("staff")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
-        %>
+            if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+          %>
         <h1 class="title">Manage meals.</h1>
         <h5 id="subtitle">Here you can add or edit meals. To view meals' specific info, you will need to press "edit" first.</h5>
         <!-- Search bar -->
@@ -45,79 +43,18 @@
         </form>
 
         <!-- Table -->
-        <form action="#" method="post" id="mealOrder">
+        
             <div class="mealsContainer">
-                <table id="myTable">
-                    <tr>
-                        <td>
+                <table>
+                    <td>
                             <a href="DisplayFoodSelectionServlet"> <label class="meal" id="add">+</label></a>
                         </td>
-                        <td>
-                            <input type="checkbox" id="cbox1"/>
-                            <label class="meal" for="cbox1">
-                                <h5>Onion burger</h5>
-                                <div style="position: relative;">
-                                    <h6 class="breakfast">Breakfast</h6>
-                                    <img src="Images/sebastien-marchand-232356-unsplash.jpg" alt=""/>
-                                </div>
-                                <p class="description">Super awesome food, sprinkled with cheese.</p>
-                                <p class="calories">1920 Calories</p>
-                                <a href=""><div class="editButton">Edit</div></a>
-                                <div class="foodPart">
-                                    <p class="componentTitle">Consists of:</p>
-                                    <p class="component">Chicken slices, Lssssssss sssssssssssssssssettuce, Tomatoes, Pickles, Cheese</p>
-                                </div>
-                                <p class="price">1200 credits</p>
-                                <a href=""><div class="editMealButton">Edit</div></a>
-                            </label>
-                        </td>
-                      
-
-                        <td>
-                            <input type="checkbox" id="cbox2"/>
-                            <label class="meal" for="cbox2">
-                                <h5>Spaghetti</h5>
-                                <div style="position: relative;">
-                                    <h6 class="lunch">Lunch</h6>
-                                    <img src="Images/jorge-zapata-44723-unsplash.jpg" alt=""/>
-                                </div>
-
-                                <p class="description">With the power of the flour, this is perfection realized</p>
-                                <p class="calories">1920 Calories</p>
-                                <div class="foodPart">
-                                    <p class="componentTitle">Consists of:</p>
-                                    <p class="component">Chicken slices, Lssssssss sssssssssssssssssettuce, Tomatoes, Pickles, Cheese</p>
-                                </div>
-                                <p class="price">500 credits</p>
-                                <a href=""><div class="editMealButton">Edit</div></a>
-                            </label>
-                        </td>
-                        
-                        <td>
-                            <input type="checkbox" id="cbox2"/>
-                            <label class="meal" for="cbox2">
-                                <h5>Spaghetti</h5>
-                                <div style="position: relative;">
-                                    <h6 class="lunch">Lunch</h6>
-                                    <img src="Images/jorge-zapata-44723-unsplash.jpg" alt=""/>
-                                </div>
-
-                                <p class="description">With the power of the flour, this is perfection realized</p>
-                                <p class="calories">1920 Calories</p>
-                                <div class="foodPart">
-                                    <p class="componentTitle">Consists of:</p>
-                                    <p class="component">Chicken slices, Lssssssss sssssssssssssssssettuce, Tomatoes, Pickles, Cheese</p>
-                                </div>
-                                <p class="price">500 credits</p>
-                                <a href=""><div class="editMealButton">Edit</div></a>
-                            </label>
-                        </td>
-                    </tr>
+                    ${queryResult}
                 </table>
                             
             </div>
             <div><a class="nextButton" href="dashboardCanteenStaff.jsp" type="submit" >Back</a></div><br/><br/>
-        </form>
+        
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

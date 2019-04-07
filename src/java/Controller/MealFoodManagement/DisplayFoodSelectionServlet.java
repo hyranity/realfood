@@ -62,12 +62,13 @@ public class DisplayFoodSelectionServlet extends HttpServlet {
             }
 
             try {
-                utx.begin();
+                
 
                 // Get all food
+                
                 TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f", Food.class);
                 List<Food> foodList = query.getResultList();
-                utx.commit();
+                
 
                 String queryResult = "";
                  int fourCount = 0;
@@ -111,6 +112,7 @@ public class DisplayFoodSelectionServlet extends HttpServlet {
 
             } catch (Exception e) {
                 System.out.println("Could not obtain food list: " + e.getMessage());
+                e.printStackTrace();
             }
 
         }

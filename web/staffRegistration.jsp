@@ -48,10 +48,6 @@
                     <input type="hidden" value="staff" name="userType"/>
                         
                         <div class="formGroup">
-                            <input type="text" class="formInput" id="userID" name="id" placeholder="Staff ID" maxlength="10" required/>
-                        </div>
-                        
-                        <div class="formGroup">
                             <input type="text" class="formInput2" name="fname" placeholder="First Name" maxlength="25" required/>
                             <input type="text" class="formInput2" name="lname" placeholder="Last Name" maxlength="25" required/>
                         </div>

@@ -41,31 +41,31 @@
             <h5 id="subtitle">Complete the meal creation by filling in its details.</h5>
             <br/>
             <div class="mainContainer">
-
-                <form action="#" class="form">
+                <div class="errorMsg">${errorMsg}</div>
+                <form action="MealFinalizationServlet" class="form" id="finalMealForm">
                     <div>
-                        <input type="text" id="mealName" value="" placeholder="Name" />
+                        <input type="text" id="mealName" max="20" value="" placeholder="Name" name="mealName"/>
                     </div>
                     <div>
-                        <input type="text" value="" id="description" placeholder="Description"/>
+                        <input type="text" value="" id="description" placeholder="Description" name="description"/>
                     </div>
                     <div>
-                        <input type="text" value="" id="price" placeholder="Price"/>
+                        <input type="number" value="" id="price" placeholder="Price" name="price"/>
                     </div>
                     <div>
-                        <input type="text" value="" id="imageLink" placeholder="Image link"/>
+                        <input type="text" value="" id="imageLink" placeholder="Image link" name="imageLink"/>
                     </div>
                     <div class="mealTime">
                         <p>Meal will be served during:</p>
-                        <input type="checkbox" value="" id="breakfast" name="breakfast"/>
+                        <input type="checkbox" value="breakfast" id="breakfast" name="mealTime"/>
                         <label for="breakfast"><div id="breakfastDiv">Breakfast</div></label>
                         
-                        <input type="checkbox" value="" id="lunch" name="lunch"/>
+                        <input type="checkbox" value="lunch" id="lunch" name="mealTime"/>
                          <label for="lunch"><div id="lunchDiv">Lunch</div></label>
                     </div>
                     
                     <br/>
-                    <button type="submit" class="submitBtn">Add meal</button>
+                    <input type="submit" class="submitBtn" value="Add meal" form="finalMealForm">
                 </form>
                 <br/>
             </div>
