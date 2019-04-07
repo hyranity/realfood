@@ -106,6 +106,8 @@ public class FoodQuantityServletEdit extends HttpServlet {
             }
             
             meal.setTotalcalories(caloriesSum);
+            
+            // Update meal object
             meal.setMealfoodList(mealFoodList);
 
                 //Save into session first
@@ -117,7 +119,7 @@ public class FoodQuantityServletEdit extends HttpServlet {
                 session.setAttribute("step", "stepThree");
 
                 //Next step's page
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
                 return;
 
                 // END OF STEP 1
