@@ -139,7 +139,7 @@ public class ManageMealsServlet extends HttpServlet {
                             + "                                    <p class=\"component\">"+ components +"</p>\n"
                             + "                                </div>\n"
                             + "                                <p class=\"price\">"+ meal.getPrice() +" credits</p>\n"
-                            + "                                <a href=\"\"><div class=\"editMealButton\">Edit</div></a>\n"
+                            + "                                <a href=\"DisplayFoodSelectionServletForEdit?mealId="+ meal.getMealid() + "\"><div class=\"editMealButton\">Edit</div></a>\n"
                             + "                            </label>\n"
                             + "                        </td>";
 
