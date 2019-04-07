@@ -80,6 +80,16 @@ input[type=checkbox]{
     padding: 5px;
 }
 
+.bothMealTimes{
+    position: absolute;
+    display: inline-block;
+    top: 6px;
+    left: 7px;
+    margin: 0;
+    background-color: gold;
+    padding: 5px;
+}
+
 .lunch{
     position: absolute;
     display: inline-block;
