@@ -89,7 +89,7 @@ public class FoodQuantityServletEdit extends HttpServlet {
                 // <div>Spaghetti, F0001<input value="2" name="F0001"/>
                 // In other words, the ID is linked with the quantity when displayed. To update the list object, just 1. get current ID, 2. get the quantity linked with it, 3. update the quantity.
                 
-                //Get the food ID from the list
+                //Get the food ID from the listI
                 String foodID = mealFoodList.get(i).getFoodid().getFoodid();
                 
                 // Using the food ID, get its respective quantities from the JSP form
