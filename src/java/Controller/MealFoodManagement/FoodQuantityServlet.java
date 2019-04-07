@@ -123,6 +123,7 @@ public class FoodQuantityServlet extends HttpServlet {
                 // END OF STEP 1
             } catch (Exception ex) {
                 System.out.println("ERROR: Could not calculate food quantity: " + ex.getMessage());
+                ex.printStackTrace();
                 request.setAttribute("errorMsg", "Oops! Food quantity did not succeed for some reason.");
                 request.getRequestDispatcher("DisplayFoodSelectionServlet").forward(request, response);
                 return;

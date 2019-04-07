@@ -27,8 +27,8 @@
             <h5 id="subtitle">Complete the meal creation by filling in its details.</h5>
             <br/>
             <div class="mainContainer">
-
-                <form action="#" class="form" id="mealForm">
+                <div class="errorMsg">${errorMsg}</div>
+                <form action="MealFinalizationServlet" class="form" id="finalMealForm">
                     <div>
                         <input type="text" id="mealName" value="" placeholder="Name" name="mealName"/>
                     </div>
@@ -51,7 +51,7 @@
                     </div>
                     
                     <br/>
-                    <input type="submit" class="submitBtn" value="Add meal" form="mealForm">
+                    <input type="submit" class="submitBtn" value="Add meal" form="finalMealForm">
                 </form>
                 <br/>
             </div>

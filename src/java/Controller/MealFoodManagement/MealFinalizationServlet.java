@@ -5,17 +5,25 @@
  */
 package Controller.MealFoodManagement;
 
+import Model.Food;
 import Model.Meal;
 import Model.Mealfood;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.UserTransaction;
+import javax.validation.ConstraintViolationException;
 import util.Auto;
 
 /**
@@ -24,6 +32,10 @@ import util.Auto;
  */
 @WebServlet(name = "MealFinalizationServlet", urlPatterns = {"/MealFinalizationServlet"})
 public class MealFinalizationServlet extends HttpServlet {
+    @PersistenceContext
+    EntityManager em;
+    @Resource
+    UserTransaction utx;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,19 +51,32 @@ public class MealFinalizationServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
 
-        // If user is not logged in, redirect to login page
-        if (session.getAttribute("permission") == null) {
+        String permission = "";
+        String previousUrl = "";
+
+        try {
+            permission = (String) session.getAttribute("permission");
+            
+            if(permission==null){
+                request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+            }
+            
+        } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
-        } else {
-            // Allow staff only
-            String permission = (String) session.getAttribute("permission");
-            if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
-                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-                return;
-            }
+        }
+
+        // If user is not logged in, redirect to login page
+        // Allow staff only
+        if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+        else{
 
             //Values
             Meal meal = new Meal(); // This is the meal object
@@ -72,12 +97,17 @@ public class MealFinalizationServlet extends HttpServlet {
                 String imageLink = null;
                 String[] mealTime;
 
+                
+               
+
+
                 //Obtain values from form
                 try {
                     mealName = request.getParameter("mealName");
                     description = request.getParameter("description");
                     priceStr = request.getParameter("price");
                     mealTime = request.getParameterValues("mealTime");
+                    imageLink = request.getParameter("imageLink");
 
                 } catch (NullPointerException e) {
                     System.out.println("ERROR: Could not obtain values: " + e.getMessage());
@@ -85,6 +115,24 @@ public class MealFinalizationServlet extends HttpServlet {
                     request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
                     return;
                 }
+                
+                 // CHECK FOR DUPLICATE MEAL NAMES
+                Meal mealChecking = new Meal();
+                boolean existsAlready = true;
+                utx.begin();
+                TypedQuery<Meal> query = em.createQuery("SELECT m FROM Meal m WHERE m.mealname = :mealname", Meal.class).setParameter("mealname",mealName.trim()); // Query for getting meal with the same name
+
+                try {
+                    mealChecking = query.getSingleResult();
+                } catch (NoResultException ex) {
+                    existsAlready = false;
+                }
+                // Checks for meal with the same name; if there is, show an error to the user
+                if (existsAlready) {
+                    request.setAttribute("errorMsg", "Oops! A meal with the same name has already been added.");
+                    request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                    return;
+                } else {
 
                 // Ensure that meal time is filled in
                 if (mealTime.length < 1) {
@@ -104,6 +152,13 @@ public class MealFinalizationServlet extends HttpServlet {
                     request.setAttribute("errorMsg", "Make sure that price is a number.");
                     request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
                 }
+                
+                
+                
+                //Generate ID
+                query = em.createQuery("SELECT m FROM Meal m", Meal.class);
+                int count = query.getResultList().size();
+                meal.setMealid(Auto.generateID("M", 10, count));    // Set meal ID
 
                 // Set values
                 meal.setIsdiscontinued(false);
@@ -111,6 +166,11 @@ public class MealFinalizationServlet extends HttpServlet {
                 meal.setDescription(description);
                 meal.setDateadded(Auto.getToday());
                 meal.setMealimagelink(imageLink);
+                meal.setPrice(price);
+                
+                // Set default boolean values
+                meal.setIslunch(false);
+                meal.setIsbreakfast(false);
                 
                 for (int i = 0; i < mealTime.length; i++) {
                     if(mealTime[i].equalsIgnoreCase("breakfast"))   // If chosen meal time is breakfast, set as breakfast
@@ -125,24 +185,23 @@ public class MealFinalizationServlet extends HttpServlet {
                     request.setAttribute("errorMsg", "Please ensure that your meal time is correctly chosen.");
                     request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
                     }
+                    
                 }
 
-                //Save into session first
-                meal.setMealfoodList(mealFoodList);
-                session.setAttribute("mealFoodList", mealFoodList);
-                session.setAttribute("meal", meal);
-                
-
-                //Update step status
-                session.setAttribute("step", "stepThree");
+                //Persist
+                em.persist(meal);
+                utx.commit();
 
                 //Next step's page
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                System.out.println("Success! Meal with ID " + meal.getMealid() +"  is added.");
                 return;
-
-                // END OF STEP 1
-            } catch (Exception ex) {
-                System.out.println("ERROR: Could not calculate food quantity: " + ex.getMessage());
+                }
+               
+            } catch(ConstraintViolationException e){
+                System.out.println(e.getConstraintViolations());
+            }   catch (Exception ex) {
+                System.out.println("ERROR: Could not finalize meal: " + ex.getMessage());
+                ex.printStackTrace();
                 request.setAttribute("errorMsg", "Oops! Food quantity did not succeed for some reason.");
                 request.getRequestDispatcher("DisplayFoodSelectionServlet").forward(request, response);
                 return;
