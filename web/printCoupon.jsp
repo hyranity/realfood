@@ -19,6 +19,25 @@
         <title>Print Coupon</title>
     </head>
     <body>
+        <%
+            session = request.getSession(false);
+            
+            String permission = (String) session.getAttribute("permission");
+            
+            // If user is not logged in, redirect to login page
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+            else {
+                // Allow student only
+                if(!permission.equalsIgnoreCase("student")){
+                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+        %>
         <div class="couponContainer">
             <h1>RealFood Canteen</h1>
             <hr/>
@@ -52,5 +71,6 @@
             <br/>
             <p class="cost">1920</p>
         </div>
+        <%}%>
     </body>
 </html>

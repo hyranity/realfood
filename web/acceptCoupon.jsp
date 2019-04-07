@@ -15,6 +15,25 @@
 
 </head>
 <body>
+        <%
+            session = request.getSession(false);
+
+            String permission = (String) session.getAttribute("permission");
+
+            // If user is not logged in, redirect to login page
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                // Allow staff only
+                if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+                    request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+        %>
+             
 <div class="containerBox">
 	<!--<h2>Reset Password Form</h2>-->
 	<div class="acceptCoupon">
@@ -30,7 +49,7 @@
 	</div>
 </div>
     
-
+<%}%>
 </body>
 
 </html>

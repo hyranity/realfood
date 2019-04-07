@@ -10,6 +10,25 @@
          <link href="CSS/commonStyles.css" rel="stylesheet">
     </head>
     <body>
+                <%
+            session = request.getSession(false);
+            
+            String permission = (String) session.getAttribute("permission");
+            
+            // If user is not logged in, redirect to login page
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+            else {
+                // Allow staff only
+                if(!permission.equalsIgnoreCase("staff")){
+                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+        %>
         <div class="outsideContainer">
 
             <h1>Edit Food</h1>
@@ -49,6 +68,7 @@
             <a href="#"><div class="removalCancel">No</div></a>
         </div>
         <div class="coverOverlay"></div>
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 

@@ -18,6 +18,24 @@
         <title>Manage food</title>
     </head>
     <body>
+        <%
+            session = request.getSession(false);
+
+            String permission = (String) session.getAttribute("permission");
+
+            // If user is not logged in, redirect to login page
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                // Allow staff only
+                if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+                    request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+        %>
         <h1>Manage Food</h1><br><br>
         <h4 id="subtitle">Here you can manage food. Edit food to view their details.</h4>
 
@@ -56,6 +74,7 @@
         </table>
     </div>
         <div><button class="nextButton" href="" type="submit" >Back</button></div>
+        <%}%>
 </body>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

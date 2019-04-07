@@ -18,6 +18,25 @@
         <title>Choose meals.</title>
     </head>
     <body>
+          <%
+            session = request.getSession(false);
+            
+            String permission = (String) session.getAttribute("permission");
+            
+            // If user is not logged in, redirect to login page
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+            else {
+                // Allow staff only
+                if(!permission.equalsIgnoreCase("staff")){
+                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+        %>
         <h1 class="title">Manage meals.</h1>
         <h5 id="subtitle">Here you can add or edit meals. To view meals' specific info, you will need to press "edit" first.</h5>
         <!-- Search bar -->
@@ -99,7 +118,7 @@
             </div>
             <div><a class="nextButton" href="dashboardCanteenStaff.jsp" type="submit" >Back</a></div><br/><br/>
         </form>
-        
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="studentDisplayMeals.js" type="text/javascript"></script>

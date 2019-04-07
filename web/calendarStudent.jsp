@@ -23,6 +23,26 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+                <%
+            session = request.getSession(false);
+            
+            String permission = (String) session.getAttribute("permission");
+            
+            // If user is not logged in, redirect to login page
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+            else {
+                // Allow manager only
+                if(!permission.equalsIgnoreCase("student")){
+                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+        %>
+        
         <%
 
             //The following is to set the first day (Sunday or Monday)
@@ -248,7 +268,7 @@ and open the template in the editor.
         </div>
 
 
-
+<%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="calendarStudent.js" type="text/javascript"></script>

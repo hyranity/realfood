@@ -157,7 +157,7 @@ public class RegistrationServlet extends HttpServlet {
                 System.out.println("ERROR: Unable to create student object: " + ex.getMessage());
                 // This will be triggered if something went wrong.
                 request.setAttribute("errorMsg", "Oops! We couldn't register you for some reason.");
-                request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
+                request.getRequestDispatcher("studentRegistration.jsp").forward(request, response);
                 return;
             }
         } else {

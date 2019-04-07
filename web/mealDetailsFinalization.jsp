@@ -11,6 +11,7 @@
         <link href="CSS/mealDetails.css" rel="stylesheet">
     </head>
     <body>
+
         <!-- Steps -->
         <div class="stepsContainer">
             <h1>Create a Meal</h1>
@@ -18,6 +19,19 @@
                 <div>1. Select meal components.</div>
                 <div>2. Edit meal quantity</div>
                 <div class="currentStep">3. Finalize meal details</div>
+            </div>
+        </div>
+        
+        <div class="sideDisplay">
+                <div class="recordQuantity">
+                <div class="frontPart">
+                    <p class="name"><b>Spaghetti Bolognese</b></p><br/>
+                </div>
+                <div class="quantityEditor">
+                    
+                    <p class="quantity" data-quantity="5"><b>Quantity:</b> 2</p>
+
+                </div>
             </div>
         </div>
         

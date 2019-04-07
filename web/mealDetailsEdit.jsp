@@ -11,6 +11,25 @@
         <link href="CSS/mealDetails.css" rel="stylesheet">
     </head>
     <body>
+        <%
+            session = request.getSession(false);
+            
+            String permission = (String) session.getAttribute("permission");
+            
+            // If user is not logged in, redirect to login page
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+            else {
+                // Allow staff only
+                if(!permission.equalsIgnoreCase("staff")){
+                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+        %>
         <!-- Steps -->
         <div class="stepsContainer">
             <h1>Edit a Meal</h1>
@@ -18,6 +37,21 @@
                 <div>1. Modify food components.</div>
                 <div class="currentStep">2. Modify food quantity</div>
                 <div >3. Modify meal details</div>
+            </div>
+        </div>
+        
+        <div class="sideDisplay">
+            
+                        <div class="recordQuantity">
+                <div class="frontPart">
+                    <p class="name">Spaghetti Bolognese</p>
+
+                </div>
+                <div class="quantityEditor">
+                    <p class="value">1500 Credits</p>
+                    <p class="quantity" data-quantity="5">x2</p>
+
+                </div>
             </div>
         </div>
         
@@ -74,6 +108,7 @@
             <a href="#"><div class="removalConfirm">Yes</div></a>
             <a href="#"><div class="removalCancel">No</div></a>
         </div>
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
