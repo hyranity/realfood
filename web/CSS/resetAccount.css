@@ -1,0 +1,204 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 7, 2019, 8:21:57 PM
+    Author     : Richard Khoo
+*/
+
+/*--login start here--*/
+
+ body{
+   margin-bottom: 20px;
+   font-size: 100%;
+   background-color:#000000; 
+   font-family: montserrat, sans-serif;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  transition: 0.1s all;
+  -webkit-transition: 0.1s all;
+  -moz-transition: 0.1s all;
+  -o-transition: 0.1s all;
+}
+/*--element style--*/
+.containerBox h2 {
+    font-size: 30px;
+    color: gold;
+    text-align: center;
+    margin-top:24px;
+    font-weight: 700;
+
+}
+.resetAccount {
+    width:27%;
+    background-color: #000000;
+    margin: 150px auto 0px;
+    border-radius: 5px;
+    padding:3em 2em;
+
+}
+.resetAccount h1 {
+    text-align: center;
+    font-size: 28px;
+    color:gold;
+    font-weight: 700;
+}
+.resetAccount p {
+    font-size: 16px;
+    color: gold;
+    line-height: 24px;
+    margin: 24px 0px;
+    text-align:center;
+}
+.resetAccount input[type=password] {
+    font-size: 12px;
+    color: #000000;
+    padding: 20px 12px;
+    display: block;
+    width: 95%;
+    outline: none;
+    text-align:center;
+    border-radius:15px;
+    border:none;
+    background-color: gold;
+    margin-bottom: 10px;
+}
+.resetAccount input[type=text] {
+    font-size: 12px;
+    color: #000000;
+    padding: 20px 12px;
+    display: block;
+    width: 95%;
+    outline: none;
+    text-align:center;
+    border-radius:15px;
+    border:none;
+    background-color: gold;
+    margin-bottom: 10px;
+}
+
+.resetAccount input[type=submit] {
+    font-size: 16px;
+    color: #000000;
+    background-color:#ffffff;
+    width: 50%;
+    padding: 20px 0px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    border-radius: 50px;
+    display: block;
+    margin: 18px auto 0;
+}
+.resetAccount input[type=submit]:hover{
+    background-color:#000000;  
+    transition: 0.1s all;
+    color: gold;
+    border: 3px solid;
+    border-color: gold;
+    font-weight: 700;
+}
+
+label{
+    color:#ffffff;
+    margin-left: 130px;
+    border1:2px soild;
+    border-color: gold;
+}
+
+/*--media quiries start--*/
+@media(max-width:1440px){
+	
+}
+@media(max-width:1366px){
+	
+}
+@media(max-width:1280px){
+    
+.containerBox h2 {
+    margin-top: 24px;	
+}
+
+.resetAccount {
+    width: 30%;
+}
+}
+@media(max-width:1024px){
+.resetAccount {
+    width: 37%;	
+}
+}
+@media(max-width:768px){
+.resetAccount {
+    width: 49%;
+}	
+.containerBox h2 {
+    font-size: 2em;
+}
+.resetAccount {
+    width: 60%;
+}
+.resetAccount h1 {
+    font-size: 2em;
+}
+}
+@media(max-width:640px){
+	
+}
+@media(max-width:480px){
+.resetAccount {
+    width: 80%;
+    padding: 3em 1.5em;
+}	
+}
+@media(max-width:320px){
+.containerBox h2 {
+    font-size: 1.5em;
+}
+.resetAccount h1 {
+    font-size: 1.5em;
+}
+.resetAccount {
+    width: 80%;
+    margin: 2em auto 0em;
+    padding: 1.5em 1.5em;
+}
+.resetAccount p {
+    font-size: 0.9em;	
+}
+.resetAccount input[type=submit] {
+    font-size:0.9em;
+    width: 75%;
+}
+.resetAccount input[type=text] {
+    font-size: 0.9em;
+    padding: 0.8em 0.5em;
+}
+}
+
+input:checked + label{
+    color: green;
+    
+}
+
+input[type=checkbox]{
+    display: none;
+}
+
+label{
+    color: gold;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px;
+    border-radius: 13px;
+    padding: 10px;
+    font-size: 15px;
+    background-color: black;
+    
+}
