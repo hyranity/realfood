@@ -5,29 +5,27 @@
  */
 package Controller.MealFoodManagement;
 
+import Model.Meal;
+import Model.Mealfood;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.UserTransaction;
-import Model.*;
-import java.util.*;
-import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
+import javax.transaction.UserTransaction;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "DisplayMealsServlet", urlPatterns = {"/DisplayMealsServlet"})
-public class DisplayMealsServlet extends HttpServlet {
-
+public class ManageMealsServlet extends HttpServlet {
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -45,21 +43,33 @@ public class DisplayMealsServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(false);
-
-        // If user is not logged in, redirect to login page
-        if (session.getAttribute("permission") == null) {
-            request.setAttribute("errorMsg", "Please login.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-        } else {
-            // Allow staff only
-            String permission = (String) session.getAttribute("permission");
-            if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
-                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+         HttpSession session = request.getSession(false);
+        
+        String permission = "";
+        String previousUrl = "";
+        
+        try {
+            permission = (String) session.getAttribute("permission");
+            
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
+            
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // If user is not logged in, redirect to login page
+        // Allow staff only
+        if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
 
             try {
 
@@ -80,11 +90,11 @@ public class DisplayMealsServlet extends HttpServlet {
                     
                     // Create the food components string
                     for(int j=0; j< meal.getMealfoodList().size(); j++){
-                        Mealfood mf = meal.getMealfoodList().get(i);
+                        Mealfood mf = meal.getMealfoodList().get(j);
                         
                         // If the current iteration is more than the first one, put comma.
                         if(j>0)
-                            components += ", ";
+                            components += " ,";
                         
                         components += mf.getFoodid().getFoodname();
                     }

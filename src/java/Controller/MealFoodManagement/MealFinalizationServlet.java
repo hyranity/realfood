@@ -191,14 +191,17 @@ public class MealFinalizationServlet extends HttpServlet {
                         }
                         
                     }
+                    
+                    // Get record count
+                    TypedQuery<Mealfood> mfQuery = em.createQuery("SELECT mf FROM Mealfood mf", Mealfood.class); // Get total records count
+                     count = mfQuery.getResultList().size(); // Set count
 
                     // Generate ID for the child objects
                     for (int i = 0; i <  meal.getMealfoodList().size(); i++) {
                     
-                    TypedQuery<Mealfood> mfQuery = em.createQuery("SELECT mf FROM Mealfood mf", Mealfood.class); // Get total records count
-                     count = mfQuery.getResultList().size(); // Set count
                     meal.getMealfoodList().get(i).setMealfoodid(Auto.generateID("MF", 12, count));    // Set ID inside each child object of the meal
                     meal.getMealfoodList().get(i).setMealid(meal);
+                    count++;
                     }
                     
                     //Persist meal object
@@ -207,6 +210,7 @@ public class MealFinalizationServlet extends HttpServlet {
 
                     //Next step's page
                     System.out.println("Success! Meal with ID " + meal.getMealid() + "  is added.");
+                    response.sendRedirect("ManageMealsServlet");
                     return;
                 }
                 
@@ -214,6 +218,8 @@ public class MealFinalizationServlet extends HttpServlet {
                 System.out.println(e.getConstraintViolations());
             } catch (Exception ex) {
                 System.out.println("ERROR: Could not finalize meal: " + ex.getMessage());
+                request.setAttribute("errorMsg", "Oops! Food quantity did not succeed for some reason.");
+                request.getRequestDispatcher("DisplayFoodSelectionServlet").forward(request, response);
                 ex.printStackTrace();
                 request.setAttribute("errorMsg", "Oops! Food quantity did not succeed for some reason.");
                 request.getRequestDispatcher("DisplayFoodSelectionServlet").forward(request, response);

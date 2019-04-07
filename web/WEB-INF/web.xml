@@ -4,9 +4,17 @@
         <servlet-name>FoodRegistration</servlet-name>
         <servlet-class>Controller.FoodRegistration</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManageMealsServlet</servlet-name>
+        <servlet-class>Controller.MealFoodManagement.ManageMealsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>FoodRegistration</servlet-name>
         <url-pattern>/FoodRegistration</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageMealsServlet</servlet-name>
+        <url-pattern>/ManageMealsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

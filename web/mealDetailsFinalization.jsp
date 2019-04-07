@@ -30,7 +30,7 @@
                 <div class="errorMsg">${errorMsg}</div>
                 <form action="MealFinalizationServlet" class="form" id="finalMealForm">
                     <div>
-                        <input type="text" id="mealName" value="" placeholder="Name" name="mealName"/>
+                        <input type="text" id="mealName" max="20" value="" placeholder="Name" name="mealName"/>
                     </div>
                     <div>
                         <input type="text" value="" id="description" placeholder="Description" name="description"/>

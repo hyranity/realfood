@@ -46,6 +46,9 @@
         
             <div class="mealsContainer">
                 <table>
+                    <td>
+                            <a href="DisplayFoodSelectionServlet"> <label class="meal" id="add">+</label></a>
+                        </td>
                     ${queryResult}
                 </table>
                             
