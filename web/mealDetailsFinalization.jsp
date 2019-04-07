@@ -11,7 +11,25 @@
         <link href="CSS/mealDetails.css" rel="stylesheet">
     </head>
     <body>
-
+        <%
+            session = request.getSession(false);
+            
+            String permission = (String) session.getAttribute("permission");
+            
+            // If user is not logged in, redirect to login page
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+            else {
+                // Allow staff only
+                if(!permission.equalsIgnoreCase("staff")){
+                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+        %>
         <!-- Steps -->
         <div class="stepsContainer">
             <h1>Create a Meal</h1>
@@ -71,7 +89,7 @@
             </div>
         </div>
         <a href="displayStaff.jsp"><div class="back">Back</div></a>
-
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
