@@ -65,9 +65,10 @@ public class DisplayFoodSelectionServlet extends HttpServlet {
                 
 
                 // Get all food
+                
                 TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f", Food.class);
                 List<Food> foodList = query.getResultList();
-                utx.commit();
+                
 
                 String queryResult = "";
                  int fourCount = 0;

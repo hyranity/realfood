@@ -32,6 +32,7 @@ import util.Auto;
  */
 @WebServlet(name = "MealFinalizationServlet", urlPatterns = {"/MealFinalizationServlet"})
 public class MealFinalizationServlet extends HttpServlet {
+
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -50,17 +51,17 @@ public class MealFinalizationServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
-
+        
         String permission = "";
         String previousUrl = "";
-
+        
         try {
             permission = (String) session.getAttribute("permission");
             
-            if(permission==null){
+            if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
             }
             
         } catch (NullPointerException ex) {
@@ -75,19 +76,17 @@ public class MealFinalizationServlet extends HttpServlet {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
-        }
-        else{
+        } else {
 
             //Values
-            Meal meal = new Meal(); // This is the meal object
-            List<Mealfood> mealFoodList = (List<Mealfood>) session.getAttribute("mealFoodList");
+            Meal meal = (Meal) session.getAttribute("meal"); // This is the meal object
 
             // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
             //Hence, redirect to first page.
-            if (mealFoodList == null) {
+            if (meal == null) {
                 response.sendRedirect("DisplayFoodSelectionServlet");
             }
-
+            
             try {
 
                 //Declare values
@@ -97,10 +96,6 @@ public class MealFinalizationServlet extends HttpServlet {
                 String imageLink = null;
                 String[] mealTime;
 
-                
-               
-
-
                 //Obtain values from form
                 try {
                     mealName = request.getParameter("mealName");
@@ -108,19 +103,19 @@ public class MealFinalizationServlet extends HttpServlet {
                     priceStr = request.getParameter("price");
                     mealTime = request.getParameterValues("mealTime");
                     imageLink = request.getParameter("imageLink");
-
+                    
                 } catch (NullPointerException e) {
                     System.out.println("ERROR: Could not obtain values: " + e.getMessage());
                     request.setAttribute("errorMsg", "Make sure that all fields are filled in.");
                     request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
                     return;
                 }
-                
-                 // CHECK FOR DUPLICATE MEAL NAMES
+
+                // CHECK FOR DUPLICATE MEAL NAMES
                 Meal mealChecking = new Meal();
                 boolean existsAlready = true;
                 utx.begin();
-                TypedQuery<Meal> query = em.createQuery("SELECT m FROM Meal m WHERE m.mealname = :mealname", Meal.class).setParameter("mealname",mealName.trim()); // Query for getting meal with the same name
+                TypedQuery<Meal> query = em.createQuery("SELECT m FROM Meal m WHERE m.mealname = :mealname", Meal.class).setParameter("mealname", mealName.trim()); // Query for getting meal with the same name
 
                 try {
                     mealChecking = query.getSingleResult();
@@ -134,72 +129,90 @@ public class MealFinalizationServlet extends HttpServlet {
                     return;
                 } else {
 
-                // Ensure that meal time is filled in
-                if (mealTime.length < 1) {
-                    System.out.println("ERROR: Mealtime has not been selected: ");
-                    request.setAttribute("errorMsg", "Please select a time for the meal (breakfast and/or lunch).");
-                    request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
-                    return;
-                }
+                    // Ensure that meal time is filled in
+                    try{
+                    if (mealTime.length < 1) {
+                        System.out.println("ERROR: Mealtime has not been selected: ");
+                        request.setAttribute("errorMsg", "Please select a time for the meal (breakfast and/or lunch).");
+                        request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                        return;
+                    }
+                    }
+                    catch(NullPointerException ex){
+                        request.setAttribute("errorMsg", "Please select a time for the meal (breakfast and/or lunch).");
+                        request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                        return;
+                    }
 
-                // Convert price to integer
-                int price = 0;
-
-                try {
-                    price = Integer.parseInt(priceStr);
-                } catch (NumberFormatException e) {
-                    System.out.println("ERROR: Price is not numerical: " + e.getMessage());
-                    request.setAttribute("errorMsg", "Make sure that price is a number.");
-                    request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
-                }
-                
-                
-                
-                //Generate ID
-                query = em.createQuery("SELECT m FROM Meal m", Meal.class);
-                int count = query.getResultList().size();
-                meal.setMealid(Auto.generateID("M", 10, count));    // Set meal ID
-
-                // Set values
-                meal.setIsdiscontinued(false);
-                meal.setMealname(mealName);
-                meal.setDescription(description);
-                meal.setDateadded(Auto.getToday());
-                meal.setMealimagelink(imageLink);
-                meal.setPrice(price);
-                
-                // Set default boolean values
-                meal.setIslunch(false);
-                meal.setIsbreakfast(false);
-                
-                for (int i = 0; i < mealTime.length; i++) {
-                    if(mealTime[i].equalsIgnoreCase("breakfast"))   // If chosen meal time is breakfast, set as breakfast
-                        meal.setIsbreakfast(true);
+                    // Convert price to integer
+                    int price = 0;
                     
-                    if(mealTime[i].equalsIgnoreCase("lunch"))   // If chosen meal time is lunch, set as lunch
-                        meal.setIslunch(true);
+                    try {
+                        price = Integer.parseInt(priceStr);
+                    } catch (NumberFormatException e) {
+                        System.out.println("ERROR: Price is not numerical: " + e.getMessage());
+                        request.setAttribute("errorMsg", "Make sure that price is a number.");
+                        request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                    }
+
+                    //Generate ID
+                    query = em.createQuery("SELECT m FROM Meal m", Meal.class);
+                    int count = query.getResultList().size();
+                    meal.setMealid(Auto.generateID("M", 10, count));    // Set meal ID
+
+                    // Set values
+                    meal.setIsdiscontinued(false);
+                    meal.setMealname(mealName);
+                    meal.setDescription(description);
+                    meal.setDateadded(Auto.getToday());
+                    meal.setMealimagelink(imageLink);
+                    meal.setPrice(price);
+
+                    // Set default boolean values
+                    meal.setIslunch(false);
+                    meal.setIsbreakfast(false);
                     
-                    if(!mealTime[i].equalsIgnoreCase("lunch") && !mealTime[i].equalsIgnoreCase("breakfast")){   // If chosen meal time is neither breakfast nor lunch (highly unlikely due to validations made)
-                        // Return an error since meal time is neither breakfast nor lunch
-                        System.out.println("ERROR: Meal time is not breakfast nor lunch. It is: " + mealTime[i]);
-                    request.setAttribute("errorMsg", "Please ensure that your meal time is correctly chosen.");
-                    request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                    for (int i = 0; i < mealTime.length; i++) {
+                        if (mealTime[i].equalsIgnoreCase("breakfast")) // If chosen meal time is breakfast, set as breakfast
+                        {
+                            meal.setIsbreakfast(true);
+                        }
+                        
+                        if (mealTime[i].equalsIgnoreCase("lunch")) // If chosen meal time is lunch, set as lunch
+                        {
+                            meal.setIslunch(true);
+                        }
+                        
+                        if (!mealTime[i].equalsIgnoreCase("lunch") && !mealTime[i].equalsIgnoreCase("breakfast")) {   // If chosen meal time is neither breakfast nor lunch (highly unlikely due to validations made)
+                            // Return an error since meal time is neither breakfast nor lunch
+                            System.out.println("ERROR: Meal time is not breakfast nor lunch. It is: " + mealTime[i]);
+                            request.setAttribute("errorMsg", "Please ensure that your meal time is correctly chosen.");
+                            request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                        }
+                        
+                    }
+
+                    // Generate ID for the child objects
+                    for (int i = 0; i <  meal.getMealfoodList().size(); i++) {
+                    
+                    TypedQuery<Mealfood> mfQuery = em.createQuery("SELECT mf FROM Mealfood mf", Mealfood.class); // Get total records count
+                     count = mfQuery.getResultList().size(); // Set count
+                    meal.getMealfoodList().get(i).setMealfoodid(Auto.generateID("MF", 12, count));    // Set ID inside each child object of the meal
+                    meal.getMealfoodList().get(i).setMealid(meal);
                     }
                     
-                }
+                    //Persist meal object
+                    em.persist(meal);
+                    utx.commit();
 
-                //Persist
-                em.persist(meal);
-                utx.commit();
-
-                //Next step's page
-                System.out.println("Success! Meal with ID " + meal.getMealid() +"  is added.");
-                return;
+                    //Next step's page
+                    System.out.println("Success! Meal with ID " + meal.getMealid() + "  is added.");
+                    return;
                 }
-               
-            } catch(ConstraintViolationException e){
+                
+            } catch (ConstraintViolationException e) {
                 System.out.println(e.getConstraintViolations());
-            }   catch (Exception ex) {
+            } catch (Exception ex) {
                 System.out.println("ERROR: Could not finalize meal: " + ex.getMessage());
                 ex.printStackTrace();
                 request.setAttribute("errorMsg", "Oops! Food quantity did not succeed for some reason.");
