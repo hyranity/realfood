@@ -24,7 +24,7 @@
         
         <h1 class="title">Edit food quantity</h1>
         <h5 id="subtitle">Modify the quantity of the food components.</h5>
-        <form action="FoodQuantityServlet" method="POST" id="foodForm">
+        <form action="FoodQuantityServlet" method="POST" id="mealForm">
         ${queryResultQuantity}
             <div class="total">
                 
@@ -32,7 +32,7 @@
             </div>
         <div class="nextButtonDiv">
             
-            <input class="nextButton" form="foodForm" type="submit" value="Next Step">
+            <input class="nextButton" form="mealForm" type="submit" value="Next Step">
         </div>
     </form>
     </body>

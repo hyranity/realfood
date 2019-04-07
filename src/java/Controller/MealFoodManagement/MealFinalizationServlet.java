@@ -5,39 +5,25 @@
  */
 package Controller.MealFoodManagement;
 
-import Model.*;
+import Model.Meal;
+import Model.Mealfood;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-import util.*;
+import util.Auto;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "FoodQuantityServlet", urlPatterns = {"/FoodQuantityServlet"})
-public class FoodQuantityServlet extends HttpServlet {
-    
-    @PersistenceContext
-    EntityManager em;
-    @Resource
-    UserTransaction utx;
+@WebServlet(name = "MealFinalizationServlet", urlPatterns = {"/MealFinalizationServlet"})
+public class MealFinalizationServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,9 +37,8 @@ public class FoodQuantityServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
         HttpSession session = request.getSession(false);
-        
+
         // If user is not logged in, redirect to login page
         if (session.getAttribute("permission") == null) {
             request.setAttribute("errorMsg", "Please login.");
@@ -67,51 +52,86 @@ public class FoodQuantityServlet extends HttpServlet {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-            
+
             //Values
             Meal meal = new Meal(); // This is the meal object
             List<Mealfood> mealFoodList = (List<Mealfood>) session.getAttribute("mealFoodList");
- 
-            
+
             // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
             //Hence, redirect to first page.
             if (mealFoodList == null) {
                 response.sendRedirect("DisplayFoodSelectionServlet");
             }
-            
-            try{
 
-                int caloriesSum = 0;
-            for(int i=0; i<mealFoodList.size(); i++){
+            try {
+
+                //Declare values
+                String mealName = null;
+                String description = null;
+                String priceStr = null;
+                String imageLink = null;
+                String[] mealTime;
+
+                //Obtain values from form
+                try {
+                    mealName = request.getParameter("mealName");
+                    description = request.getParameter("description");
+                    priceStr = request.getParameter("price");
+                    mealTime = request.getParameterValues("mealTime");
+
+                } catch (NullPointerException e) {
+                    System.out.println("ERROR: Could not obtain values: " + e.getMessage());
+                    request.setAttribute("errorMsg", "Make sure that all fields are filled in.");
+                    request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                    return;
+                }
+
+                // Ensure that meal time is filled in
+                if (mealTime.length < 1) {
+                    System.out.println("ERROR: Mealtime has not been selected: ");
+                    request.setAttribute("errorMsg", "Please select a time for the meal (breakfast and/or lunch).");
+                    request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                    return;
+                }
+
+                // Convert price to integer
+                int price = 0;
+
+                try {
+                    price = Integer.parseInt(priceStr);
+                } catch (NumberFormatException e) {
+                    System.out.println("ERROR: Price is not numerical: " + e.getMessage());
+                    request.setAttribute("errorMsg", "Make sure that price is a number.");
+                    request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                }
+
+                // Set values
+                meal.setIsdiscontinued(false);
+                meal.setMealname(mealName);
+                meal.setDescription(description);
+                meal.setDateadded(Auto.getToday());
+                meal.setMealimagelink(imageLink);
                 
-                // NOTE: The list will correspond EXACLTY to the one in the form. Eg. Ice cream - ID of F1, Pizza - ID of F2. In the form, it will be Ice cream - ID of F1, quantity of 1, and so on.
-                // Using the selected foods' IDs, their quantities (default is 1) are displayed (as values) on quantity JSP with the name of their IDs.
-                // <div>Spaghetti, F0001<input value="2" name="F0001"/>
-                // In other words, the ID is linked with the quantity when displayed. To update the list object, just 1. get current ID, 2. get the quantity linked with it, 3. update the quantity.
-                
-                //Get the food ID from the list
-                String foodID = mealFoodList.get(i).getFoodid().getFoodid();
-                
-                // Using the food ID, get its respective quantities from the JSP form
-               
-                int quantity = Integer.parseInt(request.getParameter(foodID));
-                
-                // Insert the obtained quantity into the object from the list
-                mealFoodList.get(i).setQuantity(quantity);
-                
-                // Set isDiscontinued to false
-                mealFoodList.get(i).setIsdiscontinued(false);
-                
-                caloriesSum += quantity * mealFoodList.get(i).getFoodid().getCalories();
-            }
-            
-            meal.setTotalcalories(caloriesSum);
-            meal.setMealfoodList(mealFoodList);
+                for (int i = 0; i < mealTime.length; i++) {
+                    if(mealTime[i].equalsIgnoreCase("breakfast"))   // If chosen meal time is breakfast, set as breakfast
+                        meal.setIsbreakfast(true);
+                    
+                    if(mealTime[i].equalsIgnoreCase("lunch"))   // If chosen meal time is lunch, set as lunch
+                        meal.setIslunch(true);
+                    
+                    if(!mealTime[i].equalsIgnoreCase("lunch") && !mealTime[i].equalsIgnoreCase("breakfast")){   // If chosen meal time is neither breakfast nor lunch (highly unlikely due to validations made)
+                        // Return an error since meal time is neither breakfast nor lunch
+                        System.out.println("ERROR: Meal time is not breakfast nor lunch. It is: " + mealTime[i]);
+                    request.setAttribute("errorMsg", "Please ensure that your meal time is correctly chosen.");
+                    request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                    }
+                }
 
                 //Save into session first
                 meal.setMealfoodList(mealFoodList);
                 session.setAttribute("mealFoodList", mealFoodList);
                 session.setAttribute("meal", meal);
+                
 
                 //Update step status
                 session.setAttribute("step", "stepThree");
