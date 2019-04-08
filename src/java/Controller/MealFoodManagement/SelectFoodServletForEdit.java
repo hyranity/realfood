@@ -117,7 +117,7 @@ public class SelectFoodServletForEdit extends HttpServlet {
         //Values
         List<Mealfood> mealFoodList = meal.getMealfoodList(); 
         List<Mealfood> newMealFoodList = new ArrayList(); 
-
+        System.out.println(meal.getMealfoodList().size());
         //STEP 1 - SELECT MEAL COMPONENTS (FOOD)
         try {
 
@@ -126,19 +126,25 @@ public class SelectFoodServletForEdit extends HttpServlet {
             for (int i = 0; i < componentId.length; i++) {
                 //Obtain each food using the foodID from the array.
                 Food food = em.find(Food.class, componentId[i]);
+                boolean found = false;
 
                 // Loop through the existing mealFood list. 
                 for(Mealfood mf : mealFoodList){
+                    System.out.println("loop mealFood");
                     // If there's the same one, store the EXISTING data into the new list
-                    if(food.getFoodid().equals(mf.getFoodid().getFoodid()))
+                    if(food.getFoodid().equals(mf.getFoodid().getFoodid())){
                         newMealFoodList.add(mf);
-                    else { 
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if(!found){
                         // If the new one doesn't exist, store the NEW data into the new list
                         Mealfood newMf = new Mealfood();
                         newMf.setFoodid(food);
                         newMealFoodList.add(newMf);
                     }
-                }
             }
 
             utx.commit();

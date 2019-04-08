@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,7 +32,7 @@ import util.Auto;
  * @author mast3
  */
 @WebServlet(name = "MealFinalizationServlet", urlPatterns = {"/MealFinalizationServlet"})
-public class MealFinalizationServlet extends HttpServlet {
+public class MealDetailsEditServlet extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -51,19 +52,19 @@ public class MealFinalizationServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
-        
+
         String permission = "";
         String previousUrl = "";
-        
+
         try {
             permission = (String) session.getAttribute("permission");
-            
+
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-            
+
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -86,7 +87,7 @@ public class MealFinalizationServlet extends HttpServlet {
             if (meal == null) {
                 response.sendRedirect("DisplayFoodSelectionServlet");
             }
-            
+
             try {
 
                 //Declare values
@@ -103,11 +104,11 @@ public class MealFinalizationServlet extends HttpServlet {
                     priceStr = request.getParameter("price");
                     mealTime = request.getParameterValues("mealTime");
                     imageLink = request.getParameter("imageLink");
-                    
+
                 } catch (NullPointerException e) {
                     System.out.println("ERROR: Could not obtain values: " + e.getMessage());
                     request.setAttribute("errorMsg", "Make sure that all fields are filled in.");
-                    request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                    request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
                     return;
                 }
 
@@ -125,28 +126,27 @@ public class MealFinalizationServlet extends HttpServlet {
                 // Checks for meal with the same name; if there is, show an error to the user
                 if (existsAlready) {
                     request.setAttribute("errorMsg", "Oops! A meal with the same name has already been added.");
-                    request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                    request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
                     return;
                 } else {
 
                     // Ensure that meal time is filled in
-                    try{
-                    if (mealTime.length < 1) {
-                        System.out.println("ERROR: Mealtime has not been selected: ");
+                    try {
+                        if (mealTime.length < 1) {
+                            System.out.println("ERROR: Mealtime has not been selected: ");
+                            request.setAttribute("errorMsg", "Please select a time for the meal (breakfast and/or lunch).");
+                            request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
+                            return;
+                        }
+                    } catch (NullPointerException ex) {
                         request.setAttribute("errorMsg", "Please select a time for the meal (breakfast and/or lunch).");
-                        request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
-                        return;
-                    }
-                    }
-                    catch(NullPointerException ex){
-                        request.setAttribute("errorMsg", "Please select a time for the meal (breakfast and/or lunch).");
-                        request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                        request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
                         return;
                     }
 
                     // Convert price to integer
                     int price = 0;
-                    
+
                     try {
                         price = Integer.parseInt(priceStr);
                     } catch (NumberFormatException e) {
@@ -171,39 +171,64 @@ public class MealFinalizationServlet extends HttpServlet {
                     // Set default boolean values
                     meal.setIslunch(false);
                     meal.setIsbreakfast(false);
-                    
+
                     for (int i = 0; i < mealTime.length; i++) {
                         if (mealTime[i].equalsIgnoreCase("breakfast")) // If chosen meal time is breakfast, set as breakfast
                         {
                             meal.setIsbreakfast(true);
                         }
-                        
+
                         if (mealTime[i].equalsIgnoreCase("lunch")) // If chosen meal time is lunch, set as lunch
                         {
                             meal.setIslunch(true);
                         }
-                        
+
                         if (!mealTime[i].equalsIgnoreCase("lunch") && !mealTime[i].equalsIgnoreCase("breakfast")) {   // If chosen meal time is neither breakfast nor lunch (highly unlikely due to validations made)
                             // Return an error since meal time is neither breakfast nor lunch
                             System.out.println("ERROR: Meal time is not breakfast nor lunch. It is: " + mealTime[i]);
                             request.setAttribute("errorMsg", "Please ensure that your meal time is correctly chosen.");
                             request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
                         }
-                        
+
                     }
                     
+                    // Delete all the relationships with the current meal
+                    Query deleteQuery = em.createQuery("DELETE FROM Mealfood mf WHERE mf.mealid = :mealid").setParameter("mealid", meal);
+                    deleteQuery.executeUpdate();
+                    
+                    /*
+                    Meal existingMeal = em.find(Meal.class, meal.getMealid());
+                    
+                    // Compare existing meal with updated meal
+                     for (int i = 0; i < existingMeal.getMealfoodList().size(); i++) {
+                        // Get existing mealfood
+                        Mealfood existingMf = existingMeal.getMealfoodList().get(i);
+                        
+                        // Loop through every mealfood in the updated one
+                        for(Mealfood mf : meal.getMealfoodList()){
+                            
+                            //If new food component already is in the old one, just update the quantity
+                            if(existingMf.getFoodid().getFoodid() != mf.getFoodid().getFoodid()){
+                                mf.setQuantity();
+                            }
+                        }
+                    }
+                    */
+                    
+                    
+
                     // Get record count
                     TypedQuery<Mealfood> mfQuery = em.createQuery("SELECT mf FROM Mealfood mf", Mealfood.class); // Get total records count
-                     count = mfQuery.getResultList().size(); // Set count
+                    count = mfQuery.getResultList().size(); // Set count
 
-                    // Generate ID for the child objects
-                    for (int i = 0; i <  meal.getMealfoodList().size(); i++) {
-                    meal.getMealfoodList().get(i).setMealid(meal);
-                    count++;
+                    // Set the meal ID of child objects
+                    for (int i = 0; i < meal.getMealfoodList().size(); i++) {
+                        meal.getMealfoodList().get(i).setMealid(meal);
+                        count++;
                     }
-                    
-                    //Persist meal object
-                    em.persist(meal);
+
+                    //Update meal object
+                    em.merge(meal);
                     utx.commit();
 
                     //Next step's page
@@ -211,16 +236,16 @@ public class MealFinalizationServlet extends HttpServlet {
                     response.sendRedirect("ManageMealsServlet");
                     return;
                 }
-                
+
             } catch (ConstraintViolationException e) {
                 System.out.println(e.getConstraintViolations());
             } catch (Exception ex) {
                 System.out.println("ERROR: Could not finalize meal: " + ex.getMessage());
                 request.setAttribute("errorMsg", "Oops! Meal creation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
                 ex.printStackTrace();
                 request.setAttribute("errorMsg", "Oops! Meal creation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
                 return;
             }
         }
