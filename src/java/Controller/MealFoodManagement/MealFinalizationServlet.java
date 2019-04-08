@@ -53,7 +53,6 @@ public class MealFinalizationServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         
         String permission = "";
-        String previousUrl = "";
         
         try {
             permission = (String) session.getAttribute("permission");
@@ -124,7 +123,7 @@ public class MealFinalizationServlet extends HttpServlet {
                 }
                 // Checks for meal with the same name; if there is, show an error to the user
                 if (existsAlready) {
-                    request.setAttribute("errorMsg", "Oops! A meal with the same name has already been added.");
+                    request.setAttribute("errorMsg", "Oops! A meal with the same name already exists");
                     request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
                     return;
                 } else {

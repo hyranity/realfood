@@ -98,10 +98,11 @@ public class FoodQuantityServlet extends HttpServlet {
                 
                 // Insert the obtained quantity into the object from the list
                 mealFoodList.get(i).setQuantity(quantity);
-                
+                mealFoodList.get(i).setIsdiscontinued(false);
                 
                 caloriesSum += quantity * mealFoodList.get(i).getFoodid().getCalories();
             }
+            
             
             meal.setTotalcalories(caloriesSum);
             meal.setMealfoodList(mealFoodList);

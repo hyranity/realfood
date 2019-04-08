@@ -117,7 +117,7 @@ public class SelectFoodServletForEdit extends HttpServlet {
         //Values
         List<Mealfood> mealFoodList = meal.getMealfoodList(); 
         List<Mealfood> newMealFoodList = new ArrayList(); 
-        System.out.println(meal.getMealfoodList().size());
+        
         //STEP 1 - SELECT MEAL COMPONENTS (FOOD)
         try {
 
@@ -150,8 +150,9 @@ public class SelectFoodServletForEdit extends HttpServlet {
             utx.commit();
 
             //Save into session first
-            meal.setMealfoodList(mealFoodList);
-            session.setAttribute("newMealFoodList", mealFoodList);
+            meal.setMealfoodList(newMealFoodList);
+            System.out.println(meal.getMealfoodList().size());
+            session.setAttribute("mealFoodList", newMealFoodList);
 
             //Update step status
             session.setAttribute("step", "stepTwo");

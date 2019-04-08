@@ -29,7 +29,7 @@ import util.*;
 
 /**
  *
- * @author mast3
+ * @author Johann Lee Jia Xuan
  */
 @WebServlet(name = "FoodQuantityServletEdit", urlPatterns = {"/FoodQuantityServletEdit"})
 public class FoodQuantityServletEdit extends HttpServlet {
@@ -53,20 +53,31 @@ public class FoodQuantityServletEdit extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         HttpSession session = request.getSession(false);
-        
-        // If user is not logged in, redirect to login page
-        if (session.getAttribute("permission") == null) {
-            request.setAttribute("errorMsg", "Please login.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-        } else {
-            // Allow staff only
-            String permission = (String) session.getAttribute("permission");
-            if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
-                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+
+        String permission = "";
+        int componentsLength = 0;
+        try {
+            permission = (String) session.getAttribute("permission");
+
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
+
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // If user is not logged in, redirect to login page
+        // Allow staff only
+        if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
             
             //Values
             Meal meal = (Meal) session.getAttribute("meal"); // This is the meal object
@@ -76,13 +87,13 @@ public class FoodQuantityServletEdit extends HttpServlet {
             // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
             //Hence, redirect to first page.
             if (mealFoodList == null) {
-                response.sendRedirect("DisplayFoodSelectionServlet");
+                response.sendRedirect("DisplayFoodSelectionServletForEdit");
             }
             
             try{
 
                 int caloriesSum = 0;
-            for(int i=0; i<mealFoodList.size(); i++){
+            for(int i=0; i< mealFoodList.size(); i++){
                 
                 // NOTE: The list will correspond EXACLTY to the one in the form. Eg. Ice cream - ID of F1, Pizza - ID of F2. In the form, it will be Ice cream - ID of F1, quantity of 1, and so on.
                 // Using the selected foods' IDs, their quantities (default is 1) are displayed (as values) on quantity JSP with the name of their IDs.
@@ -93,18 +104,19 @@ public class FoodQuantityServletEdit extends HttpServlet {
                 String foodID = mealFoodList.get(i).getFoodid().getFoodid();
                 
                 // Using the food ID, get its respective quantities from the JSP form
-               
+                System.out.println(foodID);
                 int quantity = Integer.parseInt(request.getParameter(foodID));
                 
                 // Insert the obtained quantity into the object from the list
                 mealFoodList.get(i).setQuantity(quantity);
+                mealFoodList.get(i).setIsdiscontinued(false);
                 
                 caloriesSum += quantity * mealFoodList.get(i).getFoodid().getCalories();
             }
             
             meal.setTotalcalories(caloriesSum);
             
-            // Update meal object
+            // Update meal object with the new mealFoodList
             meal.setMealfoodList(mealFoodList);
 
                 //Save into session first
@@ -124,7 +136,7 @@ public class FoodQuantityServletEdit extends HttpServlet {
                 System.out.println("ERROR: Could not calculate food quantity: " + ex.getMessage());
                 ex.printStackTrace();
                 request.setAttribute("errorMsg", "Oops! Food quantity did not succeed for some reason.");
-                request.getRequestDispatcher("DisplayFoodSelectionServlet").forward(request, response);
+                request.getRequestDispatcher("DisplayFoodSelectionServletForEdit").forward(request, response);
                 return;
             }
         }

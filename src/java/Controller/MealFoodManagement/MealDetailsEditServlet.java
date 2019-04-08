@@ -31,7 +31,7 @@ import util.Auto;
  *
  * @author mast3
  */
-@WebServlet(name = "MealFinalizationServlet", urlPatterns = {"/MealFinalizationServlet"})
+@WebServlet(name = "MealDetailsEditServlet", urlPatterns = {"/MealDetailsEditServlet"})
 public class MealDetailsEditServlet extends HttpServlet {
 
     @PersistenceContext
@@ -54,7 +54,6 @@ public class MealDetailsEditServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         String permission = "";
-        String previousUrl = "";
 
         try {
             permission = (String) session.getAttribute("permission");
@@ -120,12 +119,14 @@ public class MealDetailsEditServlet extends HttpServlet {
 
                 try {
                     mealChecking = query.getSingleResult();
+                    if(mealChecking.getMealid().equals(meal.getMealid()))
+                        existsAlready = false;
                 } catch (NoResultException ex) {
                     existsAlready = false;
                 }
                 // Checks for meal with the same name; if there is, show an error to the user
                 if (existsAlready) {
-                    request.setAttribute("errorMsg", "Oops! A meal with the same name has already been added.");
+                    request.setAttribute("errorMsg", "Oops! A meal with the same name already exists.");
                     request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
                     return;
                 } else {
@@ -156,9 +157,7 @@ public class MealDetailsEditServlet extends HttpServlet {
                     }
 
                     //Generate ID
-                    query = em.createQuery("SELECT m FROM Meal m", Meal.class);
-                    int count = query.getResultList().size();
-                    meal.setMealid(Auto.generateID("M", 10, count));    // Set meal ID
+                    meal.setMealid(request.getParameter("mealId"));
 
                     // Set values
                     meal.setIsdiscontinued(false);
@@ -195,6 +194,7 @@ public class MealDetailsEditServlet extends HttpServlet {
                     // Delete all the relationships with the current meal
                     Query deleteQuery = em.createQuery("DELETE FROM Mealfood mf WHERE mf.mealid = :mealid").setParameter("mealid", meal);
                     deleteQuery.executeUpdate();
+                    System.out.println("Mealfood relationships deleted.");
                     
                     /*
                     Meal existingMeal = em.find(Meal.class, meal.getMealid());
@@ -215,11 +215,8 @@ public class MealDetailsEditServlet extends HttpServlet {
                     }
                     */
                     
-                    
+                    int count = 0;
 
-                    // Get record count
-                    TypedQuery<Mealfood> mfQuery = em.createQuery("SELECT mf FROM Mealfood mf", Mealfood.class); // Get total records count
-                    count = mfQuery.getResultList().size(); // Set count
 
                     // Set the meal ID of child objects
                     for (int i = 0; i < meal.getMealfoodList().size(); i++) {
@@ -241,9 +238,6 @@ public class MealDetailsEditServlet extends HttpServlet {
                 System.out.println(e.getConstraintViolations());
             } catch (Exception ex) {
                 System.out.println("ERROR: Could not finalize meal: " + ex.getMessage());
-                request.setAttribute("errorMsg", "Oops! Meal creation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
-                ex.printStackTrace();
                 request.setAttribute("errorMsg", "Oops! Meal creation did not succeed for some reason.");
                 request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
                 return;

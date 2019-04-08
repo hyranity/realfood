@@ -3,33 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package Controller.MealFoodManagement;
 
+import Model.Food;
+import Model.Meal;
+import Model.Mealfood;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import Model.*;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
 import javax.validation.ConstraintViolationException;
-import util.*;
+import util.Auto;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "CreateFoodServlet", urlPatterns = {"/CreateFoodServlet"})
-public class CreateFoodServlet extends HttpServlet {
+@WebServlet(name = "FoodDiscontinuationServlet", urlPatterns = {"/FoodDiscontinuationServlet"})
+public class FoodDiscontinuationServlet extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -51,79 +53,84 @@ public class CreateFoodServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         String permission = "";
-
+        String foodId = "";
         try {
             permission = (String) session.getAttribute("permission");
+            foodId = (String) session.getAttribute("foodId");
+
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
+        // If user is not logged in, redirect to login page
         // Allow staff only
         if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
-        }
+        } else {
 
-        Food food = new Food();
-        food.setFoodname(request.getParameter("foodName").trim()); // Uses trim() to remove any unexpected whitespaces (spaces)
-        food.setDateadded(Auto.getToday()); // Set the date of food added to today
-        food.setIsdiscontinued(false);
-        food.setDatediscontinued(null);
-
-        try {
-            food.setCalories(Integer.parseInt(request.getParameter("calories"))); // Convert calories to int
-        } catch (NullPointerException | NumberFormatException e) {
-            // This is highly unlikely to be triggered due to measures we've taken to ensure validity of input. But this is for "just in case".
-            request.setAttribute("errorMsg", "Oops! The number of calories is not numerical. Please ensure that it is a number.");
-            request.getRequestDispatcher("createFood.jsp").forward(request, response);
-            return;
-        }
-
-        try {
-
-            utx.begin();
-            Food foodChecking = new Food();
-            boolean existsAlready = true;
-            
-            TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f WHERE f.foodname = :foodname", Food.class).setParameter("foodname", food.getFoodname().trim()); // Query for getting food with the same name
-            
             try {
-                foodChecking = query.getSingleResult();
-            } catch (NoResultException ex) {
-                existsAlready = false;
-            }
-            // Checks for food with the same name; if there is, show an error to the user
-            if (existsAlready) {
-                request.setAttribute("errorMsg", "Oops! A food with the same name already exists.");
-                request.getRequestDispatcher("createFood.jsp").forward(request, response);
-                return;
-            } else {
 
-                query = em.createQuery("SELECT f FROM Food f", Food.class);
-                int count = query.getResultList().size();
-                food.setFoodid(Auto.generateID("F", 7, count));
+                utx.begin();
 
-                // Insert new food details
-                em.persist(food);
+                // Obtain food object from database
+                Food food = em.find(Food.class, foodId);
+
+                // If the food is currently discontinued
+                if (food.getIsdiscontinued()) {
+                    // Toggle it
+                    food.setIsdiscontinued(false);
+                } else {
+                    // If the food is currently not discontinued
+                    // Toggle it
+                    food.setIsdiscontinued(false);
+                }
+                
+                // Update the food object
+                em.merge(food);
+
+                // Get related list of Mealfood objects
+                TypedQuery<Mealfood> query = em.createQuery("SELECT mf FROM Mealfood mf where mf.foodid = :foodId", Mealfood.class).setParameter("foodId", food);
+                List<Mealfood> mealFoodList = query.getResultList();
+
+                for (Mealfood mf : mealFoodList) {
+                    // If the mealFood is currently discontinued
+                    if (mf.getIsdiscontinued()) {
+                        // Toggle it
+                        mf.setIsdiscontinued(false);
+                    } else {
+                        // If the mealFood is currently not discontinued
+                        // Toggle it
+                        mf.setIsdiscontinued(false);
+                    }
+                    
+                    //Update the objects
+                    em.merge(mf);
+                }
+
                 utx.commit();
 
-                request.setAttribute("successMsg", "Your food has been added successfully!.");
-                request.getRequestDispatcher("createFood.jsp").forward(request, response);
+            } catch (ConstraintViolationException e) {
+                System.out.println(e.getConstraintViolations());
+            } catch (Exception ex) {
+                System.out.println("ERROR: Could not discontinue food: " + ex.getMessage());
+                request.setAttribute("errorMsg", "Oops! Food discontinuation did not succeed for some reason.");
+                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                ex.printStackTrace();
+                request.setAttribute("errorMsg", "Oops! Food discontinuation did not succeed for some reason.");
+                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
                 return;
             }
-        } catch (ConstraintViolationException e) {
-            System.out.println(e.getConstraintViolations());
-        } catch (Exception e) {
-            System.out.println("Unable to create food: " + e.getMessage());
-            e.printStackTrace();
-            request.setAttribute("errorMsg", "Oops! The new food couldn't be created for some reason.");
-            request.getRequestDispatcher("createFood.jsp").forward(request, response);
-            return;
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Mealfood.findAll", query = "SELECT m FROM Mealfood m")
     , @NamedQuery(name = "Mealfood.findByMealfoodid", query = "SELECT m FROM Mealfood m WHERE m.mealfoodid = :mealfoodid")
-    , @NamedQuery(name = "Mealfood.findByQuantity", query = "SELECT m FROM Mealfood m WHERE m.quantity = :quantity")})
+    , @NamedQuery(name = "Mealfood.findByQuantity", query = "SELECT m FROM Mealfood m WHERE m.quantity = :quantity")
+    , @NamedQuery(name = "Mealfood.findByIsdiscontinued", query = "SELECT m FROM Mealfood m WHERE m.isdiscontinued = :isdiscontinued")})
 public class Mealfood implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,6 +44,10 @@ public class Mealfood implements Serializable {
     @NotNull
     @Column(name = "QUANTITY")
     private int quantity;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ISDISCONTINUED")
+    private Boolean isdiscontinued;
     @JoinColumn(name = "FOODID", referencedColumnName = "FOODID")
     @ManyToOne(optional = false)
     private Food foodid;
@@ -57,9 +62,10 @@ public class Mealfood implements Serializable {
         this.mealfoodid = mealfoodid;
     }
 
-    public Mealfood(Integer mealfoodid, int quantity) {
+    public Mealfood(Integer mealfoodid, int quantity, Boolean isdiscontinued) {
         this.mealfoodid = mealfoodid;
         this.quantity = quantity;
+        this.isdiscontinued = isdiscontinued;
     }
 
     public Integer getMealfoodid() {
@@ -76,6 +82,14 @@ public class Mealfood implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public Boolean getIsdiscontinued() {
+        return isdiscontinued;
+    }
+
+    public void setIsdiscontinued(Boolean isdiscontinued) {
+        this.isdiscontinued = isdiscontinued;
     }
 
     public Food getFoodid() {
