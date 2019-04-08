@@ -55,7 +55,7 @@ public class DisplayFoodSelectionServletForEdit extends HttpServlet {
             permission = (String) session.getAttribute("permission");
             
             // Get chosen meal ID
-            mealId = (String) request.getAttribute("mealId");
+            mealId = (String) request.getParameter("mealId");
             
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
@@ -77,12 +77,12 @@ public class DisplayFoodSelectionServletForEdit extends HttpServlet {
             return;
         } else if(mealId == null){
             // If no meal is selected, redirect to previous page
-           response.sendRedirect("DisplayMealsServlet");
+           response.sendRedirect("ManageMealsServlet");
         }
         else{
             try {
                 
-                Meal meal = em.find(Meal.class, "mealId");
+                Meal meal = em.find(Meal.class, mealId);
                  
                 // Put the meal into the session. This will be used on later steps.
                 session.setAttribute("meal", meal);
@@ -109,8 +109,15 @@ public class DisplayFoodSelectionServletForEdit extends HttpServlet {
                     
                     String outsideOpen = "<td>";
                     
+                    boolean isChecked = false;
+                    
+                    for (int j = 0; j < meal.getMealfoodList().size(); j++) {
+                        if(foodList.get(i).getFoodid().equals(meal.getMealfoodList().get(j).getFoodid().getFoodid()))
+                            isChecked = true;
+                    }
+                    
                     // If this food is already part of the meal, keep it checked
-                    if(meal.getMealfoodList().get(i).getFoodid().getFoodid() == food.getFoodid())
+                    if(isChecked)
                         checkbox = "<input type=\"checkbox\"  name= \"componentId\" value=\"" + food.getFoodid() +"\" id=\"" + food.getFoodid() +"\" checked/>";
                     else
                         checkbox = "<input type=\"checkbox\"  name= \"componentId\" value=\"" + food.getFoodid() +"\" id=\"" + food.getFoodid() +"\"/>";

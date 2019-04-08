@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,25 +30,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Ordermeal.findAll", query = "SELECT o FROM Ordermeal o")
     , @NamedQuery(name = "Ordermeal.findByOrdermealid", query = "SELECT o FROM Ordermeal o WHERE o.ordermealid = :ordermealid")
-    , @NamedQuery(name = "Ordermeal.findByQuantity", query = "SELECT o FROM Ordermeal o WHERE o.quantity = :quantity")
-    , @NamedQuery(name = "Ordermeal.findByIscanceled", query = "SELECT o FROM Ordermeal o WHERE o.iscanceled = :iscanceled")})
+    , @NamedQuery(name = "Ordermeal.findByQuantity", query = "SELECT o FROM Ordermeal o WHERE o.quantity = :quantity")})
 public class Ordermeal implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 14)
     @Column(name = "ORDERMEALID")
-    private String ordermealid;
+    private Integer ordermealid;
     @Basic(optional = false)
     @NotNull
     @Column(name = "QUANTITY")
     private int quantity;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ISCANCELED")
-    private Boolean iscanceled;
     @JoinColumn(name = "MEALID", referencedColumnName = "MEALID")
     @ManyToOne(optional = false)
     private Meal mealid;
@@ -58,21 +53,20 @@ public class Ordermeal implements Serializable {
     public Ordermeal() {
     }
 
-    public Ordermeal(String ordermealid) {
+    public Ordermeal(Integer ordermealid) {
         this.ordermealid = ordermealid;
     }
 
-    public Ordermeal(String ordermealid, int quantity, Boolean iscanceled) {
+    public Ordermeal(Integer ordermealid, int quantity) {
         this.ordermealid = ordermealid;
         this.quantity = quantity;
-        this.iscanceled = iscanceled;
     }
 
-    public String getOrdermealid() {
+    public Integer getOrdermealid() {
         return ordermealid;
     }
 
-    public void setOrdermealid(String ordermealid) {
+    public void setOrdermealid(Integer ordermealid) {
         this.ordermealid = ordermealid;
     }
 
@@ -82,14 +76,6 @@ public class Ordermeal implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public Boolean getIscanceled() {
-        return iscanceled;
-    }
-
-    public void setIscanceled(Boolean iscanceled) {
-        this.iscanceled = iscanceled;
     }
 
     public Meal getMealid() {

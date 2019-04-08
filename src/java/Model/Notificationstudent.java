@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,7 +18,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -34,11 +35,10 @@ public class Notificationstudent implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 12)
     @Column(name = "NOTIFICATIONSTUDENTID")
-    private String notificationstudentid;
+    private Integer notificationstudentid;
     @Basic(optional = false)
     @NotNull
     @Column(name = "ISREAD")
@@ -53,20 +53,20 @@ public class Notificationstudent implements Serializable {
     public Notificationstudent() {
     }
 
-    public Notificationstudent(String notificationstudentid) {
+    public Notificationstudent(Integer notificationstudentid) {
         this.notificationstudentid = notificationstudentid;
     }
 
-    public Notificationstudent(String notificationstudentid, Boolean isread) {
+    public Notificationstudent(Integer notificationstudentid, Boolean isread) {
         this.notificationstudentid = notificationstudentid;
         this.isread = isread;
     }
 
-    public String getNotificationstudentid() {
+    public Integer getNotificationstudentid() {
         return notificationstudentid;
     }
 
-    public void setNotificationstudentid(String notificationstudentid) {
+    public void setNotificationstudentid(Integer notificationstudentid) {
         this.notificationstudentid = notificationstudentid;
     }
 

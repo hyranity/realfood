@@ -32,7 +32,7 @@
                 }
             else {
                 // Allow student only
-                if(!permission.equalsIgnoreCase("student")){
+                if(!permission.equalsIgnoreCase("canteenStaff")){
                      request.setAttribute("errorMsg", "You are not allowed to visit that page.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;
@@ -56,7 +56,7 @@
             <input type="text" name="query" placeholder="search..." class="searchBar"/>
         </form>
         <div class="bodyContainer">
-            <form action="SelectFoodSerletForEdit" method="post">
+            <form action="SelectFoodServletForEdit" method="post">
                 <table class="recordTable">
                     ${queryResult}
                 </table>
