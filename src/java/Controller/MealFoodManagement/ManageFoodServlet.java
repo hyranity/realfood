@@ -47,15 +47,36 @@ public class ManageFoodServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
 
+        String permission = "";
+        String foodId = "";
+        String previousUrl = "";
+
+        // Checks for previous URL. if no previous URL detected, means the user directly accessed the pages.
+        try {
+            
+            previousUrl = request.getHeader("referer");
+            
+            permission = (String) session.getAttribute("permission"); // Attempts to get permission
+            if (previousUrl == null) {
+                request.setAttribute("errorMsg", "Please don't directly access pages.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+        } catch (Exception e) {
+            request.setAttribute("errorMsg", "Please don't directly access pages.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+
         // If user is not logged in, redirect to login page
-        if (session.getAttribute("permission") == null) {
+        if (permission == null) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
             // Allow staff only
-            String permission = (String) session.getAttribute("permission");
-            if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+            if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equalsIgnoreCase("manager")) {
                 request.setAttribute("errorMsg", "You are not allowed to visit that page.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;

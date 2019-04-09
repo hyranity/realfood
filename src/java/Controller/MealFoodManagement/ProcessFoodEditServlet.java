@@ -6,8 +6,7 @@
 package Controller.MealFoodManagement;
 
 import Model.Food;
-import Model.Meal;
-import Model.Mealfood;
+import Model.Food;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -30,8 +29,8 @@ import util.Auto;
  *
  * @author mast3
  */
-@WebServlet(name = "FoodDiscontinuationServlet", urlPatterns = {"/FoodDiscontinuationServlet"})
-public class FoodDiscontinuationServlet extends HttpServlet {
+@WebServlet(name = "ProcessFoodEditServlet", urlPatterns = {"/ProcessFoodEditServlet"})
+public class ProcessFoodEditServlet extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -56,7 +55,7 @@ public class FoodDiscontinuationServlet extends HttpServlet {
         String foodId = "";
         try {
             permission = (String) session.getAttribute("permission");
-            foodId = request.getParameter("foodId");
+            
 
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
@@ -79,59 +78,65 @@ public class FoodDiscontinuationServlet extends HttpServlet {
         } else {
 
             try {
-
                 utx.begin();
-
-                // Obtain food object from database
+                String foodName = request.getParameter("foodName");
+                int calories = Integer.parseInt(request.getParameter("calories"));
+                foodId = request.getParameter("foodId");
+                
+                if(foodId == null){
+                    // If user attempts to access this page indirectly
+                    response.sendRedirect("dashboardCanteenStaff.jsp");
+                }
+                
+                // Load the food object
                 Food food = em.find(Food.class, foodId);
-                System.out.println(food.getFoodid());
-
-                // If the food is currently discontinued
-                if (food.getIsdiscontinued()) {
-                    // Toggle it
-                    food.setIsdiscontinued(false);
-                    food.setDatediscontinued(null);
-                } else {
-                    // If the food is currently not discontinued
-                    // Toggle it
-                    food.setIsdiscontinued(true);
-                   food.setDatediscontinued(Auto.getToday());
-                }
                 
-                // Update the food object
-                em.merge(food);
-                utx.commit();
-
-                // Get related list of Mealfood objects
-                TypedQuery<Mealfood> query = em.createQuery("SELECT mf FROM Mealfood mf where mf.foodid = :foodId", Mealfood.class).setParameter("foodId", food);
-                List<Mealfood> mealFoodList = query.getResultList();
-
-                for (Mealfood mf : mealFoodList) {
-                    // If the mealFood is currently discontinued
-                    if (mf.getIsdiscontinued()) {
-                        // Toggle it
-                        mf.setIsdiscontinued(false);
-                    } else {
-                        // If the mealFood is currently not discontinued
-                        // Toggle it
-                        mf.setIsdiscontinued(true);
-                    }   
+                // CHECK FOR DUPLICATE FOOD NAMES
+                Food foodChecking = new Food();
+                boolean existsAlready = true;
+                
+                TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f WHERE f.foodname = :foodName", Food.class).setParameter("foodName", foodName.trim()); // Query for getting food with the same name
+                
+                try {
+                    foodChecking = query.getSingleResult();
                     
-                    utx.begin();
-                    //Update the objects
-                    em.merge(mf);
+                    // If the current food has the same ID as the one in the database, it's the same one.
+                    if(foodChecking.getFoodid().equals(food.getFoodid()))
+                        existsAlready = false;
+                    
+                } catch (NoResultException ex) {
+                    existsAlready = false;
                 }
-
+                
                 utx.commit();
                 
-                request.setAttribute("successMsg", "Food has been edited.");
+                // Checks for food with the same name; if there is, show an error to the user
+                if (existsAlready) {
+                request.setAttribute("errorMsg", "Oops! There's already a food with that name.");
                 request.getRequestDispatcher("EditFoodServlet?foodId=" + foodId).forward(request, response);
+                return;
+                } else {
+                    
+                    //Update the food details
+                    food.setFoodname(foodName);
+                    food.setCalories(calories);
+                    
+                    //Update the database
+                    utx.begin();
+                    em.merge(food);
+                    utx.commit();
+                        
+
+                    request.setAttribute("successMsg", "Food has been edited.");
+                    request.getRequestDispatcher("EditFoodServlet?foodId=" + foodId).forward(request, response);
+                    return;
+                }
 
             } catch (ConstraintViolationException e) {
                 System.out.println(e.getConstraintViolations());
             } catch (Exception ex) {
-                System.out.println("ERROR: Could not discontinue food: " + ex.getMessage());
-                request.setAttribute("errorMsg", "Oops! Food discontinuation did not succeed for some reason.");
+                System.out.println("ERROR: Could not update food: " + ex.getMessage());
+                request.setAttribute("errorMsg", "Oops! Food update did not succeed for some reason.");
                 request.getRequestDispatcher("EditFoodServlet?foodId=" + foodId).forward(request, response);
                 ex.printStackTrace();
                 return;

@@ -64,17 +64,17 @@
                         <p class="couponCode" id="couponCode">aK5sXmS</p>
                         <br/>
                         <br/>
-                        <a href="#" onclick="confirmRemoval()"> <div class="removal">Cancel Order</div></a>
+                        <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable">Cancel Order</div></a>
                     </div>
                     
             </div>
         </div>
         <a href=""><div class="back" style="margin-bottom: 30px;">Back</div></a>
-        <div class="removalConfirmation">
+        <div class="toggleDisableConfirmation">
             <h5>Discontinue order?</h5>
             <p>The order will be canceled and you will receive an 80% refund.</p>
-            <a href="#"><div class="removalConfirm">Yes</div></a>
-            <a href="#"><div class="removalCancel">No</div></a>
+            <a href="#"><div class="toggleDisableConfirm">Yes</div></a>
+            <a href="#"><div class="toggleDisableCancel">No</div></a>
         </div>
 <h6 class="credits">1000 credits</h6>
     <%}%>
@@ -134,7 +134,7 @@
                                         $("#subtitle").css("color", "white");
                                     });
                                     
-                                    $(".removal").hover(function () {
+                                    $(".toggleDisable").hover(function () {
                                         $("#subtitle").html("Cancel the order.");
                                         $("#subtitle").css("color", "red");
                                     }, function () {
@@ -156,14 +156,14 @@
                                         $("#subtitle").css("color", "white");
                                     });
 
-                                    $(".removal").click(function confirmRemoval() {
-                                        $(".removalConfirmation").css("display", "inline-block");
+                                    $(".toggleDisable").click(function confirmtoggleDisable() {
+                                        $(".toggleDisableConfirmation").css("display", "inline-block");
                                         $(".outsideContainer").css("opacity", "0.5");
                                         $(".outsideContainer :input").prop("disabled", true);
                                     });
 
-                                    $(".removalCancel").click(function confirmRemoval() {
-                                        $(".removalConfirmation").css("display", "none");
+                                    $(".toggleDisableCancel").click(function confirmtoggleDisable() {
+                                        $(".toggleDisableConfirmation").css("display", "none");
                                         $(".outsideContainer").css("opacity", "1");
                                         $(".outsideContainer :input").prop("disabled", false);
                                     });

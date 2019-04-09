@@ -37,7 +37,7 @@
             <div class="mainContainer">
 
                 <form action="#" class="form">
-                    <a href="#" onclick="confirmRemoval()"> <div class="removal">Discontinue</div></a>
+                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable">Discontinue</div></a>
                     <div>
                         <input type="text" value="EMP002994" style="background-color: darkgray;"  id="staffid" readonly/>
                     </div>
@@ -65,11 +65,11 @@
             </div>
         </div>
         <a href="displayStaff.jsp"><div class="back">Back</div></a>
-        <div class="removalConfirmation">
+        <div class="toggleDisableConfirmation">
             <h5>Dismiss staff?</h5>
             <p>The staff will not be able to use the system anymore.</p>
-            <a href="#"><div class="removalConfirm">Yes</div></a>
-            <a href="#"><div class="removalCancel">No</div></a>
+            <a href="#"><div class="toggleDisableConfirm">Yes</div></a>
+            <a href="#"><div class="toggleDisableCancel">No</div></a>
         </div>
         <div class="coverOverlay"></div>
         <%}%>
@@ -121,31 +121,31 @@
                         $("#subtitle").html("Here's where you can view and edit staff's details.");
                                 $("#subtitle").css("color", "white");
                         });
-                                $(".removal").hover(function () {
+                                $(".toggleDisable").hover(function () {
                         $("#subtitle").html("Dismiss the staff");
                                 $("#subtitle").css("color", "red");
                         }, function () {
                         $("#subtitle").html("Here's where you can view and edit staff's details.");
                                 $("#subtitle").css("color", "white");
                         });
-                                $(".removal").click(function confirmRemoval() {
-                        $(".removalConfirmation").css("display", "inline-block");
+                                $(".toggleDisable").click(function confirmtoggleDisable() {
+                        $(".toggleDisableConfirmation").css("display", "inline-block");
                                 $(".outsideContainer :input").prop("disabled", true);
                         });
-                                $(".removalCancel").click(function confirmRemoval() {
-                        $(".removalConfirmation").css("display", "none");
+                                $(".toggleDisableCancel").click(function confirmtoggleDisable() {
+                        $(".toggleDisableConfirmation").css("display", "none");
                                 $(".outsideContainer :input").prop("disabled", false);
                         });
                         
         <!--  The following code allows a "disabling" overlay -->
-                            $(".removal").click(function () {
+                            $(".toggleDisable").click(function () {
                                 $(".coverOverlay").css("display", "block");
-                                $(".removalConfirmation").css("z-index", "1");
+                                $(".toggleDisableConfirmation").css("z-index", "1");
                             });
 
-                            $(".removalCancel").click(function () {
+                            $(".toggleDisableCancel").click(function () {
                                 $(".coverOverlay").css("display", "none");
-                                $(".removalConfirmation").css("z-index", "0");
+                                $(".toggleDisableConfirmation").css("z-index", "0");
                             });
                         });
     </script>

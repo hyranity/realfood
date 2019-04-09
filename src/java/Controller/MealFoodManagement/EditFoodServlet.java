@@ -100,36 +100,35 @@ public class EditFoodServlet extends HttpServlet {
                     discontinuedDate = Auto.dateToString(food.getDateadded());
                 }
                 
-                System.out.println(food.getIsdiscontinued());
 
                 // If it is not discontinued, show the appropriate text
                 if (!food.getIsdiscontinued()) {
-                    discontinueButton = "<div class=\"removal\">Discontinue</div>";
+                    discontinueButton = "<div class=\"toggleDisable\" id=\"disable\">Discontinue</div>";
 
                     discontinueDialog = "<h5>Discontinue food?</h5>\n"
                             + "            <p>The food will be discontinued.</p>";
                 } else {
-                    discontinueButton = "<div class=\"removal\" style\"color: green;\">Re-enable</div>";
+                    discontinueButton = "<div class=\"toggleDisable\" id=\"enable\">Re-enable</div>";
                     
                     discontinueDialog = "<h5>Re-enable food?</h5>\n"
                             + "            <p>The food will be able to be used again.</p>";
                 }
 
-                String query = " <a href=\"#\" onclick=\"confirmRemoval()\"> " + discontinueButton + "</a>\n"
+                String query = " <a href=\"#\" onclick=\"confirmtoggleDisable()\"> " + discontinueButton + "</a>\n"
                         + "                    <div>\n"
-                        + "                        <input type=\"text\" value=\"" + food.getFoodid() + "\" style=\"background-color: darkgray;\" placeholder=\"Food ID\"  id=\"foodid\" readonly/>\n"
+                        + "                        <input type=\"text\" value=\"" + food.getFoodid() + "\" style=\"background-color: darkgray;\" placeholder=\"Food ID\"  id=\"foodId\" name=\"foodId\" readonly/>\n"
                         + "                    </div>\n"
                         + "                    <div>\n"
-                        + "                        <input type=\"text\" id=\"foodName\" placeholder=\"Food Name\" value=\"" + food.getFoodname() + "\" />\n"
+                        + "                        <input type=\"text\" id=\"foodName\" placeholder=\"Food Name\" value=\"" + food.getFoodname() + "\" name=\"foodName\" />\n"
                         + "                    </div>\n"
                         + "                    <div>\n"
-                        + "                        <input type=\"text\" value=\"" + food.getCalories() + "\" placeholder=\"Calories\" id=\"calories\" />\n"
+                        + "                        <input type=\"text\" value=\"" + food.getCalories() + "\" placeholder=\"Calories\" id=\"calories\" name=\"calories\" />\n"
                         + "                    </div>\n"
                         + "                    <div>\n"
                         + "                        <input type=\"text\" value=\"" + Auto.dateToString(food.getDateadded()) + "\" id=\"dateAdded\"  style=\"background-color: darkgray;\"  readonly/>\n"
                         + "                    </div>\n"
                         + "                    <div>\n"
-                        + "                        <input type=\"text\" value=\"" + Auto.dateToString(food.getDateadded()) + "\" id=\"dateDiscontinued\"  style=\"background-color: darkgray; font-weight: 500;\"  readonly/>\n"
+                        + "                        <input type=\"text\" value=\"" + discontinuedDate + "\" id=\"dateDiscontinued\"  style=\"background-color: darkgray; font-weight: 500;\"  readonly/>\n"
                         + "                    </div>\n"
                         + "                    \n"
                         + "                    <br/>";
@@ -141,7 +140,8 @@ public class EditFoodServlet extends HttpServlet {
                 return;
 
             } catch (Exception e) {
-                request.setAttribute(previousUrl, "oops! Something went wrong.");
+                request.setAttribute("errorMsg", "Oops! Something went wrong.");
+                e.printStackTrace();
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }

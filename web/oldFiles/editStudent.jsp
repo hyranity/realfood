@@ -17,7 +17,7 @@
             <div class="mainContainer">
 
                 <form action="#" class="form">
-                    <a href="#" onclick="confirmRemoval()"> <div class="removal">Unenroll</div></a>
+                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable">Unenroll</div></a>
                     <div>
                         <input type="text" value="STU00294" style="background-color: darkgray;"  id="studentid" readonly/>
                     </div>
@@ -45,11 +45,11 @@
             </div>
         </div>
         <a href="displayStudents.jsp"><div class="back">back</div></a>
-        <div class="removalConfirmation">
+        <div class="toggleDisableConfirmation">
             <h5>Unenroll student?</h5>
             <p>The student will not be able to use the system anymore.</p>
-            <a href="#"><div class="removalConfirm">Yes</div></a>
-            <a href="#"><div class="removalCancel">No</div></a>
+            <a href="#"><div class="toggleDisableConfirm">Yes</div></a>
+            <a href="#"><div class="toggleDisableCancel">No</div></a>
         </div>
 
     </body>
@@ -100,7 +100,7 @@
                                         $("#subtitle").html("Here's where you can view and edit student's details.");
                                         $("#subtitle").css("color", "white");
                                     });
-                                    $(".removal").hover(function () {
+                                    $(".toggleDisable").hover(function () {
                                         $("#subtitle").html("Unenroll the student");
                                         $("#subtitle").css("color", "red");
                                     }, function () {
@@ -108,14 +108,14 @@
                                         $("#subtitle").css("color", "white");
                                     });
 
-                                    $(".removal").click(function confirmRemoval() {
-                                        $(".removalConfirmation").css("display", "inline-block");
+                                    $(".toggleDisable").click(function confirmtoggleDisable() {
+                                        $(".toggleDisableConfirmation").css("display", "inline-block");
                                         $(".outsideContainer").css("opacity", "0.5");
                                         $(".outsideContainer :input").prop("disabled", true);
                                     });
 
-                                    $(".removalCancel").click(function confirmRemoval() {
-                                        $(".removalConfirmation").css("display", "none");
+                                    $(".toggleDisableCancel").click(function confirmtoggleDisable() {
+                                        $(".toggleDisableConfirmation").css("display", "none");
                                         $(".outsideContainer").css("opacity", "1");
                                         $(".outsideContainer :input").prop("disabled", false);
                                     });

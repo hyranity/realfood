@@ -53,18 +53,23 @@
                 int totalCalories = meal.getTotalcalories();
                 boolean isBreakfast = meal.getIsbreakfast();
                 boolean isLunch = meal.getIslunch();
+                boolean isDiscontinued = true;
+                
+                session.setAttribute("meal", meal);
 
                 try {
                     dateDiscontinued = Auto.dateToString(meal.getDatediscontinued());
-                    if(dateDiscontinued == null)
+                    if (dateDiscontinued == null) {
                         dateDiscontinued = "not discontinued";
+                    }
                 } catch (NullPointerException e) {
-                        dateDiscontinued = "not discontinued";
+                    dateDiscontinued = "not discontinued";
                 }
 
                 // If not discontinued, show that it is not
                 if (!meal.getIsdiscontinued()) {
                     dateDiscontinued = "not discontinued";
+                    isDiscontinued = false;
                 }
 
         %>
@@ -100,8 +105,16 @@
             <br/>
             <div class="mainContainer">
                 <div class="errorMsg">${errorMsg}</div>
+                <div class="successMsg">${successMsg}</div>
                 <form action="MealDetailsEditServlet" class="form">
-                    <a href="#" onclick="confirmRemoval()"> <div class="removal">Discontinue</div></a>
+                    <%                        if (!isDiscontinued) {
+                    %>
+                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable" id="discontinue">Discontinue</div></a>
+                    <%
+                    } else {
+                    %>
+                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable" id="enable">Re-enable</div></a>
+                    <%}%>
                     <div>
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="mealId" name="mealId" readonly/>
                     </div>
@@ -152,11 +165,22 @@
             </div>
         </div>
         <a href="displayMeals.jsp"><div class="back">Back</div></a><br/><br/>
-        <div class="removalConfirmation">
+        <div class="toggleDisableConfirmation">
+            <%
+                if (!isDiscontinued) {
+            %>
             <h5>Discontinue meal?</h5>
-            <p>The meal will be permanently discontinued.</p>
-            <a href="#"><div class="removalConfirm">Yes</div></a>
-            <a href="#"><div class="removalCancel">No</div></a>
+            <p>The meal will be discontinued.</p>
+            <%
+            } else {
+            %>
+            <h5>Re-enable meal?</h5>
+            <p>The meal will be discontinued.</p>
+            <%
+                }
+            %>
+            <a href="MealDiscontinuationServlet?mealId=<%=id%>"><div class="toggleDisableConfirm">Yes</div></a>
+            <a href="#"><div class="toggleDisableCancel">No</div></a>
         </div>
         <%}%>
     </body>
@@ -229,7 +253,7 @@
                                 $("#subtitle").css("color", "white");
                             });
 
-                            $(".removal").hover(function () {
+                            $(".toggleDisable").hover(function () {
                                 $("#subtitle").html("Discontinue the meal");
                                 $("#subtitle").css("color", "red");
                             }, function () {
@@ -237,14 +261,14 @@
                                 $("#subtitle").css("color", "white");
                             });
 
-                            $(".removal").click(function confirmRemoval() {
-                                $(".removalConfirmation").css("display", "inline-block");
+                            $(".toggleDisable").click(function confirmtoggleDisable() {
+                                $(".toggleDisableConfirmation").css("display", "inline-block");
                                 $(".outsideContainer").css("opacity", "0.5");
                                 $(".outsideContainer :input").prop("disabled", true);
                             });
 
-                            $(".removalCancel").click(function confirmRemoval() {
-                                $(".removalConfirmation").css("display", "none");
+                            $(".toggleDisableCancel").click(function confirmtoggleDisable() {
+                                $(".toggleDisableConfirmation").css("display", "none");
                                 $(".outsideContainer").css("opacity", "1");
                                 $(".outsideContainer :input").prop("disabled", false);
                             });

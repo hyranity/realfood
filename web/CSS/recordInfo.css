@@ -111,9 +111,9 @@ h6{
     font-size: 17px;
 }
 
-/* Removal CSS */
+/* toggleDisable CSS */
 
-.removal{
+.toggleDisable{
     color: red;
     position: relative;
     text-decoration: none;
@@ -126,7 +126,7 @@ h6{
     margin: 10px;
 }
 
-.removal:hover{
+.toggleDisable:hover{
     background-color: red;
     color: white;
 }
@@ -135,7 +135,7 @@ a{
     text-decoration: none;
 }
 
-.removalConfirmation{
+.toggleDisableConfirmation{
     text-align: center;
     display: none;
     position: absolute;
@@ -151,17 +151,17 @@ a{
     
 }
 
-.removalConfirmation h5{
+.toggleDisableConfirmation h5{
     font-size: 20px;
     margin-bottom: 10px;
 }
 
-.removalConfirmation p{
+.toggleDisableConfirmation p{
     margin-bottom: 10px;
 }
 
 
-.removalConfirm{
+.toggleDisableConfirm{
     border-color: gold;
     border-width: 1px;
     border-style: solid;
@@ -173,11 +173,11 @@ a{
     margin: 10px;
 }
 
-.removalConfirm:hover{
+.toggleDisableConfirm:hover{
     border-color: red;
 }
 
-.removalCancel{
+.toggleDisableCancel{
     border-color: gold;
     border-width: 1px;
     border-style: solid;
@@ -190,7 +190,7 @@ a{
     margin-bottom: 0;
 }
 
-.removalCancel:hover{
+.toggleDisableCancel:hover{
     border-color: green;
 }
 
@@ -199,7 +199,7 @@ a{
 }
 
 /*Add CSS */
-/* Removal CSS */
+/* toggleDisable CSS */
 
 .adding{
     color: green;
