@@ -38,7 +38,7 @@
             <div class="buttonsContainer">
                 <a href="topUp.jsp"><div class="buttonDiv" id="topup">Top Up</div></a>
                 <a href="ManageMealsServlet"><div class="buttonDiv" id="meal">manage meal</div></a>
-                <a href="displayFood.jsp"><div class="buttonDiv" id="food">manage food</div></a>
+                <a href="ManageFoodServlet"><div class="buttonDiv" id="food">manage food</div></a>
                 <br/>
                 <a href="#"><div class="buttonDiv" id="prep">order preparation</div></a>
                 <a href="staffProfile.jsp"><div class="buttonDiv" id="account">my account</div></a>

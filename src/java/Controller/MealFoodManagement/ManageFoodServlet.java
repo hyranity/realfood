@@ -5,33 +5,28 @@
  */
 package Controller.MealFoodManagement;
 
-import Model.Food;
-import Model.Meal;
-import Model.Mealfood;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
-import javax.validation.ConstraintViolationException;
-import util.Auto;
+import java.util.*;
+import Model.*;
+import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "MealDiscontinuationServlet", urlPatterns = {"/MealDiscontinuationServlet"})
-public class MealDiscontinuationServlet extends HttpServlet {
+@WebServlet(name = "ManageFoodServlet", urlPatterns = {"/ManageFoodServlet"})
+public class ManageFoodServlet extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -51,66 +46,65 @@ public class MealDiscontinuationServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
-        
-        String permission = "";
-        String mealId = "";
-        try {
-            permission = (String) session.getAttribute("permission");
-            mealId = (String) session.getAttribute("mealId");
-            
-            if (permission == null) {
-                request.setAttribute("errorMsg", "Please login.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-                return;
-            }
-            
-        } catch (NullPointerException ex) {
+
+        // If user is not logged in, redirect to login page
+        if (session.getAttribute("permission") == null) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
-        }
-
-        // If user is not logged in, redirect to login page
-        // Allow staff only
-        if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
-            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
         } else {
-
-            try{
-                
-                utx.begin();
-                
-                // Obtain meal object from database
-                Meal meal = em.find(Meal.class, mealId);
-                
-                // If the meal is currently discontinued
-                if(meal.getIsdiscontinued()){
-                    // Toggle it
-                    meal.setIsdiscontinued(false);
-                }
-                else{
-                    // If the meal is currently not discontinued
-                     // Toggle it
-                    meal.setIsdiscontinued(false);
-                }
-                
-                // Update it
-                em.merge(meal);
-                utx.commit();
-                
-            } catch (ConstraintViolationException e) {
-                System.out.println(e.getConstraintViolations());
-            } catch (Exception ex) {
-                System.out.println("ERROR: Could not discontinue meal: " + ex.getMessage());
-                request.setAttribute("errorMsg", "Oops! Meal discontinuation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
-                ex.printStackTrace();
-                request.setAttribute("errorMsg", "Oops! Meal discontinuation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+            // Allow staff only
+            String permission = (String) session.getAttribute("permission");
+            if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
+
+            try {
+
+                // Get all food
+                TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f", Food.class);
+                List<Food> foodList = query.getResultList();
+                System.out.println(foodList.size());
+                String queryResult = "";
+                int fourCount = 1;
+
+                // Format it for display
+                for (int i = 0; i < foodList.size(); i++) {
+
+                    Food food = foodList.get(i);
+
+                    if (i != 0 && i % 4 == 0 && i != foodList.size() - 1) {
+                        queryResult += "<tr>";
+                        fourCount++;
+                    }
+
+                    queryResult += "<td>\n"
+                            + "                    <div class=\"record\">\n"
+                            + "                        <h6>" + food.getFoodid() +"</h6>\n"
+                            + "                        <p>" + food.getFoodname() +"</p>\n"
+                            + "                        <p>" + food.getCalories() +" calories</p>\n"
+                            + "                        <a href=\"EditFoodServlet?foodId=" + food.getFoodid() +"\"><div class=\"editButton\">Edit</div></a>\n"
+                            + "                    </div>\n"
+                            + "                </td>";
+
+                    if (fourCount == 4) {
+                        queryResult += "</tr>";
+                        fourCount = 0;
+                    }
+                }
+
+                // Send the formatted list to JSP
+                request.setAttribute("queryResult", queryResult);
+                request.getRequestDispatcher("manageFood.jsp").forward(request, response);
+                return;
+
+            } catch (Exception e) {
+                System.out.println("Could not obtain food list: " + e.getMessage());
+                e.printStackTrace();
+            }
+
         }
     }
 

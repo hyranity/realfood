@@ -1,3 +1,4 @@
+<%@page import="Model.Food"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,6 +15,22 @@
             session = request.getSession(false);
             
             String permission = (String) session.getAttribute("permission");
+            String previousUrl = "";
+            
+            // Checks for previous URL. if no previous URL detected, means the user directly accessed the pages.
+            try {
+               previousUrl = request.getHeader("referer");
+               if(previousUrl == null){
+                   request.setAttribute("errorMsg", "Direct access detected. Please don't directly access pages..");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+               }
+                } catch (Exception e) {
+                     request.setAttribute("errorMsg", "Direct access detected. Please don't directly access pages..");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+            
             
             // If user is not logged in, redirect to login page
             if (permission == null) {
@@ -23,11 +40,13 @@
                 }
             else {
                 // Allow staff only
-                if(!permission.equalsIgnoreCase("staff")){
+                if(!permission.equalsIgnoreCase("canteenStaff") && !permission.equalsIgnoreCase("manager")){
                      request.setAttribute("errorMsg", "You are not allowed to visit that page.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;
                 }
+                
+                
         %>
         <div class="outsideContainer">
 
@@ -35,24 +54,9 @@
             <h5 id="subtitle">Here's where you can view and edit food details.</h5>
             <br/>
             <div class="mainContainer">
-
+<div class="errorMsg">${errorMsg}</div>
                 <form action="#" class="form">
-                    <a href="#" onclick="confirmRemoval()"> <div class="removal">Discontinue</div></a>
-                    <div>
-                        <input type="text" value="F000001" style="background-color: darkgray;" placeholder="Food ID"  id="foodid" readonly/>
-                    </div>
-                    <div>
-                        <input type="text" id="foodName" placeholder="Food Name" value="Chicken Wing" />
-                    </div>
-                    <div>
-                        <input type="text" value="200" placeholder="Calories" id="calories" />
-                    </div>
-                    <div>
-                        <input type="text" value="16 March, 2017" id="dateAdded"  style="background-color: darkgray;"  readonly/>
-                    </div>
-                    <div>
-                        <input type="text" value="not discontinued" id="dateDiscontinued"  style="background-color: darkgray; font-weight: 500;"  readonly/>
-                    </div>
+                    ${query}
                     
                     <br/>
                     <button type="submit" class="submitBtn">Submit changes</button>
@@ -62,9 +66,9 @@
         </div>
         <a href="displayStaff.jsp"><div class="back">Back</div></a>
         <div class="removalConfirmation">
-            <h5>Discontinue food?</h5>
-            <p>The food will be discontinued permanently.</p>
-            <a href="#"><div class="removalConfirm">Yes</div></a>
+            ${discontinueDialog}
+            
+            <a href="FoodDiscontinuationServlet?foodId=${foodId}"><div class="removalConfirm">Yes</div></a>
             <a href="#"><div class="removalCancel">No</div></a>
         </div>
         <div class="coverOverlay"></div>

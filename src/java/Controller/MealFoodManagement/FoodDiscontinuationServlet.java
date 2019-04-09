@@ -56,7 +56,7 @@ public class FoodDiscontinuationServlet extends HttpServlet {
         String foodId = "";
         try {
             permission = (String) session.getAttribute("permission");
-            foodId = (String) session.getAttribute("foodId");
+            foodId = request.getParameter("foodId");
 
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
@@ -84,6 +84,7 @@ public class FoodDiscontinuationServlet extends HttpServlet {
 
                 // Obtain food object from database
                 Food food = em.find(Food.class, foodId);
+                System.out.println(food.getFoodid());
 
                 // If the food is currently discontinued
                 if (food.getIsdiscontinued()) {
@@ -92,11 +93,12 @@ public class FoodDiscontinuationServlet extends HttpServlet {
                 } else {
                     // If the food is currently not discontinued
                     // Toggle it
-                    food.setIsdiscontinued(false);
+                    food.setIsdiscontinued(true);
                 }
                 
                 // Update the food object
                 em.merge(food);
+                utx.commit();
 
                 // Get related list of Mealfood objects
                 TypedQuery<Mealfood> query = em.createQuery("SELECT mf FROM Mealfood mf where mf.foodid = :foodId", Mealfood.class).setParameter("foodId", food);
@@ -110,24 +112,26 @@ public class FoodDiscontinuationServlet extends HttpServlet {
                     } else {
                         // If the mealFood is currently not discontinued
                         // Toggle it
-                        mf.setIsdiscontinued(false);
-                    }
+                        mf.setIsdiscontinued(true);
+                    }   
                     
+                    utx.begin();
                     //Update the objects
                     em.merge(mf);
                 }
 
                 utx.commit();
+                
+                request.setAttribute("successMsg", "Food has been edited.");
+                request.getRequestDispatcher("editFood.jsp?foodId=" + foodId).forward(request, response);
 
             } catch (ConstraintViolationException e) {
                 System.out.println(e.getConstraintViolations());
             } catch (Exception ex) {
                 System.out.println("ERROR: Could not discontinue food: " + ex.getMessage());
                 request.setAttribute("errorMsg", "Oops! Food discontinuation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                request.getRequestDispatcher("editFood.jsp?foodId=" + foodId).forward(request, response);
                 ex.printStackTrace();
-                request.setAttribute("errorMsg", "Oops! Food discontinuation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
                 return;
             }
         }

@@ -53,25 +53,7 @@
                         </div>
                     </a>
                 </td>
-                <td>
-                    <div class="record">
-                        <h6>F00001</h6>
-                        <p>Honey Mustard</p>
-                        <p>120 calories</p>
-                        <a href=""><div class="editButton">Edit</div></a>
-                    </div>
-                </td>
-                <td>
-                    <div class="record">
-                        <h6>F00002</h6>
-                        <p>Honey Mustard</p>
-                        <p>120 calories</p>
-                        <br/>
-                        <p class="status" style="color: red; font-weight: bold;">Discontinued</p>
-                        <a href=""><div class="editButton">Edit</div></a>
-                    </div>
-                </td>
-            </tr>
+                ${queryResult}
         </table>
     </div>
         <div><button class="nextButton" href="" type="submit" >Back</button></div>
