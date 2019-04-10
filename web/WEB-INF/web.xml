@@ -6,7 +6,7 @@
     </servlet>
     <servlet>
         <servlet-name>ManageMealsServlet</servlet-name>
-        <servlet-class>Controller.MealFoodManagement.ManageMealsServlet</servlet-class>
+        <servlet-class>Controller.MealManagement.ManageMealsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>FoodRegistration</servlet-name>

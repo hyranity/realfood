@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.MealFoodManagement;
+package Controller.OrderManagement;
 
-import Model.Food;
-import Model.Meal;
-import Model.Mealfood;
+import Controller.MealManagement.*;
+import Model.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -28,8 +27,8 @@ import javax.transaction.UserTransaction;
  *
  * @author mast3
  */
-@WebServlet(name = "SelectFoodServlet", urlPatterns = {"/SelectFoodServlet"})
-public class SelectFoodServlet extends HttpServlet {
+@WebServlet(name = "SelectMealServlet", urlPatterns = {"/SelectMealServlet"})
+public class SelectMealServlet extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -89,39 +88,39 @@ public class SelectFoodServlet extends HttpServlet {
         }
 
         // Get array of food IDs from form
-        String[] componentId = request.getParameterValues("componentId");
+        String[] mealId = request.getParameterValues("mealId");
 
         // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
         //Hence, redirect to first page.
-        if (componentId == null) {
-            response.sendRedirect("foodSelectionForMeal.jsp");
+        if (mealId == null) {
+            response.sendRedirect("calendarStudent.jsp");
             return;
         }
 
         //Values
-        Meal meal = new Meal(); // This is the meal object
-        List<Mealfood> mealFoodList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
+        Studentorder so = new Studentorder(); // This is the meal object
+        List<Ordermeal> orderMealList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
 
         //STEP 1 - SELECT MEAL COMPONENTS (FOOD)
         try {
 
             utx.begin();
 
-            for (int i = 0; i < componentId.length; i++) {
+            for (int i = 0; i < mealId.length; i++) {
                 //Obtain each food using the foodID from the array.
-                Food food = em.find(Food.class, componentId[i]);
+                Meal meal = em.find(Meal.class, mealId[i]);
 
                 // Store the obtained food object into mealFoodList
-                Mealfood mf = new Mealfood();
-                mf.setFoodid(food);
-                mealFoodList.add(mf);
+                Ordermeal om = new Ordermeal();
+                om.setMealid(meal);
+                orderMealList.add(om);
             }
 
             utx.commit();
 
             //Save into session first
-            meal.setMealfoodList(mealFoodList);
-            session.setAttribute("mealFoodList", mealFoodList);
+            so.setOrdermealList(orderMealList);
+            session.setAttribute("orderMealList", orderMealList);
 
             //Update step status
             session.setAttribute("step", "stepTwo");
@@ -129,10 +128,10 @@ public class SelectFoodServlet extends HttpServlet {
             //Print the chosen food for next page
             String queryResultQuantity = "";
 
-            int caloriesSum = 0;
+            int totalPrice = 0;
             
             // Prints the query results and format it 
-            for (Mealfood mf : mealFoodList) {
+            for (Ordermeal om : orderMealList) {
                 queryResultQuantity += "<div class=\"mainContainer\">\n"
                         + "            <div class=\"recordQuantity\">\n"
                         + "                <div class=\"frontPart\">\n"
@@ -147,7 +146,7 @@ public class SelectFoodServlet extends HttpServlet {
                         + "            </div>"
                         + "             <br/>";
                 
-                caloriesSum += mf.getFoodid().getCalories();
+                totalPrice += om.getQuantity() * om.getMealid().getPrice();
             }
 
             //Next step's page

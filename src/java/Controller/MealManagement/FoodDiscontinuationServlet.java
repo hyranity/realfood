@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.MealFoodManagement;
+package Controller.MealManagement;
 
 import Model.Food;
 import Model.Meal;
@@ -30,8 +30,8 @@ import util.Auto;
  *
  * @author mast3
  */
-@WebServlet(name = "MealDiscontinuationServlet", urlPatterns = {"/MealDiscontinuationServlet"})
-public class MealDiscontinuationServlet extends HttpServlet {
+@WebServlet(name = "FoodDiscontinuationServlet", urlPatterns = {"/FoodDiscontinuationServlet"})
+public class FoodDiscontinuationServlet extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -51,19 +51,19 @@ public class MealDiscontinuationServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
-        
+
         String permission = "";
-        String mealId = "";
+        String foodId = "";
         try {
             permission = (String) session.getAttribute("permission");
-            
-            
+            foodId = request.getParameter("foodId");
+
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-            
+
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -78,33 +78,32 @@ public class MealDiscontinuationServlet extends HttpServlet {
             return;
         } else {
 
-            try{
-                mealId = request.getParameter("mealId");
-                utx.begin();
-                // Obtain meal object from database
-                Meal meal = em.find(Meal.class, mealId);
-                System.out.println(meal.getMealid());
+            try {
 
-                // If the meal is currently discontinued
-                if (meal.getIsdiscontinued()) {
+                utx.begin();
+
+                // Obtain food object from database
+                Food food = em.find(Food.class, foodId);
+                System.out.println(food.getFoodid());
+
+                // If the food is currently discontinued
+                if (food.getIsdiscontinued()) {
                     // Toggle it
-                    meal.setIsdiscontinued(false);
-                    meal.setDatediscontinued(null);
-                    request.setAttribute("successMsg", "Meal has been re-enabled.");
+                    food.setIsdiscontinued(false);
+                    food.setDatediscontinued(null);
                 } else {
-                    // If the meal is currently not discontinued
+                    // If the food is currently not discontinued
                     // Toggle it
-                    meal.setIsdiscontinued(true);
-                   meal.setDatediscontinued(Auto.getToday());
-                   request.setAttribute("successMsg", "Meal has been discontinued.");
+                    food.setIsdiscontinued(true);
+                   food.setDatediscontinued(Auto.getToday());
                 }
                 
-                // Update the meal object
-                em.merge(meal);
+                // Update the food object
+                em.merge(food);
                 utx.commit();
 
-                // Get related list of Mealmeal objects
-                TypedQuery<Mealfood> query = em.createQuery("SELECT mf FROM Mealfood mf where mf.mealid = :mealId", Mealfood.class).setParameter("mealId", meal);
+                // Get related list of Mealfood objects
+                TypedQuery<Mealfood> query = em.createQuery("SELECT mf FROM Mealfood mf where mf.foodid = :foodId", Mealfood.class).setParameter("foodId", food);
                 List<Mealfood> mealFoodList = query.getResultList();
 
                 for (Mealfood mf : mealFoodList) {
@@ -122,24 +121,18 @@ public class MealDiscontinuationServlet extends HttpServlet {
                     //Update the objects
                     em.merge(mf);
                 }
-                
-                // Update it
-                em.merge(meal);
+
                 utx.commit();
                 
-                //Update the meal in session
-                session.setAttribute("meal", meal);
-                
-                
-                request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
-                return;
-                
+                request.setAttribute("successMsg", "Food has been edited.");
+                request.getRequestDispatcher("EditFoodServlet?foodId=" + foodId).forward(request, response);
+
             } catch (ConstraintViolationException e) {
                 System.out.println(e.getConstraintViolations());
             } catch (Exception ex) {
-                System.out.println("ERROR: Could not discontinue meal: " + ex.getMessage());
-                request.setAttribute("errorMsg", "Oops! Meal discontinuation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                System.out.println("ERROR: Could not discontinue food: " + ex.getMessage());
+                request.setAttribute("errorMsg", "Oops! Food discontinuation did not succeed for some reason.");
+                request.getRequestDispatcher("EditFoodServlet?foodId=" + foodId).forward(request, response);
                 ex.printStackTrace();
                 return;
             }

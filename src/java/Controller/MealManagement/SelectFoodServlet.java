@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.MealFoodManagement;
+package Controller.MealManagement;
 
 import Model.Food;
 import Model.Meal;
@@ -28,8 +28,8 @@ import javax.transaction.UserTransaction;
  *
  * @author mast3
  */
-@WebServlet(name = "SelectFoodServletForEdit", urlPatterns = {"/SelectFoodServletForEdit"})
-public class SelectFoodServletForEdit extends HttpServlet {
+@WebServlet(name = "SelectFoodServlet", urlPatterns = {"/SelectFoodServlet"})
+public class SelectFoodServlet extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -52,9 +52,7 @@ public class SelectFoodServletForEdit extends HttpServlet {
         HttpSession session = request.getSession(false);
         String permission = "";
         String previousUrl = "";
-        Meal meal = new Meal();
-      
-        // URL ACCESS CHECKING =====================================
+
         try {
             permission = (String) session.getAttribute("permission");
             
@@ -68,19 +66,6 @@ public class SelectFoodServletForEdit extends HttpServlet {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
-        }
-        
-        //Attempt to get meal
-        try {
-            meal = (Meal) session.getAttribute("meal");
-            
-            //Check if meal is null; If it's null, then redirect
-            if(meal == null)
-                response.sendRedirect("DisplayMealsServlet.java");
-            
-        } catch (NullPointerException e) {
-            //If meal is null, redirect
-            response.sendRedirect("DisplayMealsServlet.java");
         }
 
         // If user is not logged in, redirect to login page
@@ -102,8 +87,7 @@ public class SelectFoodServletForEdit extends HttpServlet {
             request.getRequestDispatcher("dashboardCanteenStaff.jsp").forward(request, response);
             return;
         }
-        // END OF URL ACCESS CHECKING =====================================
-        
+
         // Get array of food IDs from form
         String[] componentId = request.getParameterValues("componentId");
 
@@ -115,9 +99,9 @@ public class SelectFoodServletForEdit extends HttpServlet {
         }
 
         //Values
-        List<Mealfood> mealFoodList = meal.getMealfoodList(); 
-        List<Mealfood> newMealFoodList = new ArrayList(); 
-        
+        Meal meal = new Meal(); // This is the meal object
+        List<Mealfood> mealFoodList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
+
         //STEP 1 - SELECT MEAL COMPONENTS (FOOD)
         try {
 
@@ -126,33 +110,18 @@ public class SelectFoodServletForEdit extends HttpServlet {
             for (int i = 0; i < componentId.length; i++) {
                 //Obtain each food using the foodID from the array.
                 Food food = em.find(Food.class, componentId[i]);
-                boolean found = false;
 
-                // Loop through the existing mealFood list. 
-                for(Mealfood mf : mealFoodList){
-                    System.out.println("loop mealFood");
-                    // If there's the same one, store the EXISTING data into the new list
-                    if(food.getFoodid().equals(mf.getFoodid().getFoodid())){
-                        newMealFoodList.add(mf);
-                        found = true;
-                        break;
-                    }
-                }
-                
-                if(!found){
-                        // If the new one doesn't exist, store the NEW data into the new list
-                        Mealfood newMf = new Mealfood();
-                        newMf.setFoodid(food);
-                        newMealFoodList.add(newMf);
-                    }
+                // Store the obtained food object into mealFoodList
+                Mealfood mf = new Mealfood();
+                mf.setFoodid(food);
+                mealFoodList.add(mf);
             }
 
             utx.commit();
 
             //Save into session first
-            meal.setMealfoodList(newMealFoodList);
-            System.out.println(meal.getMealfoodList().size());
-            session.setAttribute("mealFoodList", newMealFoodList);
+            meal.setMealfoodList(mealFoodList);
+            session.setAttribute("mealFoodList", mealFoodList);
 
             //Update step status
             session.setAttribute("step", "stepTwo");
@@ -163,7 +132,7 @@ public class SelectFoodServletForEdit extends HttpServlet {
             int caloriesSum = 0;
             
             // Prints the query results and format it 
-            for (Mealfood mf : newMealFoodList) {
+            for (Mealfood mf : mealFoodList) {
                 queryResultQuantity += "<div class=\"mainContainer\">\n"
                         + "            <div class=\"recordQuantity\">\n"
                         + "                <div class=\"frontPart\">\n"
@@ -184,7 +153,7 @@ public class SelectFoodServletForEdit extends HttpServlet {
             //Next step's page
             request.setAttribute("queryResultQuantity", queryResultQuantity);
             request.setAttribute("caloriesSum", caloriesSum);
-            request.getRequestDispatcher("foodQuantityEdit.jsp").forward(request, response);
+            request.getRequestDispatcher("foodQuantity.jsp").forward(request, response);
 
             // END OF STEP 1
         } catch (Exception ex) {

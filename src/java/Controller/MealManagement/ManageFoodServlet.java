@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.MealFoodManagement;
+package Controller.MealManagement;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,8 +25,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author mast3
  */
-@WebServlet(name = "DisplayFoodSelectionServlet", urlPatterns = {"/DisplayFoodSelectionServlet"})
-public class DisplayFoodSelectionServlet extends HttpServlet {
+@WebServlet(name = "ManageFoodServlet", urlPatterns = {"/ManageFoodServlet"})
+public class ManageFoodServlet extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -47,68 +47,79 @@ public class DisplayFoodSelectionServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
 
+        String permission = "";
+        String foodId = "";
+        String previousUrl = "";
+
+        // Checks for previous URL. if no previous URL detected, means the user directly accessed the pages.
+        try {
+            
+            previousUrl = request.getHeader("referer");
+            
+            permission = (String) session.getAttribute("permission"); // Attempts to get permission
+            if (previousUrl == null) {
+                request.setAttribute("errorMsg", "Please don't directly access pages.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+        } catch (Exception e) {
+            request.setAttribute("errorMsg", "Please don't directly access pages.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+
         // If user is not logged in, redirect to login page
-        if (session.getAttribute("permission") == null) {
+        if (permission == null) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
             // Allow staff only
-            String permission = (String) session.getAttribute("permission");
-            if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+            if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equalsIgnoreCase("manager")) {
                 request.setAttribute("errorMsg", "You are not allowed to visit that page.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
 
             try {
-                
 
                 // Get all food
-                
                 TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f", Food.class);
                 List<Food> foodList = query.getResultList();
-                
-
+                System.out.println(foodList.size());
                 String queryResult = "";
-                 int fourCount = 0;
-                 
-                 // Format it for display
-                for (int i=0; i<foodList.size(); i++) {
-                   
-                    
+                int fourCount = 1;
+
+                // Format it for display
+                for (int i = 0; i < foodList.size(); i++) {
+
                     Food food = foodList.get(i);
-                    
-                    if(i!=0 && i % 4 == 0 && i != foodList.size() - 1){
+
+                    if (i != 0 && i % 4 == 0 && i != foodList.size() - 1) {
                         queryResult += "<tr>";
                         fourCount++;
                     }
-                    
-                    String outsideOpen = "<td>";
-                    String checkbox = "<input type=\"checkbox\"  name= \"componentId\" value=\"" + food.getFoodid() +"\" id=\"" + food.getFoodid() +"\"/>";
-                    String labelOpen = "<label for=\"" + food.getFoodid() +"\">";
-                    String divOpen = "<div class=\"record\">";
-                    String id = "<h6>" + food.getFoodid() +"</h6>";
-                    String breaks = "<br/><br/>";
-                    String calories = "<p class=\"calories\">" + food.getCalories() +" calories</p>";
-                    String name = "<p class=\"name\">" + food.getFoodname() +"</p>";
-                    String divClose = "</div>";
-                    String labelClose = "</label>";
-                    String outsideClose = "</td>";
-                    
-                    queryResult += outsideOpen + checkbox + labelOpen + divOpen + id + breaks + calories + name + divClose + labelClose + outsideClose;
-                    
-                    if(fourCount == 4){
+
+                    queryResult += "<td>\n"
+                            + "                    <div class=\"record\">\n"
+                            + "                        <h6>" + food.getFoodid() +"</h6>\n"
+                            + "                        <p>" + food.getFoodname() +"</p>\n"
+                            + "                        <p>" + food.getCalories() +" calories</p>\n"
+                            + "                        <a href=\"EditFoodServlet?foodId=" + food.getFoodid() +"\"><div class=\"editButton\">Edit</div></a>\n"
+                            + "                    </div>\n"
+                            + "                </td>";
+
+                    if (fourCount == 4) {
                         queryResult += "</tr>";
                         fourCount = 0;
                     }
                 }
-                
+
                 // Send the formatted list to JSP
                 request.setAttribute("queryResult", queryResult);
-                request.getRequestDispatcher("foodSelectionForMeal.jsp").forward(request, response);
+                request.getRequestDispatcher("manageFood.jsp").forward(request, response);
                 return;
-                
 
             } catch (Exception e) {
                 System.out.println("Could not obtain food list: " + e.getMessage());
