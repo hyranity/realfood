@@ -64,10 +64,8 @@
 
                 // Get student's credits
                 int credits = stud.getCredits();
-                System.out.println(credits);
 
                 int totalPrice = studOrder.getTotalprice();
-                System.out.println("hey");
         %>
         <div class="stepsContainer">
             <h1>steps</h1>
@@ -117,14 +115,6 @@
         <div class="container">
             <form action="">
 
-                <div class="formGroup">
-                    <input type="text" value="STU123456" class="formInput" id="userID" name="userID" style="background-color: darkgray;" placeholder="User ID" maxlength="10" readonly/>
-                </div>
-
-                <div class="formGroup">
-                    <input type="password" value="123456" class="formInput" name="oassword" id="password" placeholder="Password" maxlength="20" required/>
-                </div>
-
                 <div style="display: inline-block; text-align: center; border-radius: 50px;">
                     <button class="nextButton" href="" type="submit" >Back</button>
                 </div>
@@ -139,7 +129,7 @@
                     <%
                     } else {
                     %>
- <button class="nextButton" href="" type="submit">PAY <%=totalPrice%> CREDITS</button>
+                    <button class="nextButton" href="" type="submit">PAY <%=totalPrice%> CREDITS</button>
                     <%}%>
                 </div>
             </form>
