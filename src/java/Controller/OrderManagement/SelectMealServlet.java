@@ -130,7 +130,8 @@ public class SelectMealServlet extends HttpServlet {
 
             int totalPrice = 0;
             
-            // Prints the query results and format it 
+            /*
+            //Prints the query results and format it 
             for (Ordermeal om : orderMealList) {
                 queryResultQuantity += "<div class=\"mainContainer\">\n"
                         + "            <div class=\"recordQuantity\">\n"
@@ -148,11 +149,13 @@ public class SelectMealServlet extends HttpServlet {
                 
                 totalPrice += om.getQuantity() * om.getMealid().getPrice();
             }
+            
 
             //Next step's page
             request.setAttribute("queryResultQuantity", queryResultQuantity);
             request.setAttribute("caloriesSum", caloriesSum);
             request.getRequestDispatcher("foodQuantity.jsp").forward(request, response);
+            */
 
             // END OF STEP 1
         } catch (Exception ex) {

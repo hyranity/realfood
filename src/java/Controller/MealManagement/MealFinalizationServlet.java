@@ -152,12 +152,19 @@ public class MealFinalizationServlet extends HttpServlet {
                         System.out.println("ERROR: Price is not numerical: " + e.getMessage());
                         request.setAttribute("errorMsg", "Make sure that price is a number.");
                         request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                        return;
                     }
 
                     //Generate ID
                     query = em.createQuery("SELECT m FROM Meal m", Meal.class);
                     int count = query.getResultList().size();
                     meal.setMealid(Auto.generateID("M", 10, count));    // Set meal ID
+                    
+                    if(imageLink.length()>200){
+                        request.setAttribute("errorMsg", "Image URL is too long!");
+                        request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                        return;
+                    }
 
                     // Set values
                     meal.setIsdiscontinued(false);

@@ -158,6 +158,13 @@ public class MealDetailsEditServlet extends HttpServlet {
 
                     //Generate ID
                     meal.setMealid(request.getParameter("mealId"));
+                    System.out.println(imageLink.length());
+                    if(imageLink.length()>200){
+                        request.setAttribute("errorMsg", "Image URL is too long!");
+                        System.out.println("Image URL is too long.");
+                        request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                        return;
+                    }
 
                     // Set values
                     meal.setIsdiscontinued(false);

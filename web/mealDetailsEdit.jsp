@@ -128,7 +128,7 @@
                         <input type="number" value="<%=price%>" id="price" placeholder="Price" name="price"/>
                     </div>
                     <div>
-                        <input type="text" value="<%=imageLink%>" id="imageLink" placeholder="Image Link" name="imageLink" required/>
+                        <input type="text"  value="<%=imageLink%>" id="imageLink" placeholder="Image Link" name="imageLink" maxlength="200" required/>
                     </div>
                     <div>
                         <input type="text" value="<%=totalCalories%>" id="totalCalories" style="background-color: darkgray;"readonly/>
@@ -271,6 +271,10 @@
                                 $(".toggleDisableConfirmation").css("display", "none");
                                 $(".outsideContainer").css("opacity", "1");
                                 $(".outsideContainer :input").prop("disabled", false);
+                            });
+                            
+                            $("#.imageLink").on("input", function(){
+                                var url = this.
                             });
 
 
