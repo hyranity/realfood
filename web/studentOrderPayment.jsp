@@ -4,6 +4,7 @@
     Author     : Richard Khoo
 --%>
 
+<%@page import="Model.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,24 +18,56 @@
         <title>Payment.</title>
     </head>
     <body>
-                        <%
+        <%
             session = request.getSession(false);
-            
-            String permission = (String) session.getAttribute("permission");
-            
-            // If user is not logged in, redirect to login page
-            if (permission == null) {
+
+            String permission = "";
+            String[] dateValue;
+            Student stud = new Student();
+
+            try {
+                permission = (String) session.getAttribute("permission");
+                stud = (Student) session.getAttribute("stud");
+                stud.getFirstname();
+                if (permission == null) {
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+
+            } catch (NullPointerException ex) {
                 request.setAttribute("errorMsg", "Please login.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+            // If user is not logged in, redirect to login page
+            // Allow student only
+            if (!permission.equalsIgnoreCase("student")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+
+                Studentorder studOrder = new Studentorder();
+
+                // Attempt to get studOrder
+                try {
+                    studOrder = (Studentorder) session.getAttribute("studOrder");
+                    studOrder.getTotalprice(); // If null, it will cause an exception
+                    dateValue = (String[]) session.getAttribute("dateValue");
+                } catch (Exception e) {
+                    // If cannot get, means user did not follow the steps
+                    request.getRequestDispatcher("calendarStudent.jsp").forward(request, response);
+                    System.out.println("Couldn't get data from session for studentOrderPayment.jsp: " + e.getMessage());
                 }
-            else {
-                // Allow student only
-                if(!permission.equalsIgnoreCase("student")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
+
+                // Get student's credits
+                int credits = stud.getCredits();
+                System.out.println(credits);
+
+                int totalPrice = studOrder.getTotalprice();
+                System.out.println("hey");
         %>
         <div class="stepsContainer">
             <h1>steps</h1>
@@ -45,61 +78,73 @@
                 <div class="currentStep">4. Payment</div>
             </div>
         </div>
-<!------------>
+        <!------------>
 
         <h1 class="title">Payment Confirmation</h1>
-        <h5 id="subtitle"></h5>
+        <h5 id="subtitle">Date(s) booked:</h5>
+        <h6 style="color: gold; font-size: 15px; ">15/4/19, 4/5/19</h6>
 
+        <%
+            for (int i = 0; i < studOrder.getOrdermealList().size(); i++) {
+                Ordermeal om = studOrder.getOrdermealList().get(i);
+
+                String mealName = om.getMealid().getMealname();
+                int price = om.getMealid().getPrice();
+                int quantity = om.getQuantity();
+        %>
         <div class="mainContainer2">
-            <div class="recordQuantity2"">
-                <div class="frontPart">
-                    <p class="name">Spaghetti Bolognese</p>
-
-                </div>
-                <div class="quantityEditor">
-                    <p class="value">1500 Credits</p>
-                    <p class="quantity" data-quantity="5">x2</p>
-                </div>
-            </div>
-            <br/>
             <div class="recordQuantity2">
                 <div class="frontPart">
-                    <p class="name">Peppermint Ice Cream</p>
+                    <p class="name"><%=mealName%></p>
+
                 </div>
                 <div class="quantityEditor">
-                    <p class="value">500 Credits</p>
-                    <p class="quantity" data-quantity="5">x23</p>
+                    <p class="value"><%=price%> Credits</p>
+                    <p class="quantity" style="background-color: black;">x<%=quantity%></p>
                 </div>
             </div>
             <br/>
+
+            <%}%>
             <div class="total2">
-                <p>Total Payment Is 4000 Credits Point</p>
+                <p>Total: <%=totalPrice%> Credits</p>
             </div>
-           
+
         </div>
-        
-        
+
+
+
         <div class="container">
-                     <form action="">
-                        
-                        <div class="formGroup">
-                            <input type="text" value="STU123456" class="formInput" id="userID" name="userID" style="background-color: darkgray;" placeholder="User ID" maxlength="10" readonly/>
-                        </div>
-                        
-                        <div class="formGroup">
-                            <input type="password" value="123456" class="formInput" name="oassword" id="password" placeholder="Password" maxlength="20" required/>
-                        </div>
-            
-            <div style="display: inline-block; text-align: center; border-radius: 50px;">
-            <button class="nextButton" href="" type="submit" >Back</button>
-            </div>
-            
-            <div style="display: inline-block; text-align: center; border-radius: 50px;">
-            <button class="nextButton" href="" type="submit" >PAY 4000 CP</button>
-            </div>
-        </form>
-        <h6 class="credits">1000 credits</h6>
-</div>
+            <form action="">
+
+                <div class="formGroup">
+                    <input type="text" value="STU123456" class="formInput" id="userID" name="userID" style="background-color: darkgray;" placeholder="User ID" maxlength="10" readonly/>
+                </div>
+
+                <div class="formGroup">
+                    <input type="password" value="123456" class="formInput" name="oassword" id="password" placeholder="Password" maxlength="20" required/>
+                </div>
+
+                <div style="display: inline-block; text-align: center; border-radius: 50px;">
+                    <button class="nextButton" href="" type="submit" >Back</button>
+                </div>
+
+                <div style="display: inline-block; text-align: center; border-radius: 50px;">
+
+                    <!-- If student cannot afford, block the button -->
+                    <%
+                        if (totalPrice > credits) {
+                    %>
+                    <button class="insufficientButton" href="" type="submit" disabled>Not enough credits</button>
+                    <%
+                    } else {
+                    %>
+ <button class="nextButton" href="" type="submit">PAY <%=totalPrice%> CREDITS</button>
+                    <%}%>
+                </div>
+            </form>
+            <h6 class="credits"><%=credits%> credits</h6>
+        </div>
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

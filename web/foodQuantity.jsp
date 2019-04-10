@@ -16,7 +16,6 @@
             session = request.getSession(false);
             
             String permission = (String) session.getAttribute("permission");
-            
             // If user is not logged in, redirect to login page
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
@@ -49,7 +48,7 @@
                 <p id="totalCal">Total: ${caloriesSum} calories</p>
             </div>
         <div class="nextButtonDiv">
-            
+            <button class="nextButton">Back</button>
             <input class="nextButton" form="mealForm" type="submit" value="Next Step">
         </div>
     </form>

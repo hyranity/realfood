@@ -52,57 +52,61 @@
 
         <h1 class="title">Edit particulars</h1>
         <h5 id="subtitle">Modify the quantity of your meals.</h5>
-        
-        <div class="mainContainer">
+
+
+        <form action="MealQuantityServlet" method="POST" id="mealQuantityForm">
             ${queryResultQuantity}
             
-            <br/>
-            <div class="total">
+           <div class="total">
                 <p id="totalPrice">Total: ${totalPrice} credits</p>
             </div>
-            <h6 class="credits">${totalPrice} credits</h6>
-        </div>
-        <div>
-            <button class="nextButton">Back</button>
-            <button class="nextButton">Next step</button>
+
             <br/>
-        </div>
+            
+            <h6 class="credits">${totalPrice} credits</h6>
+
+            <div class="nextButtonDiv">
+                <button class="nextButton">Back</button>
+                <input class="nextButton" form="mealQuantityForm" type="submit" value="Next Step">
+                <br/>
+            </div>
+        </form>
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-                        $(document).ready(function () {      
-                            $(".symbol").click(function (event) {
-                                var id = event.target.id;
-                                symbolId = id.substring(0, 3);
-                                var targetId = id.substring(3);
-                                var quantity = parseInt($("#" + targetId).val());
+        $(document).ready(function () {
+            $(".symbol").click(function (event) {
+                var id = event.target.id;
+                symbolId = id.substring(0, 3);
+                var targetId = id.substring(3);
+                var quantity = parseInt($("#" + targetId).val());
 
-                                // Update quantity
-                                if (symbolId == "add") {
-                                    quantity++;
-                                } else {
-                                    if (quantity != 1)
-                                        quantity--;
-                                }
-                                $("#" + targetId).val(quantity);
-                                var priceId = "#price" + targetId;
-                                var price = quantity * parseInt($(priceId).data("price"));
-                                $("#price" + targetId).text(price + " credits");
+                // Update quantity
+                if (symbolId == "add") {
+                    quantity++;
+                } else {
+                    if (quantity != 1)
+                        quantity--;
+                }
+                $("#" + targetId).val(quantity);
+                var priceId = "#price" + targetId;
+                var price = quantity * parseInt($(priceId).data("price"));
+                $("#price" + targetId).text(price + " credits");
 
-                                var sum = 0;
+                var sum = 0;
 
-                                $(".value").each(function () {
-                                    var priceId = "#price" + targetId;
-                                    var price = quantity * parseInt($(priceId).data("price"));
+                $(".value").each(function () {
+                    var priceId = "#price" + targetId;
+                    var price = quantity * parseInt($(priceId).data("price"));
 
-                                    sum += parseInt($(this).html());
-                                });
+                    sum += parseInt($(this).html());
+                });
 
 
-                                $("#totalPrice").html("Total: " + sum + " credits");
+                $("#totalPrice").html("Total: " + sum + " credits");
 
-                            });
-                        });
+            });
+        });
     </script>
 </html>

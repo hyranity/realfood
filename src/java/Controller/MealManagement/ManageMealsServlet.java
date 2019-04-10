@@ -51,11 +51,14 @@ public class ManageMealsServlet extends HttpServlet {
         try {
             permission = (String) session.getAttribute("permission");
             
+            
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
+            
+            
             
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
@@ -70,6 +73,19 @@ public class ManageMealsServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
+            
+            // Get any error messages from the later pages
+            try {
+                String errorMsg = request.getParameter("errorMsg");
+                
+                if(errorMsg != null){
+                    request.setAttribute("errorMsg", "Sorry, it seems like there's no food for you to add to a meal.");
+                    request.getRequestDispatcher("manageMeals.jsp").forward(request, response);
+                    return;
+                }
+            } catch (Exception e) {
+                
+            }
 
             try {
 
@@ -94,7 +110,7 @@ public class ManageMealsServlet extends HttpServlet {
                         
                         // If the current iteration is more than the first one, put comma.
                         if(j>0)
-                            components += " ,";
+                            components += ", ";
                         
                         components += mf.getFoodid().getFoodname();
                     }

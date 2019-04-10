@@ -104,6 +104,13 @@ public class DisplayFoodSelectionServlet extends HttpServlet {
                     }
                 }
                 
+                // If there's no food at all
+                if(foodList.size() == 0){
+                    request.setAttribute("errorMsg", "Sorry, it seems like there's no food for you to add to a meal.");
+                    request.getRequestDispatcher("ManageMealsServlet").forward(request, response);
+                    return;
+                }
+                
                 // Send the formatted list to JSP
                 request.setAttribute("queryResult", queryResult);
                 request.getRequestDispatcher("foodSelectionForMeal.jsp").forward(request, response);

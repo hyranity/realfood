@@ -99,3 +99,29 @@ form input:focus{
     border:1px solid;
     
 }
+
+.insufficientButton{
+    background-color: rgba(255,255,255,0.5);
+    color: white;
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: white;
+    border-radius: 50px;
+    border: none;
+    font-family: Montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    display: inline-block;
+    transition: 0.2s;
+    outline: 0;
+    width: 200px;
+    cursor: pointer;
+    padding: 17px 20px;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -o-border-radius: 50px;
+    -ms-border-radius: 50px;
+}

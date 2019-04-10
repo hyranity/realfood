@@ -149,6 +149,7 @@ public class SelectFoodServlet extends HttpServlet {
                 
                 caloriesSum += mf.getFoodid().getCalories();
             }
+            
 
             //Next step's page
             request.setAttribute("queryResultQuantity", queryResultQuantity);

@@ -196,7 +196,7 @@ public class RegistrationServlet extends HttpServlet {
                     utx.commit();
 
                     //Login successful message
-                    request.setAttribute("accountMsg", "Your registration is successful! You may login now.");
+                    request.setAttribute("accountMsg", "Staff registration is successful! The staff may login now.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;
                 

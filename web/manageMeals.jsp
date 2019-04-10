@@ -37,6 +37,7 @@
           %>
         <h1 class="title">Manage meals.</h1>
         <h5 id="subtitle">Here you can add or edit meals. To view meals' specific info, you will need to press "edit" first.</h5>
+        <div class="errorMsg">${errorMsg}</div>
         <!-- Search bar -->
         <form class="searchForm">
             <input type="text" id="myInput" name="query" onkeyup="myFunction()" placeholder="search..." class="searchBar"/>

@@ -62,7 +62,9 @@ public class FoodQuantityServlet extends HttpServlet {
         } else {
             // Allow staff only
             String permission = (String) session.getAttribute("permission");
+            
             if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+                
                 request.setAttribute("errorMsg", "You are not allowed to visit that page.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;

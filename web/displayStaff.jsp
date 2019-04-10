@@ -48,9 +48,10 @@
 
         <!-- Container of the results -->
         <div class="bodyContainer">
-            <div class="add">
+            <a href="staffRegistration.jsp"> <div class="add" >
                 +
             </div>
+            </a>    
 
             ${queryResults}
             <br/>

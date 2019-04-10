@@ -32,8 +32,8 @@ import util.*;
  *
  * @author mast3
  */
-@WebServlet(name = "FoodQuantityServlet", urlPatterns = {"/FoodQuantityServlet"})
-public class MealQuantity extends HttpServlet {
+@WebServlet(name = "MealQuantityServlet", urlPatterns = {"/MealQuantityServlet"})
+public class MealQuantityServlet extends HttpServlet {
     
     @PersistenceContext
     EntityManager em;
