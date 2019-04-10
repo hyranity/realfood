@@ -38,7 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Studentorder.findByOrderid", query = "SELECT s FROM Studentorder s WHERE s.orderid = :orderid")
     , @NamedQuery(name = "Studentorder.findByChosendate", query = "SELECT s FROM Studentorder s WHERE s.chosendate = :chosendate")
     , @NamedQuery(name = "Studentorder.findByCouponcode", query = "SELECT s FROM Studentorder s WHERE s.couponcode = :couponcode")
-    , @NamedQuery(name = "Studentorder.findByIspaid", query = "SELECT s FROM Studentorder s WHERE s.ispaid = :ispaid")
     , @NamedQuery(name = "Studentorder.findByIsredeemed", query = "SELECT s FROM Studentorder s WHERE s.isredeemed = :isredeemed")
     , @NamedQuery(name = "Studentorder.findByIscanceled", query = "SELECT s FROM Studentorder s WHERE s.iscanceled = :iscanceled")
     , @NamedQuery(name = "Studentorder.findByTotalprice", query = "SELECT s FROM Studentorder s WHERE s.totalprice = :totalprice")})
@@ -61,10 +60,6 @@ public class Studentorder implements Serializable {
     @Size(min = 1, max = 7)
     @Column(name = "COUPONCODE")
     private String couponcode;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ISPAID")
-    private Boolean ispaid;
     @Basic(optional = false)
     @NotNull
     @Column(name = "ISREDEEMED")
@@ -90,11 +85,10 @@ public class Studentorder implements Serializable {
         this.orderid = orderid;
     }
 
-    public Studentorder(String orderid, Date chosendate, String couponcode, Boolean ispaid, Boolean isredeemed, Boolean iscanceled, int totalprice) {
+    public Studentorder(String orderid, Date chosendate, String couponcode, Boolean isredeemed, Boolean iscanceled, int totalprice) {
         this.orderid = orderid;
         this.chosendate = chosendate;
         this.couponcode = couponcode;
-        this.ispaid = ispaid;
         this.isredeemed = isredeemed;
         this.iscanceled = iscanceled;
         this.totalprice = totalprice;
@@ -122,14 +116,6 @@ public class Studentorder implements Serializable {
 
     public void setCouponcode(String couponcode) {
         this.couponcode = couponcode;
-    }
-
-    public Boolean getIspaid() {
-        return ispaid;
-    }
-
-    public void setIspaid(Boolean ispaid) {
-        this.ispaid = ispaid;
     }
 
     public Boolean getIsredeemed() {

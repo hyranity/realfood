@@ -20,25 +20,34 @@
     <body>
         <%
             session = request.getSession(false);
-            
-            String permission = (String) session.getAttribute("permission");
-            
-            // If user is not logged in, redirect to login page
-            if (permission == null) {
+
+            String permission = "";
+
+            try {
+                permission = (String) session.getAttribute("permission");
+
+                if (permission == null) {
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+
+            } catch (NullPointerException ex) {
                 request.setAttribute("errorMsg", "Please login.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
-            else {
-                // Allow student only
-                if(!permission.equalsIgnoreCase("student")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+            // If user is not logged in, redirect to login page
+            // Allow student only
+            if (!permission.equalsIgnoreCase("student")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
         %>
         <div class="stepsContainer">
-            <h1>steps</h1>
+            <h1>Make an Order</h1>
             <div class="steps">
                 <div>1. Select a date</div>
                 <div class="currentStep">2. Choose meals.</div>
@@ -48,77 +57,24 @@
         </div>
         <h1 class="title">Choose meals.</h1>
         <h5 id="subtitle">Click on the meals you would like to have.</h5>
-        
+        <div class="errorMsg">${errorMsg}</div>
+
         <!-- Search bar -->
         <form class="searchForm">
             <input type="text" name="query" placeholder="search..." class="searchBar"/>
         </form>
-        
+
         <!-- Table -->
-        <form action="#" method="post" id="mealOrder">
+        <form action="SelectMealServlet" method="post" id="mealOrder">
             <div class="mealsContainer">
                 <table>
                     <tr>
-                        <td>
-                            <input type="checkbox" id="cbox1"/>
-                            <label class="meal" for="cbox1">
-                                <h5>Onion burger</h5>
-                                <div style="position: relative;">
-                                    <h6 class="breakfast">Breakfast</h6>
-                                    <img src="Images/sebastien-marchand-232356-unsplash.jpg" alt=""/>
-                                </div>
-                                <p class="description">Super awesome food, sprinkled with cheese.</p>
-                                <p class="calories">1920 Calories</p>
-
-                                <div class="foodPart">
-                                    <p class="componentTitle">Consists of:</p>
-                                    <p class="component">Chicken slices, Lssssssss sssssssssssssssssettuce, Tomatoes, Pickles, Cheese</p>
-                                </div>
-                                <p class="price">1200 credits</p>
-                            </label>
-                        </td>
-                        <td>
-                            <input type="checkbox" id="cbox2"/>
-                            <label class="meal" for="cbox2">
-                                <h5>Spaghetti</h5>
-                                <div style="position: relative;">
-                                    <h6 class="lunch">Lunch</h6>
-                                    <img src="Images/jorge-zapata-44723-unsplash.jpg" alt=""/>
-                                </div>
-
-                                <p class="description">With the power of the flour, this is perfection realized</p>
-                                <p class="calories">1920 Calories</p>
-                                <div class="foodPart">
-                                    <p class="componentTitle">Consists of:</p>
-                                    <p class="component">Chicken slices, Lssssssss sssssssssssssssssettuce, Tomatoes, Pickles, Cheese</p>
-                                </div>
-                                <p class="price">500 credits</p>
-                            </label>
-                        </td>
-                        <td>
-                            <input type="checkbox" id="cbox2"/>
-                            <label class="meal" for="cbox2">
-                                <h5>Spaghetti</h5>
-                                <div style="position: relative;">
-                                    <h6 class="lunch">Lunch</h6>
-                                    <img src="Images/jorge-zapata-44723-unsplash.jpg" alt=""/>
-                                </div>
-
-                                <p class="description">With the power of the flour, this is perfection realized</p>
-                                <p class="calories">1920 Calories</p>
-                                <div class="foodPart">
-                                    <p class="componentTitle">Consists of:</p>
-                                    <p class="component">Chicken slices, Lssssssss sssssssssssssssssettuce, Tomatoes, Pickles, Cheese</p>
-                                </div>
-                                <p class="price">500 credits</p>
-                            </label>
-                        </td>
-                    </tr>
+                        ${queryResult}
                 </table>
 
             </div>
             <div>
-                <button class="nextButton">Back</button>
+                <input class="nextButton" form="mealOrder">Back</button>
                 <button class="nextButton">Next step</button>
                 <br/><br/><br/>
             </div>

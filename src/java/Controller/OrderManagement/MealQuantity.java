@@ -33,7 +33,7 @@ import util.*;
  * @author mast3
  */
 @WebServlet(name = "FoodQuantityServlet", urlPatterns = {"/FoodQuantityServlet"})
-public class FoodQuantityServlet extends HttpServlet {
+public class MealQuantity extends HttpServlet {
     
     @PersistenceContext
     EntityManager em;
@@ -54,78 +54,84 @@ public class FoodQuantityServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         HttpSession session = request.getSession(false);
-        
-        // If user is not logged in, redirect to login page
-        if (session.getAttribute("permission") == null) {
-            request.setAttribute("errorMsg", "Please login.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-        } else {
-            // Allow staff only
-            String permission = (String) session.getAttribute("permission");
-            if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
-                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            
+           String permission = "";
+
+        try {
+            permission = (String) session.getAttribute("permission");
+
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
+
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // If user is not logged in, redirect to login page
+        // Allow student only
+        if (!permission.equalsIgnoreCase("student")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
             
             //Values
-            Meal meal = new Meal(); // This is the meal object
-            List<Mealfood> mealFoodList = (List<Mealfood>) session.getAttribute("mealFoodList");
+            Studentorder studOrder = new Studentorder();
+            List<Ordermeal> orderMealList = (List<Ordermeal>) session.getAttribute("orderMealList");
  
             
             // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
             //Hence, redirect to first page.
-            if (mealFoodList == null) {
+            if (orderMealList == null) {
                 response.sendRedirect("DisplayFoodSelectionServlet");
             }
             
             try{
 
-                int caloriesSum = 0;
-            for(int i=0; i<mealFoodList.size(); i++){
+                int totalPrice = 0;
+            for(int i=0; i<orderMealList.size(); i++){
                 
-                // NOTE: The list will correspond EXACLTY to the one in the form. Eg. Ice cream - ID of F1, Pizza - ID of F2. In the form, it will be Ice cream - ID of F1, quantity of 1, and so on.
-                // Using the selected foods' IDs, their quantities (default is 1) are displayed (as values) on quantity JSP with the name of their IDs.
-                // <div>Spaghetti, F0001<input value="2" name="F0001"/>
-                // In other words, the ID is linked with the quantity when displayed. To update the list object, just 1. get current ID, 2. get the quantity linked with it, 3. update the quantity.
+                //Get the meal ID from the list
+                String mealId = orderMealList.get(i).getMealid().getMealid();
                 
-                //Get the food ID from the list
-                String foodID = mealFoodList.get(i).getFoodid().getFoodid();
-                
-                // Using the food ID, get its respective quantities from the JSP form
+                // Using the meal ID, get its respective quantities from the JSP form
                
-                int quantity = Integer.parseInt(request.getParameter(foodID));
+                int quantity = Integer.parseInt(request.getParameter(mealId));
                 
                 // Insert the obtained quantity into the object from the list
-                mealFoodList.get(i).setQuantity(quantity);
-                mealFoodList.get(i).setIsdiscontinued(false);
+                orderMealList.get(i).setQuantity(quantity);
+                orderMealList.get(i).setIscanceled(false);
+                orderMealList.get(i).setQuantity(quantity);
                 
-                caloriesSum += quantity * mealFoodList.get(i).getFoodid().getCalories();
+                totalPrice += quantity * orderMealList.get(i).getMealid().getPrice();
             }
             
             
-            meal.setTotalcalories(caloriesSum);
-            meal.setMealfoodList(mealFoodList);
+            studOrder.setTotalprice(totalPrice);
+            studOrder.setOrdermealList(orderMealList);
 
                 //Save into session first
-                meal.setMealfoodList(mealFoodList);
-                session.setAttribute("mealFoodList", mealFoodList);
-                session.setAttribute("meal", meal);
+                session.setAttribute("orderMealList", orderMealList);
+                session.setAttribute("studOrder", studOrder);
 
                 //Update step status
                 session.setAttribute("step", "stepThree");
 
                 //Next step's page
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                request.getRequestDispatcher("studentOrderPayment.jsp").forward(request, response);
                 return;
 
                 // END OF STEP 1
             } catch (Exception ex) {
-                System.out.println("ERROR: Could not calculate food quantity: " + ex.getMessage());
+                System.out.println("ERROR: Could not calculate meal quantity: " + ex.getMessage());
                 ex.printStackTrace();
-                request.setAttribute("errorMsg", "Oops! Food quantity did not succeed for some reason.");
-                request.getRequestDispatcher("DisplayFoodSelectionServlet").forward(request, response);
+                request.setAttribute("errorMsg", "Oops! Meal quantity did not succeed for some reason.");
+                request.getRequestDispatcher("SelectMealServlet").forward(request, response);
                 return;
             }
         }

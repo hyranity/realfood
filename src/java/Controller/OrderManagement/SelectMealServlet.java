@@ -69,7 +69,7 @@ public class SelectMealServlet extends HttpServlet {
 
         // If user is not logged in, redirect to login page
         // Allow staff only
-        if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+        if (!permission.equalsIgnoreCase("student")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
@@ -77,28 +77,30 @@ public class SelectMealServlet extends HttpServlet {
 
         try {
             previousUrl = request.getHeader("referer");
-            if (previousUrl.equalsIgnoreCase("foodSelectionForMeal.jsp")) {
-                response.sendRedirect("dashboardCanteenStaff");
+            if (previousUrl.equalsIgnoreCase("studentDisplayMeals.jsp")) {
+                response.sendRedirect("dashboardStudent.jsp");
                 return;
             }
         } catch (Exception ex) {
             request.setAttribute("errorMsg", "Oops! Please don't access that page directly.");
-            request.getRequestDispatcher("dashboardCanteenStaff.jsp").forward(request, response);
+            request.getRequestDispatcher("dashboardStudent.jsp").forward(request, response);
             return;
         }
 
         // Get array of food IDs from form
-        String[] mealId = request.getParameterValues("mealId");
+        String[] mealChoice = request.getParameterValues("mealChoice");
+        
+        
 
         // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
         //Hence, redirect to first page.
-        if (mealId == null) {
-            response.sendRedirect("calendarStudent.jsp");
+        if (mealChoice == null) {
+            request.setAttribute("errorMsg", "Please select at least one meal.");
+            request.getRequestDispatcher("DisplayMealsServlet").forward(request, response);
             return;
         }
 
         //Values
-        Studentorder so = new Studentorder(); // This is the meal object
         List<Ordermeal> orderMealList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
 
         //STEP 1 - SELECT MEAL COMPONENTS (FOOD)
@@ -106,10 +108,9 @@ public class SelectMealServlet extends HttpServlet {
 
             utx.begin();
 
-            for (int i = 0; i < mealId.length; i++) {
+            for (int i = 0; i < mealChoice.length; i++) {
                 //Obtain each food using the foodID from the array.
-                Meal meal = em.find(Meal.class, mealId[i]);
-
+                Meal meal = em.find(Meal.class, mealChoice[i]);
                 // Store the obtained food object into mealFoodList
                 Ordermeal om = new Ordermeal();
                 om.setMealid(meal);
@@ -117,9 +118,10 @@ public class SelectMealServlet extends HttpServlet {
             }
 
             utx.commit();
+            
+            
 
             //Save into session first
-            so.setOrdermealList(orderMealList);
             session.setAttribute("orderMealList", orderMealList);
 
             //Update step status
@@ -130,38 +132,40 @@ public class SelectMealServlet extends HttpServlet {
 
             int totalPrice = 0;
             
-            /*
+            
+            
             //Prints the query results and format it 
             for (Ordermeal om : orderMealList) {
                 queryResultQuantity += "<div class=\"mainContainer\">\n"
                         + "            <div class=\"recordQuantity\">\n"
                         + "                <div class=\"frontPart\">\n"
-                        + "                    <p class=\"name\" style=\"color: black;\">" + mf.getFoodid().getFoodname() + "</p>\n"
+                        + "                    <p class=\"name\" style=\"color: black;\">" + om.getMealid().getMealname() + "</p>\n"
                         + "                </div>\n"
                         + "                <div class=\"quantityEditor\">\n"
-                        + "                    <p class=\"value\" id=\"cal" + mf.getFoodid().getFoodid() + "\" data-calories=\"" + mf.getFoodid().getCalories() + "\">" + mf.getFoodid().getCalories() + " calories</p>\n"
-                        + "                    <p class=\"symbol\" id=\"sub" + mf.getFoodid().getFoodid() + "\" onclick=\"subtract()\">-</p>\n"
-                        + "                    <input type=\"number\" class=\"quantity\" id=\"" + mf.getFoodid().getFoodid() + "\" name=\"" + mf.getFoodid().getFoodid() + "\" value=\"1\" readonly=\"\">\n"
-                        + "                    <p class=\"symbol\" id=\"add" + mf.getFoodid().getFoodid() + "\">+</p>\n"
+                        + "                    <p class=\"value\" id=\"price" + om.getMealid().getMealid() + "\" data-price=\"" +  om.getMealid().getPrice() + "\">" + om.getMealid().getPrice() + " credits</p>\n"
+                        + "                    <p class=\"symbol\" id=\"sub" + om.getMealid().getMealid() + "\" onclick=\"subtract()\">-</p>\n"
+                        + "                    <input type=\"number\" class=\"quantity\" id=\"" + om.getMealid().getMealid() + "\" name=\"" + om.getMealid().getMealid() + "\" value=\"1\" readonly=\"\">\n"
+                        + "                    <p class=\"symbol\" id=\"add" + om.getMealid().getMealid() + "\">+</p>\n"
                         + "                </div>\n"
                         + "            </div>"
                         + "             <br/>";
                 
-                totalPrice += om.getQuantity() * om.getMealid().getPrice();
+                totalPrice += om.getMealid().getPrice();
             }
             
 
             //Next step's page
             request.setAttribute("queryResultQuantity", queryResultQuantity);
-            request.setAttribute("caloriesSum", caloriesSum);
-            request.getRequestDispatcher("foodQuantity.jsp").forward(request, response);
-            */
+            request.setAttribute("totalPrice", totalPrice);
+            request.getRequestDispatcher("studentOrderQuantity.jsp").forward(request, response);
+            
 
             // END OF STEP 1
         } catch (Exception ex) {
-            System.out.println("ERROR: Could not add food into foodList: " + ex.getMessage());
-            request.setAttribute("errorMsg", "Oops! Your food selection failed for some reason.");
-            request.getRequestDispatcher("DisplayFoodSelectionServlet").forward(request, response);
+            System.out.println("ERROR: Could not add meal into mealList: " + ex.getMessage());
+            ex.printStackTrace();
+            request.setAttribute("errorMsg", "Oops! Your meal selection failed for some reason.");
+            request.getRequestDispatcher("DisplayMealsServlet").forward(request, response);
             return;
         }
     }

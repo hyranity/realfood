@@ -149,10 +149,27 @@
     display: inline-block;
     background-color: black;
     width: 600px;
+    border-width: 20px;
+    padding: 10px;  
+    position: relative; 
+    margin: 0; 
+    left: 0; 
+    top: 0;
+}
+
+.errorMsgAbsolute{
     position: absolute;
     top: 160px;
     left: 50%;
     margin-left: -300px;
+    color: red;
+    margin: 10px;
+    text-align: center;
+    display: inline-block;
+    background-color: rgba(255,0,0,0.4);
+    width: 600px;
+    border-width: 20px;
+    padding: 10px;  
 }
 
 .accountMsg{

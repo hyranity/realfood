@@ -68,8 +68,8 @@ public class DisplayMealsServlet extends HttpServlet {
         }
 
         // If user is not logged in, redirect to login page
-        // Allow staff only
-        if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+        // Allow student only
+        if (!permission.equalsIgnoreCase("student")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
@@ -128,7 +128,7 @@ public class DisplayMealsServlet extends HttpServlet {
                     }
 
                     queryResult += "<td>\n"
-                            + "                            <input type=\"checkbox\" id=\""+ meal.getMealid() +"\"/>\n"
+                            + "                            <input type=\"checkbox\" id=\""+ meal.getMealid() +"\" name=\"mealChoice\" value=\""+ meal.getMealid() +"\"/>\n"
                             + "                            <label class=\"meal\" for=\""+ meal.getMealid() +"\">\n"
                             + "                                <h5>"+ meal.getMealname() +"</h5>\n"
                             + "                                <div style=\"position: relative;\">\n"
@@ -137,7 +137,6 @@ public class DisplayMealsServlet extends HttpServlet {
                             + "                                </div>\n"
                             + "                                <p class=\"description\">"+ meal.getDescription() +"</p>\n"
                             + "                                <p class=\"calories\">"+ meal.getTotalcalories() +" Calories</p>\n"
-                            + "                                <a href=\"\"><div class=\"editButton\">Edit</div></a>\n"
                             + "                                <div class=\"foodPart\">\n"
                             + "                                    <p class=\"componentTitle\">Consists of:</p>\n"
                             + "                                    <p class=\"component\">"+ components +"</p>\n"
@@ -154,7 +153,7 @@ public class DisplayMealsServlet extends HttpServlet {
 
                 // Send the formatted list to JSP
                 request.setAttribute("queryResult", queryResult);
-                request.getRequestDispatcher("manageMeals.jsp").forward(request, response);
+                request.getRequestDispatcher("studentDisplayMeals.jsp").forward(request, response);
                 return;
 
             } catch (Exception e) {

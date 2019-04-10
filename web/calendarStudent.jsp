@@ -26,21 +26,30 @@ and open the template in the editor.
                 <%
             session = request.getSession(false);
             
-            String permission = (String) session.getAttribute("permission");
-            
-            // If user is not logged in, redirect to login page
+           String permission = "";
+
+        try {
+            permission = (String) session.getAttribute("permission");
+
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
-            else {
-                // Allow manager only
-                if(!permission.equalsIgnoreCase("student")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // If user is not logged in, redirect to login page
+        // Allow student only
+        if (!permission.equalsIgnoreCase("student")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
         %>
         
         <%
@@ -94,7 +103,7 @@ and open the template in the editor.
             }
         %>
         <div class="stepsContainer">
-            <h1>steps</h1>
+            <h1>Make an Order</h1>
             <div class="steps">
                 <div class="currentStep">1. Select dates</div>
                 <div>2. Choose a meal</div>
@@ -106,10 +115,13 @@ and open the template in the editor.
             
             <h1 class="title">Current day is</h1><h1 class="dynamicTitle" data-date="<%=dynamicTitle%>"><%=dynamicTitle%></h1>
             <br>
-            <p class="instruction">Select a date. You may select more than one.</p>
+            <p class="instruction">Select a date. You may select more than one if you want the same meals.</p>
+            <br>
+            <div class="errorMsg">${errorMsg}</div>
             <br>
             <div class="calendar">
-                <form action="#">
+                <form action="DateSelectionServlet" method="POST" id="calendarForm">
+                    
                 <%
                     if (firstDayIsSunday) {
                 %>
@@ -197,9 +209,10 @@ and open the template in the editor.
 
                     // Only the following days can be clicked.
                     String dateId = "id" + i;
+                    String dateValue = cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.YEAR);
 
                 %>
-                <input  type="checkbox" id="<%=dateId%>" > 
+                <input  type="checkbox" id="<%=dateId%>" name="dateValue" value="<%=dateValue%>"> 
                 <label for="<%=dateId%>" class="weekday" data-date="<%=date[i]%>"  data-dow="<%=cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH)%>" data-month="<%=cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)%>"  data-day="<%=cal.get(Calendar.DAY_OF_MONTH)%>" data-hasclicked="false" onclick="appendLink()" ><%=day%></label>
                 <%
                     }
@@ -246,7 +259,7 @@ and open the template in the editor.
             </form>
                 <br/>
                 <button class="nextButton" href="" type="submit" >Back</button>&nbsp;
-                <button class="nextButton" href="" type="submit" >Next step</button>
+                <input class="nextButton" type="submit" form="calendarForm">
             </div>
             <div class="setting">Set the first day as: 
                 <br>

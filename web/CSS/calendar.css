@@ -5,6 +5,7 @@ html, body{
     height: 100%;
     width: 100%;
     font-family: montserrat, sans-serif;
+    
 }
 
 /* Title styles */
@@ -37,8 +38,9 @@ html, body{
 
 .calendar{
     display: inline-block;
-    text-align: left;
+    text-align: center;
     animation: intro 2s;
+   
 }
 
 .day{
@@ -151,6 +153,14 @@ input:checked + label{
 .currentStep{
     background-color: white;
 }
+
+form{
+    display: inline-block;
+    text-align: left;
+    margin: 20px;
+    margin-bottom: 40px;
+}
+
 
 
 

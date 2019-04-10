@@ -3,19 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.MealManagement;
+package Controller.OrderManagement;
 
-import Model.*;
+import Model.Meal;
+import Model.Mealfood;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,22 +17,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-import util.*;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "FoodSelectionServlet", urlPatterns = {"/FoodSelectionServlet"})
-public class FoodSelectionServletEdit extends HttpServlet {
-
-    @PersistenceContext
-    EntityManager em;
-    @Resource
-    UserTransaction utx;
+@WebServlet(name = "DateSelectionServlet", urlPatterns = {"/DateSelectionServlet"})
+public class DateSelectionServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,9 +37,62 @@ public class FoodSelectionServletEdit extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession(false);
 
-        
+        String permission = "";
 
+        try {
+            permission = (String) session.getAttribute("permission");
+
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // If user is not logged in, redirect to login page
+        // Allow student only
+        if (!permission.equalsIgnoreCase("student")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+
+            try {
+
+                String dateValue[];
+
+                try {
+                    dateValue = request.getParameterValues("dateValue");
+                    System.out.println(dateValue[0]);
+                } catch (NullPointerException e) {
+                    request.setAttribute("errorMsg", "Please select a date!");
+                    request.getRequestDispatcher("calendarStudent.jsp").forward(request, response);
+                    return;
+                }
+                
+                
+                // Set the result to session
+                session.setAttribute("dateValue", dateValue);
+                
+
+                // Send the formatted list to JSP
+                request.setAttribute("queryResult", "");
+                request.getRequestDispatcher("DisplayMealsServlet").forward(request, response);
+                return;
+
+            } catch (Exception e) {
+                System.out.println("Could not obtain date values: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

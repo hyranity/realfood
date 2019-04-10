@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Ordermeal.findAll", query = "SELECT o FROM Ordermeal o")
     , @NamedQuery(name = "Ordermeal.findByOrdermealid", query = "SELECT o FROM Ordermeal o WHERE o.ordermealid = :ordermealid")
-    , @NamedQuery(name = "Ordermeal.findByQuantity", query = "SELECT o FROM Ordermeal o WHERE o.quantity = :quantity")})
+    , @NamedQuery(name = "Ordermeal.findByQuantity", query = "SELECT o FROM Ordermeal o WHERE o.quantity = :quantity")
+    , @NamedQuery(name = "Ordermeal.findByIscanceled", query = "SELECT o FROM Ordermeal o WHERE o.iscanceled = :iscanceled")})
 public class Ordermeal implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,6 +44,10 @@ public class Ordermeal implements Serializable {
     @NotNull
     @Column(name = "QUANTITY")
     private int quantity;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ISCANCELED")
+    private Boolean iscanceled;
     @JoinColumn(name = "MEALID", referencedColumnName = "MEALID")
     @ManyToOne(optional = false)
     private Meal mealid;
@@ -57,9 +62,10 @@ public class Ordermeal implements Serializable {
         this.ordermealid = ordermealid;
     }
 
-    public Ordermeal(Integer ordermealid, int quantity) {
+    public Ordermeal(Integer ordermealid, int quantity, Boolean iscanceled) {
         this.ordermealid = ordermealid;
         this.quantity = quantity;
+        this.iscanceled = iscanceled;
     }
 
     public Integer getOrdermealid() {
@@ -76,6 +82,14 @@ public class Ordermeal implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public Boolean getIscanceled() {
+        return iscanceled;
+    }
+
+    public void setIscanceled(Boolean iscanceled) {
+        this.iscanceled = iscanceled;
     }
 
     public Meal getMealid() {

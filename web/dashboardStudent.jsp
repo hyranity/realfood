@@ -44,7 +44,7 @@
                 <a href="#"><div class="buttonDiv" id="order">my orders</div></a>
                 <a href="#"><div class="buttonDiv" id="notification">my notifications</div></a>
                 <br/>
-                <a href="#"><div class="buttonDiv" id="makeOrder">make an order</div></a>
+                <a href="calendarStudent.jsp"><div class="buttonDiv" id="makeOrder">make an order</div></a>
                 <a href="studentProfile.jsp"><div class="buttonDiv" id="account">my account</div></a>
             </div>
             <a href="LogoutServlet"><div class="logout">logout</div></a>
