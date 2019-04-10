@@ -1,0 +1,148 @@
+*{
+    font-family: montserrat, sans-serif;
+}
+
+html{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+  line-height: 1.25;
+}
+
+table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: auto;
+  padding: 0;
+  width: 80%;
+  table-layout: fixed;
+}
+
+table caption {
+  font-size: 30px;
+  margin: 8px 0 12px;
+}
+
+table .address{
+    font-size: 20px;
+    margin: 8px 0 12px;
+
+}
+
+table .reportType{
+    font-size: 20px;
+    margin: 8px 0 12px;
+}
+
+table .timeGenerate{
+    font-size: 18px;
+    margin: 8px 0 12px;
+    margin-left:60%;
+}
+
+table tr {
+  background-color: #f8f8f8;
+  border: 1px solid #dddddd;
+  padding: .6px;
+}
+
+table th ,table td {
+  padding: 10px;
+  text-align: center;
+}
+
+table th {
+  font-size: 14px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 20px;
+  }
+  
+  table thead {
+    border: none;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 13px;
+    text-align: right;
+  }
+  
+  table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  table td:last-child {
+    border-bottom: 0;
+  }
+
+}
+  /*Outside Table*/
+  .tableBox{
+    display: block;
+    margin-top: 20px;
+  }
+  
+.leftVerified{
+      display:block;
+      margin-top: 2%;
+      margin-left: 16%;
+      font-size: 18px;
+      font-weight: 500;
+  }
+  
+.leftLine{
+      display:block;
+      margin-top:2%;
+      margin-left:16%;
+      font-size: 18px;
+      font-weight: 500;
+  }
+  
+ .leftName{
+      display:block;
+      margin-left: 16%;
+      font-size: 18px;
+      font-weight: 500;
+  }
+  
+ .leftDate{
+      display:block;
+      margin-bottom: 4%;
+      margin-left: 16%;
+      font-size: 18px;
+      font-weight: 500;
+  }
+
