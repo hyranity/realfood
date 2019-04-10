@@ -54,7 +54,7 @@
                 boolean isBreakfast = meal.getIsbreakfast();
                 boolean isLunch = meal.getIslunch();
                 boolean isDiscontinued = true;
-                
+
                 session.setAttribute("meal", meal);
 
                 try {
@@ -272,9 +272,20 @@
                                 $(".outsideContainer").css("opacity", "1");
                                 $(".outsideContainer :input").prop("disabled", false);
                             });
-                            
-                            $("#.imageLink").on("input", function(){
-                                var url = this.
+
+                            $("#imageLink").keypress(function () {
+                                
+                                var length = this.value.length;
+                                
+                                if (this.value.length==199) {
+                                    $("#imageLInk").css("background-color", "darkred");
+                                    $("#subtitle").html("The image link is too long!");
+                                    $("#subtitle").css("color", "white");
+                                } else {
+                                    $("#imageLInk").css("background-color", "gold");
+                                    $("#subtitle").html("Here's where you can edit the meal's details.");
+                                    $("#subtitle").css("color", "white");
+                                }
                             });
 
 
