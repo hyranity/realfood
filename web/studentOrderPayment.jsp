@@ -22,7 +22,7 @@
             session = request.getSession(false);
 
             String permission = "";
-            String[] dateValue;
+            String[] dateValue = null;
             Student stud = new Student();
 
             try {
@@ -62,10 +62,9 @@
                     System.out.println("Couldn't get data from session for studentOrderPayment.jsp: " + e.getMessage());
                 }
 
-                // Get student's credits
                 int credits = stud.getCredits();
-
                 int totalPrice = studOrder.getTotalprice();
+
         %>
         <div class="stepsContainer">
             <h1>steps</h1>
@@ -80,7 +79,26 @@
 
         <h1 class="title">Payment Confirmation</h1>
         <h5 id="subtitle">Date(s) booked:</h5>
-        <h6 style="color: gold; font-size: 15px; ">15/4/19, 4/5/19</h6>
+        <h6 style="color: gold; font-size: 15px; ">
+            <!-- Print the dates -->
+            <%                int count = 0;
+                for (String dateStr : dateValue) {
+            %>
+
+            <!-- Print commas if not the first one -->
+
+            <% if (count > 0) {%>
+            , 
+            <% }%>
+
+          <%=dateStr%>
+
+
+            <%
+                    count++;
+                }%>
+
+        </h6>
 
         <%
             for (int i = 0; i < studOrder.getOrdermealList().size(); i++) {
