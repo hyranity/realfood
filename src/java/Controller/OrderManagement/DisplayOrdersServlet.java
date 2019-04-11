@@ -5,28 +5,34 @@
  */
 package Controller.OrderManagement;
 
-import Model.Meal;
-import Model.Mealfood;
+import Controller.MealManagement.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.TypedQuery;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.UserTransaction;
+import java.util.*;
+import Model.*;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "DateSelectionServlet", urlPatterns = {"/DateSelectionServlet"})
-public class DateSelectionServlet extends HttpServlet {
+@WebServlet(name = "DisplayOrdersServlet", urlPatterns = {"/DisplayOrdersServlet"})
+public class DisplayOrdersServlet extends HttpServlet {
+
+    @PersistenceContext
+    EntityManager em;
+    @Resource
+    UserTransaction utx;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,9 +47,9 @@ public class DateSelectionServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
-
-        String permission = "";
-
+ String permission = "";
+        String previousUrl = "";
+        
         try {
             permission = (String) session.getAttribute("permission");
 
@@ -52,7 +58,7 @@ public class DateSelectionServlet extends HttpServlet {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-
+            
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -60,58 +66,55 @@ public class DateSelectionServlet extends HttpServlet {
         }
 
         // If user is not logged in, redirect to login page
-        // Allow student only
+        // Allow staff only
         if (!permission.equalsIgnoreCase("student")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
+            
+            try{
+                
+                // Get all food
+                TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f", Food.class);
+                List<Food> foodList = query.getResultList();
+                System.out.println(foodList.size());
+                String queryResult = "";
+                int fourCount = 1;
 
-            try {
+                // Format it for display
+                for (int i = 0; i < foodList.size(); i++) {
 
-                String dateValue[];
-                List<Date> chosenDates = new ArrayList();
+                    Food food = foodList.get(i);
 
-                try {
-                    dateValue = request.getParameterValues("chosenDates");
-                   
-                } catch (NullPointerException e) {
-                    request.setAttribute("errorMsg", "Please select a date!");
-                    request.getRequestDispatcher("calendarStudent.jsp").forward(request, response);
-                    return;
+                    if (i != 0 && i % 4 == 0 && i != foodList.size() - 1) {
+                        queryResult += "<tr>";
+                        fourCount++;
+                    }
+
+                    queryResult += "<td>\n"
+                            + "                    <div class=\"record\">\n"
+                            + "                        <h6>" + food.getFoodid() +"</h6>\n"
+                            + "                        <p>" + food.getFoodname() +"</p>\n"
+                            + "                        <p>" + food.getCalories() +" calories</p>\n"
+                            + "                        <a href=\"EditFoodServlet?foodId=" + food.getFoodid() +"\"><div class=\"editButton\">Edit</div></a>\n"
+                            + "                    </div>\n"
+                            + "                </td>";
+
+                    if (fourCount == 4) {
+                        queryResult += "</tr>";
+                        fourCount = 0;
+                    }
                 }
                 
-                for (int i = 0; i < dateValue.length; i++) {
-                    // Split the date value
-                    int indexOfDivider = dateValue[i].indexOf('/');                                                                             // Locate the first divider
-                    int day = Integer.parseInt(dateValue[i].substring(0, indexOfDivider));                                    // Extract the first char to the one before the divider
-                    String currentDateValue = dateValue[i].substring(indexOfDivider, dateValue[i].length());    // Extract the new string, from the divider to the end of the string
-                    indexOfDivider = dateValue[i].indexOf('/');                                                                                    // Repeat the steps
-                    int month = Integer.parseInt(dateValue[i].substring(0, indexOfDivider));                              // Extract the month
-                    currentDateValue = dateValue[i].substring(indexOfDivider, dateValue[i].length());               // Extract the new string, from the divider to the end of the string
-                    indexOfDivider = dateValue[i].indexOf('/');                                                                                   // Repeat the steps
-                    int year = Integer.parseInt(dateValue[i].substring(0, indexOfDivider)) + 2000;                         // Extract the year, plus 2000
-                    
-                    Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateValue[i]);
-
-                    //NOTE: Apologize for using deprecated methods and classes, but it's the simplest I could understand and hence used due to time constraints
-                    // Set date fields
-                    
-                    chosenDates.add(date);
-                }
-                
-                
-                // Set the result to session
-                session.setAttribute("chosenDates", chosenDates);
-                
-
                 // Send the formatted list to JSP
-                request.setAttribute("queryResult", "");
-                request.getRequestDispatcher("DisplayMealsServlet").forward(request, response);
+                request.setAttribute("queryResult", queryResult);
+                request.getRequestDispatcher("foodSelectionForMeal.jsp").forward(request, response);
                 return;
+                
 
             } catch (Exception e) {
-                System.out.println("Could not obtain date values: " + e.getMessage());
+                System.out.println("Could not obtain food list: " + e.getMessage());
                 e.printStackTrace();
             }
 

@@ -7,6 +7,8 @@
 import Model.Studentorder;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -26,8 +28,8 @@ import util.CodeGenerator;
  */
 @WebServlet(urlPatterns = {"/TestServlet"})
 public class TestServlet extends HttpServlet {
-    
-     @PersistenceContext
+
+    @PersistenceContext
     EntityManager em;
     @Resource
     UserTransaction utx;
@@ -44,34 +46,80 @@ public class TestServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         // COUPON CODE GENERATION
-                String couponCode = "";
-                boolean codeExists = true;
-                do {
-                    try {
-                        //Generate coupon code
-                        CodeGenerator codeGenerator = new CodeGenerator("num");
-                         couponCode = codeGenerator.generateCode(1);
+        // COUPON CODE GENERATION
+        List<Studentorder> currentOrderList = new ArrayList();     // Get the current order list
+        Studentorder[] soA = new Studentorder[10];
+        for (int i = 0; i < 10; i++) {
+            soA[i] = new Studentorder();
 
-                        // Check database to ensure that there's no duplication
-                        TypedQuery<Studentorder> checkQuery = em.createQuery("SELECT so FROM Studentorder so WHERE so.couponcode = :couponCode", Studentorder.class).setParameter("couponCode", couponCode);
-                        Studentorder tempStudentOrder = checkQuery.getSingleResult();
-                            System.out.println("Rolled: " + couponCode);
+        }
+        
+        String couponCode = "";
+        int loopCount = 0;
+        // Create the orders. One order for each date
+        for (int i = 0; i < soA.length; i++) {
+            loopCount = 0;
+            // COUPON CODE GENERATION
+            boolean codeExists = false;
+            boolean codeExistsInDB = false;
+            do {
+                codeExists = false;
+                codeExistsInDB = false;
+                loopCount++;
+                try {
+                    //Generate coupon code
+                    CodeGenerator codeGenerator = new CodeGenerator("num");
+                    couponCode = codeGenerator.generateCode(1);
+
+                    // Check database to ensure that there's no duplication
+                    TypedQuery<Studentorder> checkQuery = em.createQuery("SELECT so FROM Studentorder so WHERE so.couponcode = :couponCode", Studentorder.class).setParameter("couponCode", couponCode);
+                    Studentorder tempStudentOrder = checkQuery.getSingleResult();
+                  
                         if (tempStudentOrder.getOrderid() != null) {
                             codeExists = true;
-                            
-                            System.out.println("HIT!");
+                            codeExistsInDB = true;
+                            System.out.println("Same coupon in DB! = " + couponCode);
                         }
                         else
                             codeExists = false;
-                    } catch (NoResultException | NullPointerException e) {
-                        // No problem if no results or is null
-                        codeExists = false;
-                        
-                    }
-                } while (codeExists);
+
+                } catch (NoResultException e) {
+                    // No problem if no results or is null
+                }
                 
-                System.out.println( "FINAL: " + couponCode);
+                if(!codeExistsInDB){
+                 // Check the orderList to ensure that there's also no duplication
+                    for (int j = 0; j < currentOrderList.size(); j++) {
+                        if (currentOrderList.get(j).getCouponcode().equals(couponCode)) {
+                            codeExists = true;
+                            break;
+                        }
+                        else{
+                            codeExists = false;
+                        }
+                    }
+                }
+                 if(loopCount == 100){
+                    System.out.println("ERROR: LOOP BREAK TO STOP INFINITE LOOP! ");
+                     System.out.println("");
+                    break;
+                }
+                
+            } while (codeExists || codeExistsInDB);
+
+            if(!codeExists){
+            soA[i].setCouponcode(couponCode);
+            currentOrderList.add(soA[i]);
+            System.out.println(couponCode);
+            }
+            else{
+                System.out.println("ERROR: Cannot add code " + couponCode + " as it already exists.");
+            }
+            
+            
+        }
+        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

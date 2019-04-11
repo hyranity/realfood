@@ -1,5 +1,6 @@
 
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Locale"%>
 <!DOCTYPE html>
 <!--
@@ -23,37 +24,36 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-                <%
+        <%
             session = request.getSession(false);
-            
-           String permission = "";
 
-        try {
-            permission = (String) session.getAttribute("permission");
+            String permission = "";
 
-            if (permission == null) {
+            try {
+                permission = (String) session.getAttribute("permission");
+
+                if (permission == null) {
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+
+            } catch (NullPointerException ex) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
 
-        } catch (NullPointerException ex) {
-            request.setAttribute("errorMsg", "Please login.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-        }
-
-        // If user is not logged in, redirect to login page
-        // Allow student only
-        if (!permission.equalsIgnoreCase("student")) {
-            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-        } else {
+            // If user is not logged in, redirect to login page
+            // Allow student only
+            if (!permission.equalsIgnoreCase("student")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
         %>
-        
-        <%
 
+        <%
             //The following is to set the first day (Sunday or Monday)
             boolean firstDayIsSunday = true;
             String firstDay = "sunday";
@@ -83,9 +83,10 @@ and open the template in the editor.
 
             //declaration of variables
             String[] date = new String[31];
-            Calendar cal = new GregorianCalendar();
-            Calendar calNextDay = new GregorianCalendar(); //used to find out the next day
-            Calendar calDaysBefore = new GregorianCalendar(); //used to find out how many days before today is Sunday
+            Calendar cal = Calendar.getInstance();
+            Calendar calNextDay = Calendar.getInstance();; //used to find out the next day
+            Calendar calDaysBefore = Calendar.getInstance();; //used to find out how many days before today is Sunday
+            SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
             calNextDay.add(Calendar.DATE, 1);
             int day = cal.get(Calendar.DAY_OF_MONTH); //used to increment from current day to 30 days later
             int pastDay = 0; //used to increment from the Sunday before until yesterday
@@ -112,7 +113,7 @@ and open the template in the editor.
             </div>
         </div>
         <div class="calendarContainer">
-            
+
             <h1 class="title">Current day is</h1><h1 class="dynamicTitle" data-date="<%=dynamicTitle%>"><%=dynamicTitle%></h1>
             <br>
             <p class="instruction">Select a date. You may select more than one if you want the same meals.</p>
@@ -121,127 +122,61 @@ and open the template in the editor.
             <br>
             <div class="calendar">
                 <form action="DateSelectionServlet" method="POST" id="calendarForm">
-                    
-                <%
-                    if (firstDayIsSunday) {
-                %>
-                <p class="week" style="color:gold;">S</p>
-                <p class="week">M</p>
-                <p class="week">T</p>
-                <p class="week">W</p>
-                <p class="week">T</p>
-                <p class="week">F</p>
-                <p class="week" style="color:gold;">S</p>
-                <%
-                } else {
-                %>
 
-                <p class="week">M</p>
-                <p class="week">T</p>
-                <p class="week">W</p>
-                <p class="week">T</p>
-                <p class="week">F</p>
-                <p class="week" style="color:gold;">S</p>
-                <p class="week" style="color:gold;">S</p>
-                <%
-                    }
-                %>
-                <br>
-                <%
-                    // Used to determine the first day of current week's date.
-                    calDaysBefore.add(Calendar.DATE, (Calendar.SUNDAY - 1 - numOfPastDaysOfWeek));
+                    <%
+                        if (firstDayIsSunday) {
+                    %>
+                    <p class="week" style="color:gold;">S</p>
+                    <p class="week">M</p>
+                    <p class="week">T</p>
+                    <p class="week">W</p>
+                    <p class="week">T</p>
+                    <p class="week">F</p>
+                    <p class="week" style="color:gold;">S</p>
+                    <%
+                    } else {
+                    %>
 
-                    //displays extra daily "blocks"  to make sure that today's "block" is correct with the day of the week;
-                    //these days are at the past, and are therefore being blocked from ordering meals on
-                    for (int i = 0; i < numOfPastDaysOfWeek; i++) {
-                %>
-                <div class="day" style="color: darkslategray"><%=calDaysBefore.get(Calendar.DAY_OF_MONTH)%></div>
-                <%
-                        calDaysBefore.add(Calendar.DATE, 1);
-                        countDay++;
-                    }
-
-                    //displays the daily "block" that can be clicked to pre-order meals
-                    for (int i = 0; i < 31; i++) {
-
-                        //If one week already, put <br>
-                        if ((countDay - 1) % 7 == 0 && countDay > 0 && countDay >= 7) {
-
-                %>
-                <br>
-                <%                    }
-                    // If today, block orders from being made on today
-                    if (isToday) {
-                %>
-                <div class="day" style="background-color: darkgoldenrod; color: white;"><%=day%></div>
-                <%
-                    //NOTE: This part of the code is to not allow students to order meals the day before
-
-                    //Increment the day
-                    cal.add(Calendar.DATE, 1);
-                    day = cal.get(Calendar.DAY_OF_MONTH);
-
-                    //Increment the nextDay, which shows what day is after the current day
-                    calNextDay.add(Calendar.DATE, 1);
-                    nextDay = calNextDay.get(Calendar.DAY_OF_MONTH);
-
-                    countDay++;
-
-                    //If one week already, put <br>
-                    if ((countDay - 1) % 7 == 0 && countDay != 0) {
-                %>
-                <br>
-                <%
-                    }
-
-                    // Block the next day so that students cannot order on that day
-                %>
-                <div class="day" style="color: darkslategray"><%=day%></div>
-                <%
-
-                    isToday = false;
-                } else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                    // If it is a weekend, block the day
-%>
-                <div class="day" style="color: darkslategray"><%=day%></div>
-                <%
-                } else {  // If it's not today, no need to highlight
-
-                    // Only the following days can be clicked.
-                    String dateId = "id" + i;
-                    String dateValue = cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.YEAR);
-
-                %>
-                <input  type="checkbox" id="<%=dateId%>" name="dateValue" value="<%=dateValue%>"> 
-                <label for="<%=dateId%>" class="weekday" data-date="<%=date[i]%>"  data-dow="<%=cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH)%>" data-month="<%=cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)%>"  data-day="<%=cal.get(Calendar.DAY_OF_MONTH)%>" data-hasclicked="false" onclick="appendLink()" ><%=day%></label>
-                <%
-                    }
-
-                    // If new month....
-                    if (nextDay == 1) {
-
-                        // Put some space in between
-                %> 
-                <br>
-                <%                    numOfPastDaysOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-
-                    // If the first day is Monday, golduce the number of "invisible days" to the calendar.
-                    // This is because <br> resets the position set previously
-                    if (!firstDayIsSunday && numOfPastDaysOfWeek != 0) {
-                        numOfPastDaysOfWeek--;
-                    }
-
-                    // "Invisible" days are added so the correct day of the week position of the next day is shown
-                    for (int j = 0; j < numOfPastDaysOfWeek; j++) {
-                %>
-
-                <div class="day" style="opacity:0;">x</div>
-                <%
-                    }
-                %>
-
-                <%
+                    <p class="week">M</p>
+                    <p class="week">T</p>
+                    <p class="week">W</p>
+                    <p class="week">T</p>
+                    <p class="week">F</p>
+                    <p class="week" style="color:gold;">S</p>
+                    <p class="week" style="color:gold;">S</p>
+                    <%
                         }
+                    %>
+                    <br>
+                    <%
+                        // Used to determine the first day of current week's date.
+                        calDaysBefore.add(Calendar.DATE, (Calendar.SUNDAY - 1 - numOfPastDaysOfWeek));
+
+                        //displays extra daily "blocks"  to make sure that today's "block" is correct with the day of the week;
+                        //these days are at the past, and are therefore being blocked from ordering meals on
+                        for (int i = 0; i < numOfPastDaysOfWeek; i++) {
+                    %>
+                    <div class="day" style="color: darkslategray"><%=calDaysBefore.get(Calendar.DAY_OF_MONTH)%></div>
+                    <%
+                            calDaysBefore.add(Calendar.DATE, 1);
+                            countDay++;
+                        }
+
+                        //displays the daily "block" that can be clicked to pre-order meals
+                        for (int i = 0; i < 31; i++) {
+
+                            //If one week already, put <br>
+                            if ((countDay - 1) % 7 == 0 && countDay > 0 && countDay >= 7) {
+
+                    %>
+                    <br>
+                    <%                    }
+                        // If today, block orders from being made on today
+                        if (isToday) {
+                    %>
+                    <div class="day" style="background-color: darkgoldenrod; color: white;"><%=day%></div>
+                    <%
+                        //NOTE: This part of the code is to not allow students to order meals the day before
 
                         //Increment the day
                         cal.add(Calendar.DATE, 1);
@@ -252,11 +187,79 @@ and open the template in the editor.
                         nextDay = calNextDay.get(Calendar.DAY_OF_MONTH);
 
                         countDay++;
-                    }
-                %>
 
-                
-            </form>
+                        //If one week already, put <br>
+                        if ((countDay - 1) % 7 == 0 && countDay != 0) {
+                    %>
+                    <br>
+                    <%
+                        }
+
+                        // Block the next day so that students cannot order on that day
+%>
+                    <div class="day" style="color: darkslategray"><%=day%></div>
+                    <%
+
+                        isToday = false;
+                    } else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                        // If it is a weekend, block the day
+                    %>
+                    <div class="day" style="color: darkslategray"><%=day%></div>
+                    <%
+                    } else {  // If it's not today, no need to highlight
+
+                        Date tempDate = cal.getTime();
+
+                        // Only the following days can be clicked.
+                        String dateId = "id" + i;
+                        String dateValue = sm.format(tempDate);
+
+                    %>
+                    <input  type="checkbox" id="<%=dateId%>" name="chosenDates" value="<%=dateValue%>"> 
+                    <label for="<%=dateId%>" class="weekday" data-date="<%=date[i]%>"  data-dow="<%=cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH)%>" data-month="<%=cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH)%>"  data-day="<%=cal.get(Calendar.DAY_OF_MONTH)%>" data-hasclicked="false" onclick="appendLink()" ><%=day%></label>
+                    <%
+                        }
+
+                        // If new month....
+                        if (nextDay == 1) {
+
+                            // Put some space in between
+                    %> 
+                    <br>
+                    <%                    numOfPastDaysOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+
+                        // If the first day is Monday, golduce the number of "invisible days" to the calendar.
+                        // This is because <br> resets the position set previously
+                        if (!firstDayIsSunday && numOfPastDaysOfWeek != 0) {
+                            numOfPastDaysOfWeek--;
+                        }
+
+                        // "Invisible" days are added so the correct day of the week position of the next day is shown
+                        for (int j = 0; j < numOfPastDaysOfWeek; j++) {
+                    %>
+
+                    <div class="day" style="opacity:0;">x</div>
+                    <%
+                        }
+                    %>
+
+                    <%
+                            }
+                            
+                            //Increment the day
+                            cal.add(Calendar.DATE, 1);
+                            day = cal.get(Calendar.DAY_OF_MONTH);
+
+                            //Increment the nextDay, which shows what day is after the current day
+                            calNextDay.add(Calendar.DATE, 1);
+                            nextDay = calNextDay.get(Calendar.DAY_OF_MONTH);
+
+                            countDay++;
+                        }
+                    %>
+
+
+                </form>
                 <br/>
                 <button class="nextButton" href="" type="submit" >Back</button>&nbsp;
                 <input class="nextButton" type="submit" form="calendarForm">
@@ -281,9 +284,9 @@ and open the template in the editor.
         </div>
 
 
-<%}%>
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="calendarStudent.js" type="text/javascript"></script>
-        
+
 </html>

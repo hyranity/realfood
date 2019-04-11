@@ -4,7 +4,9 @@
     Author     : Richard Khoo
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -50,12 +52,13 @@
             } else {
 
                 Studentorder studOrder = new Studentorder();
-
+                List<Date> chosenDates = new ArrayList();
+                
                 // Attempt to get studOrder
                 try {
                     studOrder = (Studentorder) session.getAttribute("studOrder");
                     studOrder.getTotalprice(); // If null, it will cause an exception
-                    dateValue = (String[]) session.getAttribute("dateValue");
+                    chosenDates = (List<Date>) session.getAttribute("chosenDates");
                 } catch (Exception e) {
                     // If cannot get, means user did not follow the steps
                     request.getRequestDispatcher("calendarStudent.jsp").forward(request, response);
@@ -64,6 +67,10 @@
 
                 int credits = stud.getCredits();
                 int totalPrice = studOrder.getTotalprice();
+                
+// For formatting the dates
+SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
+                
 
         %>
         <div class="stepsContainer">
@@ -82,7 +89,9 @@
         <h6 style="color: gold; font-size: 15px; ">
             <!-- Print the dates -->
             <%                int count = 0;
-                for (String dateStr : dateValue) {
+                for (Date date : chosenDates) {
+                    
+                    String dateStr = sm.format(date);
             %>
 
             <!-- Print commas if not the first one -->
