@@ -80,11 +80,12 @@ public class ViewOrderServlet extends HttpServlet {
             String orderId = "";
             
             try {
-                orderId = request.getParameter("");
+                orderId = request.getParameter("orderId");
                 so = em.find(Studentorder.class, orderId);
             } catch (Exception e) {
                 // If exception is thrown, just redirect student to dashboard
                 response.sendRedirect("dashboardStudent.jsp");
+                return;
             }
 
             try {
@@ -96,7 +97,7 @@ public class ViewOrderServlet extends HttpServlet {
                 return;
 
             } catch (Exception e) {
-                System.out.println("Could not obtain meal list: " + e.getMessage());
+                System.out.println("Could not obtain order list: " + e.getMessage());
                 e.printStackTrace();
             }
 

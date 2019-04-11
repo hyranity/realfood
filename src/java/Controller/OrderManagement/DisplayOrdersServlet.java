@@ -93,7 +93,6 @@ public class DisplayOrdersServlet extends HttpServlet {
                     
                     // Display meal count
                    String mealCount = soList.get(i).getOrdermealList().size() + " meal";
-                    System.out.println(soList.get(i).getOrdermealList().size());
                    
                    SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
                    String chosenDate = sm.format(soList.get(i).getChosendate());
@@ -107,7 +106,7 @@ public class DisplayOrdersServlet extends HttpServlet {
                             + "                        <p>" + chosenDate +"</p>\n"
                             + "                        <p>" + mealCount +"</p>\n"
                             + "                        <p>" + soList.get(i).getTotalprice()+" credits</p>\n"
-                            + "                        <a href=\"ManageOrderServlet?orderId=" + soList.get(i).getOrderid() +"\"><div class=\"editButton\">Manage</div></a>\n"
+                            + "                        <a href=\"ViewOrderServlet?orderId=" + soList.get(i).getOrderid() +"\"><div class=\"editButton\">Manage</div></a>\n"
                             + "                    </div>\n"
                             + "                </td>";
 

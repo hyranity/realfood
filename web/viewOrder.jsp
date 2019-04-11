@@ -77,7 +77,7 @@
                         for(Ordermeal om : so.getOrdermealList()){
                             
                             Meal meal = om.getMealid();
-                            String mealName = om.getMealid().getMealid();
+                            String mealName = om.getMealid().getMealname();
                             int quantity = om.getQuantity();
                         %>
                         <p class="mealItem" ><%=mealName%></p>
@@ -100,6 +100,7 @@
                         %>
                         
                         <p class="quantity">x<%=quantity%></p>
+                        <br/>
                         <%}%>
                         <br/>
                         <br/>
