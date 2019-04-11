@@ -113,6 +113,11 @@ public class MealQuantityServlet extends HttpServlet {
             
             studOrder.setTotalprice(totalPrice);
             studOrder.setOrdermealList(orderMealList);
+                
+            
+                for (int i = 0; i < orderMealList.size(); i++) {
+                    System.out.println(orderMealList.get(i).getMealid().getMealid() + " x " + orderMealList.get(i).getQuantity());
+                }
 
                 //Save into session first
                 session.setAttribute("orderMealList", orderMealList);

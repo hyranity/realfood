@@ -74,7 +74,7 @@ public class DateSelectionServlet extends HttpServlet {
 
                 try {
                     dateValue = request.getParameterValues("chosenDates");
-                   
+                   int exceptionTrigger = dateValue.length;
                 } catch (NullPointerException e) {
                     request.setAttribute("errorMsg", "Please select a date!");
                     request.getRequestDispatcher("calendarStudent.jsp").forward(request, response);

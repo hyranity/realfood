@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
 import java.util.*;
 import Model.*;
+import java.text.SimpleDateFormat;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 
@@ -50,9 +51,11 @@ public class DisplayOrdersServlet extends HttpServlet {
  String permission = "";
         String previousUrl = "";
         
+        Student stud = new Student();
+        
         try {
             permission = (String) session.getAttribute("permission");
-
+            stud = (Student) session.getAttribute("stud");
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -76,44 +79,56 @@ public class DisplayOrdersServlet extends HttpServlet {
             try{
                 
                 // Get all food
-                TypedQuery<Studentorder> query = em.createQuery("SELECT so FROM Studentorder so", Studentorder.class);
+                TypedQuery<Studentorder> query = em.createQuery("SELECT so FROM Studentorder so where so.studentid = :studentId order by so.orderid desc", Studentorder.class).setParameter("studentId", stud);
                 List<Studentorder> soList = query.getResultList();
                 String queryResult = "";
-                int fourCount = 1;
+                int fourCount = 2;
 
                 // Format it for display
                 for (int i = 0; i < soList.size(); i++) {
-
-
-                    if (i != 0 && i % 4 == 0 && i != soList.size() - 1) {
+                   
+                    if (fourCount == 0) {
                         queryResult += "<tr>";
-                        fourCount++;
                     }
                     
                     // Display meal count
-                   String mealCount = soList.get(i).getOrdermealList().size() + "meal";
+                   String mealCount = soList.get(i).getOrdermealList().size() + " meal";
+                    System.out.println(soList.get(i).getOrdermealList().size());
+                   
+                   SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
+                   String chosenDate = sm.format(soList.get(i).getChosendate());
+                   
                    if(soList.get(i).getOrdermealList().size() > 1)
                        mealCount += "s";
 
                     queryResult += "<td>\n"
                             + "                    <div class=\"record\">\n"
                             + "                        <h6>" + soList.get(i).getOrderid() +"</h6>\n"
-                            + "                        <p>" + soList.get(i).getOrderid() +"</p>\n"
-                            + "                        <p>" + soList.get(i).getOrderid() +"</p>\n"
-                            + "                        <p>" + soList.get(i).getTotalprice()+" calories</p>\n"
+                            + "                        <p>" + chosenDate +"</p>\n"
+                            + "                        <p>" + mealCount +"</p>\n"
+                            + "                        <p>" + soList.get(i).getTotalprice()+" credits</p>\n"
                             + "                        <a href=\"ManageOrderServlet?orderId=" + soList.get(i).getOrderid() +"\"><div class=\"editButton\">Manage</div></a>\n"
                             + "                    </div>\n"
                             + "                </td>";
 
+                    
                     if (fourCount == 4) {
                         queryResult += "</tr>";
                         fourCount = 0;
                     }
+                     fourCount++;
+                    
+                }
+                
+                try {
+                    request.setAttribute("sucessMsg", request.getAttribute("successMsg"));
+                } catch (Exception e) {
+                    // If null, it means that its not redirected from order payment servlet, so its fine
                 }
                 
                 // Send the formatted list to JSP
                 request.setAttribute("queryResult", queryResult);
-                request.getRequestDispatcher("foodSelectionForMeal.jsp").forward(request, response);
+                request.getRequestDispatcher("displayOrder.jsp").forward(request, response);
                 return;
                 
 

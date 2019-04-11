@@ -67,6 +67,8 @@ public class ProcessPaymentServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
+        
+        
 
         // If user is not logged in, redirect to login page
         // Allow student only
@@ -78,10 +80,9 @@ public class ProcessPaymentServlet extends HttpServlet {
 
             // Attempt to get student order from session
             Studentorder studOrder = new Studentorder();
-            List<Ordermeal> orderMealList = new ArrayList();
             try {
                 studOrder = (Studentorder) session.getAttribute("studOrder");
-                orderMealList = (List<Ordermeal>) session.getAttribute("orderMealList");
+               
 
                 // Exception trigger
                 studOrder.getOrderid(); // If this is null, it will cause an exception, which will redirect the student to first step.
@@ -103,6 +104,15 @@ public class ProcessPaymentServlet extends HttpServlet {
 
                 // Get the latest student details
                 student = em.find(Student.class, student.getStudentid());
+                
+                // Add to database
+                    utx.begin();
+                    em.merge(student);
+                    utx.commit();
+                
+                    
+                    // Charge the student
+                    student.setCredits(student.getCredits() - (studOrder.getTotalprice()));
 
                 //For generating ID
                 TypedQuery<Studentorder> query = em.createQuery("SELECT s FROM Studentorder s", Studentorder.class);
@@ -111,8 +121,8 @@ public class ProcessPaymentServlet extends HttpServlet {
                 // Create duplicate date objects, depending on how many dates have been chosen
                 List<Date> chosenDates = (List<Date>) session.getAttribute("chosenDates");
                 int dayCount = chosenDates.size();
+                
 
-                Studentorder[] soList = new Studentorder[dayCount]; // Creates an array of orders
 
                 List<Studentorder> currentOrderList = student.getStudentorderList();     // Get the current order list
 
@@ -120,7 +130,9 @@ public class ProcessPaymentServlet extends HttpServlet {
                 for (int i = 0; i < chosenDates.size(); i++) {
                     
                     // Initiate the element
-                    soList[i] = new Studentorder();
+                    Studentorder so= studOrder;
+                    
+                 
 
                     // COUPON CODE GENERATION
                     String couponCode = "";
@@ -174,51 +186,48 @@ public class ProcessPaymentServlet extends HttpServlet {
 
                         // If code is unique, add into the list
                         if (!codeExists) {
-                            soList[i].setCouponcode(couponCode);
-                            currentOrderList.add(soList[i]);
+                            studOrder.setCouponcode(couponCode);
+                            currentOrderList.add(studOrder);
                         } else {
                             System.out.println("ERROR: Cannot add code " + couponCode + " as it already exists.");
                         }
                         
                     // Set all the necessary fields
-                    soList[i].setChosendate(chosenDates.get(i));       // Store the date into the list of student orders
-                    soList[i].setStudentid(student); // Also set student ID
-                    soList[i].setIscanceled(false);
-                    soList[i].setIscanceled(false);
-                    soList[i].setCouponcode(couponCode);
-                    soList[i].setIsredeemed(false);
-                    soList[i].setTotalprice(studOrder.getTotalprice());
-                    soList[i].setOrderid(Auto.generateID("O", 10, count + i));    // Set order ID 
-
-                    // Set the associative entity's Order ID
-                    for (Ordermeal om : orderMealList) {
-                        om.setOrderid(soList[i]);
+                    studOrder.setChosendate(chosenDates.get(i));       // Store the date into the list of student orders
+                    studOrder.setStudentid(student); // Also set student ID
+                    studOrder.setIscanceled(false);
+                    studOrder.setIscanceled(false);
+                    studOrder.setCouponcode(couponCode);
+                    studOrder.setIsredeemed(false);
+                    studOrder.setTotalprice(studOrder.getTotalprice());
+                    
+                    studOrder.setOrderid(Auto.generateID("O", 10, count + i));    // Set order ID 
+                    
+                    for(Ordermeal om : studOrder.getOrdermealList()){
+                        om.setOrderid(studOrder);
                     }
+               
+                    currentOrderList.add(studOrder);
+                    
 
-                    // Put the list into the student
-                    soList[i].setOrdermealList(orderMealList);
-
-                    currentOrderList.add(soList[i]); // Add in the new orders
-
-                    // Charge the student
-                    student.setCredits(student.getCredits() - (studOrder.getTotalprice()));
+                    
+                    
+                    // Add to database
+                    utx.begin();
+                    em.persist(studOrder);
+                    utx.commit();
                 }
-
-                // Add into student object ------------------
-                student.setStudentorderList(currentOrderList); // Update the student's order list
-
-                // Save to database
-                utx.begin();
-
-                em.merge(student);
-                utx.commit();
+                
+                
 
                 //Update session
                 session.setAttribute("stud", student);
                 session.setAttribute("studOrder", null);
 
                 //Redirect to my orders page
-                System.out.println("Payment successful");
+                request.setAttribute("successMsg", "You have successfully made an order.");
+            request.getRequestDispatcher("DisplayOrdersServlet").forward(request, response);
+            return;
 
             } catch (ConstraintViolationException ex) {
 

@@ -136,8 +136,7 @@ public class SelectMealServlet extends HttpServlet {
             
             //Prints the query results and format it 
             for (Ordermeal om : orderMealList) {
-                queryResultQuantity += "<div class=\"mainContainer\">\n"
-                        + "            <div class=\"recordQuantity\">\n"
+                queryResultQuantity += "<div class=\"recordQuantity\">\n"
                         + "                <div class=\"frontPart\">\n"
                         + "                    <p class=\"name\" style=\"color: black;\">" + om.getMealid().getMealname() + "</p>\n"
                         + "                </div>\n"
