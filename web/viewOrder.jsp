@@ -1,3 +1,4 @@
+<%@page import="Model.Studentorder"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,22 +13,38 @@
     </head>
     <body>
         <%
-            session = request.getSession(false);
+            request.getSession(false);
+        
+        String permission = "";
+        
+        try {
+            permission = (String) session.getAttribute("permission");
             
-            String permission = (String) session.getAttribute("permission");
-            
-            // If user is not logged in, redirect to login page
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
-            else {
-                // Allow student only
-                if(!permission.equalsIgnoreCase("student")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+            
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // If user is not logged in, redirect to login page
+        // Allow student only
+        if (!permission.equalsIgnoreCase("student")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+            Studentorder so = new Studentorder();
+            
+            try {
+                    
+                } catch (Exception e) {
+                    
                 }
         %>
         <div class="outsideContainer">
@@ -71,7 +88,7 @@
         </div>
         <a href=""><div class="back" style="margin-bottom: 30px;">Back</div></a>
         <div class="toggleDisableConfirmation">
-            <h5>Discontinue order?</h5>
+            <h5>Cancel order?</h5>
             <p>The order will be canceled and you will receive an 80% refund.</p>
             <a href="#"><div class="toggleDisableConfirm">Yes</div></a>
             <a href="#"><div class="toggleDisableCancel">No</div></a>

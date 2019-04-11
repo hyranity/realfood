@@ -30,7 +30,7 @@
             try {
                 permission = (String) session.getAttribute("permission");
                 stud = (Student) session.getAttribute("stud");
-                stud.getFirstname();
+                stud.getFirstname(); // Triggers exceptions, if any
                 if (permission == null) {
                     request.setAttribute("errorMsg", "Please login.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -65,7 +65,7 @@
                     System.out.println("Couldn't get data from session for studentOrderPayment.jsp: " + e.getMessage());
                 }
 
-                int credits = stud.getCredits();
+                int credits = stud.getCredits();    // Obtain student's credits amount
                 int totalPrice = studOrder.getTotalprice();
                 int grandTotal = totalPrice * chosenDates.size();
                 int dateCount = chosenDates.size();
@@ -166,6 +166,7 @@ SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
                     <%}%>
                 </div>
             </form>
+                <!-- Display student's credits -->
             <h6 class="credits"><%=credits%> credits</h6>
         </div>
         <%}%>
