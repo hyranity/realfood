@@ -76,28 +76,32 @@ public class DisplayOrdersServlet extends HttpServlet {
             try{
                 
                 // Get all food
-                TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f", Food.class);
-                List<Food> foodList = query.getResultList();
-                System.out.println(foodList.size());
+                TypedQuery<Studentorder> query = em.createQuery("SELECT so FROM Studentorder so", Studentorder.class);
+                List<Studentorder> soList = query.getResultList();
                 String queryResult = "";
                 int fourCount = 1;
 
                 // Format it for display
-                for (int i = 0; i < foodList.size(); i++) {
+                for (int i = 0; i < soList.size(); i++) {
 
-                    Food food = foodList.get(i);
 
-                    if (i != 0 && i % 4 == 0 && i != foodList.size() - 1) {
+                    if (i != 0 && i % 4 == 0 && i != soList.size() - 1) {
                         queryResult += "<tr>";
                         fourCount++;
                     }
+                    
+                    // Display meal count
+                   String mealCount = soList.get(i).getOrdermealList().size() + "meal";
+                   if(soList.get(i).getOrdermealList().size() > 1)
+                       mealCount += "s";
 
                     queryResult += "<td>\n"
                             + "                    <div class=\"record\">\n"
-                            + "                        <h6>" + food.getFoodid() +"</h6>\n"
-                            + "                        <p>" + food.getFoodname() +"</p>\n"
-                            + "                        <p>" + food.getCalories() +" calories</p>\n"
-                            + "                        <a href=\"EditFoodServlet?foodId=" + food.getFoodid() +"\"><div class=\"editButton\">Edit</div></a>\n"
+                            + "                        <h6>" + soList.get(i).getOrderid() +"</h6>\n"
+                            + "                        <p>" + soList.get(i).getOrderid() +"</p>\n"
+                            + "                        <p>" + soList.get(i).getOrderid() +"</p>\n"
+                            + "                        <p>" + soList.get(i).getTotalprice()+" calories</p>\n"
+                            + "                        <a href=\"ManageOrderServlet?orderId=" + soList.get(i).getOrderid() +"\"><div class=\"editButton\">Manage</div></a>\n"
                             + "                    </div>\n"
                             + "                </td>";
 

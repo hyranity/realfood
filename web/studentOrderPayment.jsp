@@ -67,6 +67,10 @@
 
                 int credits = stud.getCredits();
                 int totalPrice = studOrder.getTotalprice();
+                int grandTotal = totalPrice * chosenDates.size();
+                int dateCount = chosenDates.size();
+                
+                String totalStr ="Total: " + grandTotal;
                 
 // For formatting the dates
 SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
@@ -123,7 +127,7 @@ SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
                     <p class="name"><%=mealName%></p>
 
                 </div>
-                <div class="quantityEditor">
+                <div class="quantityEditor">    
                     <p class="value"><%=price%> Credits</p>
                     <p class="quantity" style="background-color: black;">x<%=quantity%></p>
                 </div>
@@ -132,7 +136,9 @@ SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
 
             <%}%>
             <div class="total2">
-                <p>Total: <%=totalPrice%> Credits</p>
+                    <p style=""><%=totalPrice%> credits (per date) x <%=dateCount%> days</p>
+                <p style="font-size: 24px; color: gold;"><%=totalStr%> credits</p>
+                <p style="color: darkcyan; margin-top: 100px;">Note: Each date will have a separate order.</p>
             </div>
 
         </div>
@@ -150,13 +156,13 @@ SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
 
                     <!-- If student cannot afford, block the button -->
                     <%
-                        if (totalPrice > credits) {
+                        if (grandTotal > credits) {
                     %>
                     <button class="insufficientButton" href="" type="submit" disabled>Not enough credits</button>
                     <%
                     } else {
                     %>
-                    <a class="nextButton" href="ProcessPaymentServlet" type="submit">PAY <%=totalPrice%> CREDITS</a>
+                    <a class="nextButton" href="ProcessPaymentServlet" type="submit">PAY <%=grandTotal%> CREDITS</a>
                     <%}%>
                 </div>
             </form>
