@@ -68,7 +68,7 @@ public class ProcessPaymentServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
-
+         
         // If user is not logged in, redirect to login page
         // Allow student only
         if (!permission.equalsIgnoreCase("student")) {
@@ -76,28 +76,31 @@ public class ProcessPaymentServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
-
+            
             // Attempt to get student order from session
             Studentorder studOrder = new Studentorder();
             try {
                 studOrder = (Studentorder) session.getAttribute("studOrder");
-
+               
                 // Exception trigger
                 studOrder.getOrderid(); // If this is null, it will cause an exception, which will redirect the student to first step.
 
                 if (studOrder == null) {
                     response.sendRedirect("calendarStudent.jsp");
+                    return;
                 }
-                return;
+                
             } catch (Exception e) {
                 //If there's an error, redirect the student to the first step
                 response.sendRedirect("calendarStudent.jsp");
+                return;
             }
-
+ 
             try {
                 // Get student from session, which won't be null if the previous validations are passed
                 Student student = (Student) session.getAttribute("stud");
                 
+               
                 
                 // COUPON CODE GENERATION
                 String couponCode = "";
@@ -163,6 +166,7 @@ public class ProcessPaymentServlet extends HttpServlet {
                     date.setMonth(month);
                     date.setYear(year);
                     
+                    // Current ERROR: This returns nullexception
                     soList[i].setChosendate(date);
                 }
                 
@@ -179,11 +183,13 @@ public class ProcessPaymentServlet extends HttpServlet {
                 session.setAttribute("studOrder", null);
                 
                 //Redirect to my orders page
+                System.out.println("Payment successful");
 
             } catch (ConstraintViolationException ex) {
                 ex.getConstraintViolations();
             } catch (Exception ex) {
                 ex.printStackTrace();
+                System.out.println("Couldn't process payment!");
             }
         }
 

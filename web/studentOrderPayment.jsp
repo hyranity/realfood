@@ -20,7 +20,7 @@
     <body>
         <%
             session = request.getSession(false);
-
+            
             String permission = "";
             String[] dateValue = null;
             Student stud = new Student();
@@ -147,7 +147,7 @@
                     <%
                     } else {
                     %>
-                    <button class="nextButton" href="" type="submit">PAY <%=totalPrice%> CREDITS</button>
+                    <a class="nextButton" href="ProcessPaymentServlet" type="submit">PAY <%=totalPrice%> CREDITS</a>
                     <%}%>
                 </div>
             </form>

@@ -100,7 +100,6 @@ public class MealQuantityServlet extends HttpServlet {
                 String mealId = orderMealList.get(i).getMealid().getMealid();
                 
                 // Using the meal ID, get its respective quantities from the JSP form
-               
                 int quantity = Integer.parseInt(request.getParameter(mealId));
                 
                 // Insert the obtained quantity into the object from the list
