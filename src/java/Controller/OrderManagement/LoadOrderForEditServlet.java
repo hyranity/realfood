@@ -3,17 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.MealManagement;
+package Controller.OrderManagement;
 
-import Model.Food;
-import Model.Meal;
-import Model.Mealfood;
+import Controller.MealManagement.*;
+import Model.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
@@ -22,17 +23,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-import javax.validation.ConstraintViolationException;
-import util.Auto;
+import util.*;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "MealDiscontinuationServlet", urlPatterns = {"/MealDiscontinuationServlet"})
-public class MealDiscontinuationServlet extends HttpServlet {
-
+@WebServlet(name = "LoadOrderForEditServlet", urlPatterns = {"/LoadOrderForEditServlet"})
+public class LoadOrderForEditServlet extends HttpServlet {
+    
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -50,20 +52,20 @@ public class MealDiscontinuationServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(false);
         
-        String permission = "";
-        String mealId = "";
+        HttpSession session = request.getSession(false);
+            
+           String permission = "";
+
         try {
             permission = (String) session.getAttribute("permission");
-            
-            
+
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-            
+
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -71,77 +73,46 @@ public class MealDiscontinuationServlet extends HttpServlet {
         }
 
         // If user is not logged in, redirect to login page
-        // Allow staff only
-        if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+        // Allow student only
+        if (!permission.equalsIgnoreCase("student")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
-
+            
+            // Declaring order object
+            Studentorder studOrder = new Studentorder();
+            
+            
+            try {
+                // Get the Studentorder using the ID chosen
+                studOrder = em.find(Studentorder.class, request.getParameter("orderId"));
+                studOrder.getOrderid(); // Triggers null pointer if null
+            } catch (Exception e) {
+                // Any exception occured means that the student did not do the procedure correctly, so redirect to dashboard
+                System.out.println("Couldn't load order.");
+                request.setAttribute("errorMsg", "Oops! We couldn't load your order for editing.");
+                request.getRequestDispatcher("DisplayOrdersServlet").forward(request, response);
+                return;
+            }
+            
+            // Get the original student order details and set into session
+                session.setAttribute("currentStudOrder", em.find(Studentorder.class, studOrder.getOrderid()));
+            
+            
             try{
-                mealId = request.getParameter("mealId");
-                utx.begin();
-                // Obtain meal object from database
-                Meal meal = em.find(Meal.class, mealId);
-                System.out.println(meal.getMealid());
 
-                // If the meal is currently discontinued
-                if (meal.getIsdiscontinued()) {
-                    // Toggle it
-                    meal.setIsdiscontinued(false);
-                    meal.setDatediscontinued(null);
-                    request.setAttribute("successMsg", "Meal has been re-enabled.");
-                } else {
-                    // If the meal is currently not discontinued
-                    // Toggle it
-                    meal.setIsdiscontinued(true);
-                   meal.setDatediscontinued(Auto.getToday());
-                   request.setAttribute("successMsg", "Meal has been discontinued.");
-                }
-                
-                // Update the meal object
-                em.merge(meal);
-                utx.commit();
-                
-                utx.begin();
-                // Get related list of Mealorder objects
-                TypedQuery<Mealfood> query = em.createQuery("SELECT mf FROM Mealfood mf where mf.mealid = :mealId", Mealfood.class).setParameter("mealId", meal);
-                List<Mealfood> mealFoodList = query.getResultList();
-
-                for (Mealfood mf : mealFoodList) {
-                    // If the mealFood is currently discontinued
-                    if (mf.getIsdiscontinued()) {
-                        // Toggle it
-                        mf.setIsdiscontinued(false);
-                    } else {
-                        // If the mealFood is currently not discontinued
-                        // Toggle it
-                        mf.setIsdiscontinued(true);
-                    }   
-                    
-                    
-                    //Update the objects
-                    em.merge(mf);
-                }
-                
-                // Update it
-                em.merge(meal);
-                utx.commit();
-                
-                //Update the meal in session
-                session.setAttribute("meal", meal);
-                
-                
-                request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
+                // Set the Studentorder to the session so that it can be used later for the editing steps
+                session.setAttribute("studOrderEdit", studOrder);
+                //Next step's page
+                response.sendRedirect("DisplayMealsEditServlet");
                 return;
                 
-            } catch (ConstraintViolationException e) {
-                System.out.println(e.getConstraintViolations());
             } catch (Exception ex) {
-                System.out.println("ERROR: Could not discontinue meal: " + ex.getMessage());
-                request.setAttribute("errorMsg", "Oops! Meal discontinuation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                System.out.println("ERROR: Could not load order details for edit: " + ex.getMessage());
                 ex.printStackTrace();
+                request.setAttribute("errorMsg", "Oops! We couldn't load your order for editing.");
+                request.getRequestDispatcher("DisplayOrdersServlet").forward(request, response);
                 return;
             }
         }

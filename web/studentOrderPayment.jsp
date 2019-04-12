@@ -24,7 +24,6 @@
             session = request.getSession(false);
             
             String permission = "";
-            String[] dateValue = null;
             Student stud = new Student();
 
             try {
@@ -112,7 +111,7 @@ SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
                 }%>
 
         </h6>
-
+<div class="mainContainer2">
         <%
             for (int i = 0; i < studOrder.getOrdermealList().size(); i++) {
                 Ordermeal om = studOrder.getOrdermealList().get(i);
@@ -121,7 +120,7 @@ SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
                 int price = om.getMealid().getPrice();
                 int quantity = om.getQuantity();
         %>
-        <div class="mainContainer2">
+        
             <div class="recordQuantity2">
                 <div class="frontPart">
                     <p class="name"><%=mealName%></p>

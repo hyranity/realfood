@@ -6,29 +6,31 @@
 package Controller.OrderManagement;
 
 import Controller.MealManagement.*;
+import Model.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.UserTransaction;
-import java.util.*;
-import Model.*;
-import java.text.SimpleDateFormat;
-import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
+import javax.transaction.UserTransaction;
+import javax.validation.ConstraintViolationException;
+import util.Auto;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "DisplayOrdersServlet", urlPatterns = {"/DisplayOrdersServlet"})
-public class DisplayOrdersServlet extends HttpServlet {
+@WebServlet(name = "OrderCancellationServlet", urlPatterns = {"/OrderCancellationServlet"})
+public class OrderCancellationServlet extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -48,14 +50,14 @@ public class DisplayOrdersServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
- String permission = "";
-        String previousUrl = "";
         
-        Student stud = new Student();
-        
+        String permission = "";
+        String orderId = "";
+        Student student = new Student();
         try {
             permission = (String) session.getAttribute("permission");
-            stud = (Student) session.getAttribute("stud");
+            student = (Student) session.getAttribute("stud");
+            
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -75,78 +77,62 @@ public class DisplayOrdersServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
-            
+
             try{
+                orderId = request.getParameter("orderId");
                 
-                // Get all food
-                TypedQuery<Studentorder> query = em.createQuery("SELECT so FROM Studentorder so where so.studentid = :studentId order by so.orderid desc", Studentorder.class).setParameter("studentId", stud);
-                List<Studentorder> soList = query.getResultList();
-                String queryResult = "";
-                int fourCount = 2;
+                
+                // Obtain order object from database
+                Studentorder studOrder = em.find(Studentorder.class, orderId);
+                
+                double refundRate = 0.8;
+                int creditRefunded = (int) java.lang.Math.round(refundRate * studOrder.getTotalprice());
+                
+                // Refund the student
+                student.setCredits(student.getCredits() + creditRefunded);
+                
+                utx.begin();
+                em.merge(student);
+                utx.commit();
 
-                // Format it for display
-                for (int i = 0; i < soList.size(); i++) {
-                   
-                    if (fourCount == 0) {
-                        queryResult += "<tr>";
-                    }
+                // Cancel the order
+                    studOrder.setIscanceled(true);
+                    studOrder.setDatecanceled(Auto.getToday());
+                    request.setAttribute("successMsg", "Order has been cancelled.");
+
+               
+
+                // Get related list of Ordermeal objects
+                TypedQuery<Ordermeal> query = em.createQuery("SELECT om FROM Ordermeal om where om.orderid = :orderId", Ordermeal.class).setParameter("orderId", studOrder);
+                List<Ordermeal> orderMealLists = query.getResultList();
+
+                for (Ordermeal om : orderMealLists) {
+                    // Cancel the associative entities
+                   om.setIscanceled(true);
                     
-                    // Display meal count
-                   String mealCount = soList.get(i).getOrdermealList().size() + " meal";
-                   
-                   SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
-                   String chosenDate = sm.format(soList.get(i).getChosendate());
-                   
-                   if(soList.get(i).getOrdermealList().size() > 1)
-                       mealCount += "s";
-                   
-                   String cancelStatus = "";
-                   if(soList.get(i).getIscanceled())
-                        cancelStatus = " <p style=\"color: red; font-weight: bold;\">CANCELLED</p>";
-
-                    queryResult += "<td>\n"
-                            + "                    <div class=\"record\">\n"
-                            + "                        <h6>" + soList.get(i).getOrderid() + "</h6>\n"
-                            + "                        <p>" + chosenDate + "</p>\n"
-                            + "                        <p>" + mealCount + "</p>\n"
-                            + "                        <p>" + soList.get(i).getTotalprice() + " credits</p>\n"
-                            + cancelStatus
-                            + "                        <a href=\"ViewOrderServlet?orderId=" + soList.get(i).getOrderid() + "\"><div class=\"editButton\">Manage</div></a>\n"
-                            + "                    </div>\n"
-                            + "                </td>";
-
-
-                    if (fourCount == 4) {
-                        queryResult += "</tr>";
-                        fourCount = 0;
-                    }
-                     fourCount++;
-                    
+                   utx.begin();
+                   em.merge(om);
+                   utx.commit();
                 }
                 
-                try {
-                    request.setAttribute("sucessMsg", request.getAttribute("successMsg"));
-                } catch (Exception e) {
-                    // If null, it means that its not redirected from order payment servlet, so its fine
-                }
+                 // Update the order object
+                utx.begin();
+                em.merge(studOrder);
+                utx.commit();
                 
-                try {
-                    request.setAttribute("errorMsg", request.getAttribute("errorMsg"));
-                } catch (Exception e) {
-                    // If null, it means that its not redirected from order payment servlet, so its fine
-                }
-                
-                // Send the formatted list to JSP
-                request.setAttribute("queryResult", queryResult);
-                request.getRequestDispatcher("displayOrder.jsp").forward(request, response);
+                request.setAttribute("successMsg", "Your order has been canceled.");
+                request.getRequestDispatcher("ViewOrderServlet"+orderId).forward(request, response);
                 return;
                 
-
-            } catch (Exception e) {
-                System.out.println("Could not obtain food list: " + e.getMessage());
-                e.printStackTrace();
+            } catch (ConstraintViolationException e) {
+                System.out.println(e.getConstraintViolations());
+            } catch (Exception ex) {
+                System.out.println("ERROR: Could not cancel order: " + ex.getMessage());
+                request.setAttribute("errorMsg", "Oops! Order cancellation did not succeed for some reason.");
+                request.getRequestDispatcher("viewOrder.jsp").forward(request, response);
+                ex.printStackTrace();
+                return;
             }
-
         }
     }
 

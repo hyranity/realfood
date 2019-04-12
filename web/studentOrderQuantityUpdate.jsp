@@ -1,3 +1,4 @@
+<%@page import="Model.Studentorder"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,24 +13,47 @@
         <title>Edit Particulars</title>
     </head>
     <body>
-                        <%
+  <%
             session = request.getSession(false);
-            
-            String permission = (String) session.getAttribute("permission");
-            
-            // If user is not logged in, redirect to login page
-            if (permission == null) {
+
+            String permission = "";
+
+            try {
+                permission = (String) session.getAttribute("permission");
+
+                if (permission == null) {
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+
+            } catch (NullPointerException ex) {
                 request.setAttribute("errorMsg", "Please login.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
-            else {
-                // Allow student only
-                if(!permission.equalsIgnoreCase("student")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+            // If user is not logged in, redirect to login page
+            // Allow student only
+            if (!permission.equalsIgnoreCase("student")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                
+             // Verify that the student accessed this properly
+            Studentorder studOrder = new Studentorder();
+            Studentorder currentStudOrder = new Studentorder();
+            try {
+                // Load the student's order from session
+                studOrder = (Studentorder) session.getAttribute("studOrderEdit");
+                currentStudOrder = (Studentorder) session.getAttribute("currentStudOrder");
+            } catch (Exception e) {
+                // If any error, means that the steps are not followed correctly
+                response.sendRedirect("DisplayOrdersServlet");
+            }
+            
+            int originalPrice = currentStudOrder.getTotalprice();
         %>
         <div class="stepsContainer">
             <h1>steps</h1>
@@ -43,44 +67,61 @@
         <h1 class="title">Update particulars</h1>
         <h5 id="subtitle">Modify the quantity of your meals.</h5>
 
-        <div class="mainContainer">
-            <div class="recordQuantity">
-                <div class="frontPart">
-                    <p class="name">Spaghetti Bolognese</p>
+        <form action="MealQuantityEditServlet" method="POST" id="mealQuantityForm">
+            <div class="mainContainer">
+            ${queryResultQuantity}
+            
+           <div class="total">
+               <p style="color: white;">Original total: <%=originalPrice%> credits</p>
+                <p id="totalPrice">New total: ${totalPrice} credits</p>
+            </div>
 
-                </div>
-                <div class="quantityEditor">
-                    <p class="value">1500 Credits</p>
-                    <p class="symbol" id="sub">-</p>
-                    <p class="quantity" data-quantity="5">x2</p>
-                    <p class="symbol" id="add">+</p>
-                </div>
-            </div>
             <br/>
-            <div class="recordQuantity">
-                <div class="frontPart">
-                    <p class="name">Peppermint Ice Cream</p>
-                </div>
-                <div class="quantityEditor">
-                    <p class="value">500 Credits</p>
-                    <p class="symbol" id="sub">-</p>
-                    <p class="quantity" data-quantity="5">x23</p>
-                    <p class="symbol" id="add">+</p>
-                </div>
             </div>
-            <br/>
-            <div class="total">
-                <p>Total: 4000 Credits</p>
+            <h6 class="credits">${totalPrice} credits</h6>
+
+            <div class="nextButtonDiv">
+                <button class="nextButton">Back</button>
+                <input class="nextButton" form="mealQuantityForm" type="submit" value="Next Step">
+                <br/>
             </div>
-            <h6 class="credits">1000 credits</h6>
-        </div>
-        <div>
-            <button class="nextButton">Back</button>
-            <button class="nextButton">Next step</button>
-        </div>
-        <%
-        }
-        %>
+        </form>
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".symbol").click(function (event) {
+                var id = event.target.id;
+                symbolId = id.substring(0, 3);
+                var targetId = id.substring(3);
+                var quantity = parseInt($("#" + targetId).val());
+
+                // Update quantity
+                if (symbolId == "add") {
+                    quantity++;
+                } else {
+                    if (quantity != 1)
+                        quantity--;
+                }
+                $("#" + targetId).val(quantity);
+                var priceId = "#price" + targetId;
+                var price = quantity * parseInt($(priceId).data("price"));
+                $("#price" + targetId).text(price + " credits");
+
+                var sum = 0;
+
+                $(".value").each(function () {
+                    var priceId = "#price" + targetId;
+                    var price = quantity * parseInt($(priceId).data("price"));
+
+                    sum += parseInt($(this).html());
+                });
+
+
+                $("#totalPrice").html("New total: " + sum + " credits");
+
+            });
+        });
+    </script>
 </html>

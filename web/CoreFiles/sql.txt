@@ -1,0 +1,127 @@
+create table SchoolSystemStudent (
+    studentID VARCHAR(10) NOT NULL,
+    firstName VARCHAR(25) NOT NULL,
+    lastName VARCHAR(25) NOT NULL,
+    studentEmail VARCHAR(50) NOT NULL,
+    gender CHAR(1) NOT NULL,
+    isEnrolled boolean NOT NULL,
+    dateJoined DATE NOT NULL,
+    myKAD VARCHAR(14) NOT NULL,
+
+    primary key (studentID)
+);
+
+create table Student (
+    studentID VARCHAR(10) NOT NULL,
+    firstName VARCHAR(25) NOT NULL,
+    lastName VARCHAR(25) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    passwordSalt VARCHAR(40) NOT NULL,
+    password VARCHAR(40) NOT NULL,
+    gender CHAR(1) NOT NULL,
+    myKAD VARCHAR(13) NOT NULL,
+    credits INTEGER NOT NULL,
+    dateJoined DATE NOT NULL,
+
+    primary key (studentID)
+);
+
+
+create table Notification(
+    notificationID VARCHAR(10) NOT NULL,
+    title VARCHAR(20) NOT NULL,
+    description VARCHAR(50) NOT NULL,
+    dateIssued DATE NOT NULL,
+
+    primary key (notificationID)
+);
+
+create table NotificationStudent (
+    notificationStudentID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    studentID VARCHAR(10) references student(studentID) NOT NULL,
+    notificationID VARCHAR(10) references notification(notificationID) NOT NULL,
+    isRead BOOLEAN NOT NULL,
+
+    primary key (notificationStudentID)
+);
+
+
+create table StudentOrder (
+    orderID VARCHAR(12) NOT NULL,
+    chosenDate date NOT NULL,
+    studentID VARCHAR(10) references student(studentID) NOT NULL,
+    couponCode VARCHAR(7) NOT NULL,
+    isRedeemed boolean NOT NULL,
+    isCanceled boolean NOT NULL,
+    totalPrice INTEGER NOT NULL,
+    dateCanceled DATE,
+
+    primary key (orderID)
+);
+
+
+create table meal (
+   mealID VARCHAR(10) NOT NULL,
+   mealName VARCHAR(20) NOT NULL,
+   description VARCHAR(35) NOT NULL,
+   price INTEGER NOT NULL,
+   isDiscontinued BOOLEAN NOT NULL,
+   dateAdded date NOT NULL,
+   dateDiscontinued date,
+   totalCalories integer NOT NULL,
+   mealImageLink VARCHAR(200) NOT NULL,
+   isBreakfast BOOLEAN NOT NULL,
+   isLunch BOOLEAN NOT NULL,
+   
+    primary key (mealID)
+ 
+);
+
+
+create table food (
+  foodID VARCHAR(7) NOT NULL,
+  foodName VARCHAR(20) NOT NULL,
+  dateAdded date NOT NULL,
+   isDiscontinued boolean NOT NULL,
+   dateDiscontinued date,
+   calories integer NOT NULL,
+   
+primary key (foodID)
+ 
+);
+
+create table mealFood (
+    mealFoodID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    mealID VARCHAR(10) references meal(mealID) NOT NULL,
+    foodID VARCHAR(7) references food(foodID) NOT NULL,
+    quantity INTEGER NOT NULL,
+   isDiscontinued boolean NOT NULL,	
+    
+    primary key (mealFoodID)
+);
+
+create table OrderMeal (
+    orderMealID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    orderID VARCHAR(12) references StudentOrder(orderID) NOT NULL,
+    mealID VARCHAR(10) references meal(mealID) NOT NULL,
+    quantity INTEGER NOT NULL,
+    isCanceled boolean NOT NULL,
+    
+    primary key (orderMealID)
+);
+
+create table Staff (
+    staffID VARCHAR(8) NOT NULL,
+    firstName VARCHAR(25) NOT NULL,
+    lastName VARCHAR(25) NOT NULL,
+    gender char(1) NOT NULL,
+    isHired boolean NOT NULL,
+    dateJoined date NOT NULL,
+    staffRole VARCHAR(15) NOT NULL,
+    myKAD VARCHAR(13) NOT NULL,
+    passwordSalt VARCHAR(40) NOT NULL,
+    password VARCHAR(40) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    
+    primary key (staffID)
+);

@@ -105,14 +105,14 @@ public class ProcessPaymentServlet extends HttpServlet {
                 // Get the latest student details
                 student = em.find(Student.class, student.getStudentid());
                 
+                 // Charge the student
+                    student.setCredits(student.getCredits() - (studOrder.getTotalprice()));
+                    
+                
                 // Add to database
                     utx.begin();
                     em.merge(student);
                     utx.commit();
-                
-                    
-                    // Charge the student
-                    student.setCredits(student.getCredits() - (studOrder.getTotalprice()));
 
                 //For generating ID
                 TypedQuery<Studentorder> query = em.createQuery("SELECT s FROM Studentorder s", Studentorder.class);

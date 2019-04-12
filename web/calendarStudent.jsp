@@ -116,7 +116,7 @@ and open the template in the editor.
 
             <h1 class="title">Current day is</h1><h1 class="dynamicTitle" data-date="<%=dynamicTitle%>"><%=dynamicTitle%></h1>
             <br>
-            <p class="instruction">Select a date. You may select more than one if you want the same meals.</p>
+            <p class="instruction">Select dates. All dates will share the same order specifications.</p>
             <br>
             <div class="errorMsg">${errorMsg}</div>
             <br>

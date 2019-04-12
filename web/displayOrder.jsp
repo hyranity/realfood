@@ -44,7 +44,8 @@
         <form class="searchForm">
             <input type="text" name="query" placeholder="search..." class="searchBar"/>
         </form>
-        <div style="display: inline;" class="successMsg">${successMsg}</div>
+        <div class="successMsgAbsolute">${successMsg}</div>
+        <div class="errorMsg">${errorMsg}</div>
 <div class="bodyContainer">
         <table class="recordTable">
             
