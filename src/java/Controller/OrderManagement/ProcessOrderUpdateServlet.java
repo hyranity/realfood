@@ -97,7 +97,7 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
                 return;
             }
             
-            // DISPLAY UNTIL HERE
+            // ================
 
             try {
                 // Get student from session, which won't be null if the previous validations are passed
