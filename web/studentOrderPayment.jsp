@@ -4,7 +4,9 @@
     Author     : Richard Khoo
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -28,7 +30,7 @@
             try {
                 permission = (String) session.getAttribute("permission");
                 stud = (Student) session.getAttribute("stud");
-                stud.getFirstname();
+                stud.getFirstname(); // Triggers exceptions, if any
                 if (permission == null) {
                     request.setAttribute("errorMsg", "Please login.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -50,20 +52,29 @@
             } else {
 
                 Studentorder studOrder = new Studentorder();
-
+                List<Date> chosenDates = new ArrayList();
+                
                 // Attempt to get studOrder
                 try {
                     studOrder = (Studentorder) session.getAttribute("studOrder");
                     studOrder.getTotalprice(); // If null, it will cause an exception
-                    dateValue = (String[]) session.getAttribute("dateValue");
+                    chosenDates = (List<Date>) session.getAttribute("chosenDates");
                 } catch (Exception e) {
                     // If cannot get, means user did not follow the steps
                     request.getRequestDispatcher("calendarStudent.jsp").forward(request, response);
                     System.out.println("Couldn't get data from session for studentOrderPayment.jsp: " + e.getMessage());
                 }
 
-                int credits = stud.getCredits();
+                int credits = stud.getCredits();    // Obtain student's credits amount
                 int totalPrice = studOrder.getTotalprice();
+                int grandTotal = totalPrice * chosenDates.size();
+                int dateCount = chosenDates.size();
+                
+                String totalStr ="Total: " + grandTotal;
+                
+// For formatting the dates
+SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
+                
 
         %>
         <div class="stepsContainer">
@@ -82,7 +93,9 @@
         <h6 style="color: gold; font-size: 15px; ">
             <!-- Print the dates -->
             <%                int count = 0;
-                for (String dateStr : dateValue) {
+                for (Date date : chosenDates) {
+                    
+                    String dateStr = sm.format(date);
             %>
 
             <!-- Print commas if not the first one -->
@@ -114,7 +127,7 @@
                     <p class="name"><%=mealName%></p>
 
                 </div>
-                <div class="quantityEditor">
+                <div class="quantityEditor">    
                     <p class="value"><%=price%> Credits</p>
                     <p class="quantity" style="background-color: black;">x<%=quantity%></p>
                 </div>
@@ -123,7 +136,9 @@
 
             <%}%>
             <div class="total2">
-                <p>Total: <%=totalPrice%> Credits</p>
+                    <p style=""><%=totalPrice%> credits (per date) x <%=dateCount%> days</p>
+                <p style="font-size: 24px; color: gold;"><%=totalStr%> credits</p>
+                <p style="color: darkcyan; margin-top: 100px;">Note: Each date will have a separate order.</p>
             </div>
 
         </div>
@@ -141,16 +156,17 @@
 
                     <!-- If student cannot afford, block the button -->
                     <%
-                        if (totalPrice > credits) {
+                        if (grandTotal > credits) {
                     %>
                     <button class="insufficientButton" href="" type="submit" disabled>Not enough credits</button>
                     <%
                     } else {
                     %>
-                    <a class="nextButton" href="ProcessPaymentServlet" type="submit">PAY <%=totalPrice%> CREDITS</a>
+                    <a class="nextButton" href="ProcessPaymentServlet" type="submit">PAY <%=grandTotal%> CREDITS</a>
                     <%}%>
                 </div>
             </form>
+                <!-- Display student's credits -->
             <h6 class="credits"><%=credits%> credits</h6>
         </div>
         <%}%>

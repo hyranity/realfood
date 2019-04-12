@@ -44,36 +44,20 @@
         <form class="searchForm">
             <input type="text" name="query" placeholder="search..." class="searchBar"/>
         </form>
+        <div style="display: inline;" class="successMsg">${successMsg}</div>
 <div class="bodyContainer">
         <table class="recordTable">
+            
             <tr>
                 <td>
-                        <div class="add">
+                    <a href="calendarStudent.jsp"><div class="add">
                             +
-                        </div>
+                        </div></a>
                 </td>
-                <td>
-                    <div class="record">
-                        <h6>O00001</h6>
-                        <p>5 meals</p>
-                        <p>20305 credits</p>
-                        <a href=""><div class="updateButton">Update</div></a>
-                        <a href=""><div class="viewButton">View</div></a>
-                    </div>
-                </td>
-                <td>
-                    <div class="record">
-                        <h6>O00001</h6>
-                        <p>5 meals</p>
-                        <p>20305 credits</p>
-                        <a href=""><div class="updateButton">Update</div></a>
-                        <a href=""><div class="viewButton">View</div></a>
-                    </div>
-                </td>
-            </tr>
-        </table>
+                ${queryResult}
+        </table> 
     </div>
-        <div><button class="nextButton" href="" type="submit" >Back</button></div>
+        <div><button class="nextButton" href="dashboardStudent.jsp"  >Back</button></div>
         <%}%>
 </body>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

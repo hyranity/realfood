@@ -25,7 +25,6 @@ import javax.validation.ConstraintViolationException;
 import util.Auto;
 import util.CodeGenerator;
 
-
 /**
  *
  * @author mast3
@@ -68,7 +67,9 @@ public class ProcessPaymentServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
-         
+        
+        
+
         // If user is not logged in, redirect to login page
         // Allow student only
         if (!permission.equalsIgnoreCase("student")) {
@@ -76,12 +77,13 @@ public class ProcessPaymentServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
-            
+
             // Attempt to get student order from session
             Studentorder studOrder = new Studentorder();
             try {
                 studOrder = (Studentorder) session.getAttribute("studOrder");
                
+
                 // Exception trigger
                 studOrder.getOrderid(); // If this is null, it will cause an exception, which will redirect the student to first step.
 
@@ -89,104 +91,148 @@ public class ProcessPaymentServlet extends HttpServlet {
                     response.sendRedirect("calendarStudent.jsp");
                     return;
                 }
-                
+
             } catch (Exception e) {
                 //If there's an error, redirect the student to the first step
                 response.sendRedirect("calendarStudent.jsp");
                 return;
             }
- 
+
             try {
                 // Get student from session, which won't be null if the previous validations are passed
                 Student student = (Student) session.getAttribute("stud");
-                
-               
-                
-                // COUPON CODE GENERATION
-                String couponCode = "";
-                boolean codeExists = true;
-                do {
-                    try {
-                        //Generate coupon code
-                        CodeGenerator codeGenerator = new CodeGenerator("numletters");
-                         couponCode = codeGenerator.generateCode();
 
-                        // Check database to ensure that there's no duplication
-                        TypedQuery<Studentorder> checkQuery = em.createQuery("SELECT so FROM Studentorder so WHERE so.couponcode = :couponCode", Studentorder.class).setParameter("couponCode", couponCode);
-                        Studentorder tempStudentOrder = checkQuery.getSingleResult();
-
-                        if (tempStudentOrder.getOrderid() != null) {
-                            codeExists = true;
-                        }
-                        else
-                            codeExists = false;
-                    } catch (NoResultException | NullPointerException e) {
-                        // No problem if no results or is null
-                        codeExists = false;
-                    }
-                } while (codeExists);
-
+                // Get the latest student details
+                student = em.find(Student.class, student.getStudentid());
                 
-                //Generate ID
+                // Add to database
+                    utx.begin();
+                    em.merge(student);
+                    utx.commit();
+                
+                    
+                    // Charge the student
+                    student.setCredits(student.getCredits() - (studOrder.getTotalprice()));
+
+                //For generating ID
                 TypedQuery<Studentorder> query = em.createQuery("SELECT s FROM Studentorder s", Studentorder.class);
                 int count = query.getResultList().size();
 
-                // Set all the necessary fields
-                studOrder.setOrderid(Auto.generateID("O", 10, count));    // Set order ID
-                studOrder.setIscanceled(false);
-                studOrder.setCouponcode(couponCode);
-                studOrder.setIsredeemed(false);
-
-                // Charge the student
-                student.setCredits(student.getCredits() - studOrder.getTotalprice());
-                
                 // Create duplicate date objects, depending on how many dates have been chosen
-                String[] dateValue = (String[]) session.getAttribute("dateValue");
-                int dayCount = dateValue.length;
+                List<Date> chosenDates = (List<Date>) session.getAttribute("chosenDates");
+                int dayCount = chosenDates.size();
                 
-                Studentorder[] soList = new Studentorder[dayCount]; // Creates an array of orders
-                
-                // Assign each date to each order
-                for (int i = 0; i < dateValue.length; i++) {
-                    // Split the date value
-                    int indexOfDivider = dateValue[i].indexOf('/');                                                                             // Locate the first divisor
-                    int day = Integer.parseInt(dateValue[i].substring(0, indexOfDivider));                                    // Extract the first char to the one before the divisor
-                    String currentDateValue = dateValue[i].substring(indexOfDivider, dateValue[i].length());    // Extract the new string, from the divisor to the end of the string
-                    indexOfDivider = dateValue[i].indexOf('/');                                                                                    // Repeat the steps
-                    int month = Integer.parseInt(dateValue[i].substring(0, indexOfDivider));                              // Extract the month
-                    currentDateValue = dateValue[i].substring(indexOfDivider, dateValue[i].length());               // Extract the new string, from the divisor to the end of the string
-                    indexOfDivider = dateValue[i].indexOf('/');                                                                                   // Repeat the steps
-                   int year = Integer.parseInt(dateValue[i].substring(0, indexOfDivider));                         // Extract the year
-                   
-                    Date date = new Date();
+
+
+                List<Studentorder> currentOrderList = student.getStudentorderList();     // Get the current order list
+
+                // Create the orders. One order for each date
+                for (int i = 0; i < chosenDates.size(); i++) {
                     
-                    //NOTE: Apologize for using deprecated methods and classes, but it's the simplest I could understand and hence used due to time constraints
-                    // Set date fields
-                    date.setDate(day);
-                    date.setMonth(month);
-                    date.setYear(year);
+                    // Initiate the element
+                    Studentorder so= studOrder;
                     
-                    // Current ERROR: This returns nullexception
-                    soList[i].setChosendate(date);
+                 
+
+                    // COUPON CODE GENERATION
+                    String couponCode = "";
+                    int loopCount = 0;
+
+                        boolean codeExists = false;
+                        boolean codeExistsInDB = false;
+                        do {
+                            codeExists = false;
+                            codeExistsInDB = false;
+                            loopCount++;
+                            try {
+                                //Generate coupon code
+                                CodeGenerator codeGenerator = new CodeGenerator();
+                                couponCode = codeGenerator.generateCode(7);
+
+                                // Check database to ensure that there's no duplication
+                                TypedQuery<Studentorder> checkQuery = em.createQuery("SELECT so FROM Studentorder so WHERE so.couponcode = :couponCode", Studentorder.class).setParameter("couponCode", couponCode);
+                                Studentorder tempStudentOrder = checkQuery.getSingleResult();
+
+                                if (tempStudentOrder.getOrderid() != null) {
+                                    codeExists = true;
+                                    codeExistsInDB = true;
+                                    System.out.println("Same coupon in DB! = " + couponCode);
+                                } else {
+                                    codeExists = false;
+                                }
+
+                            } catch (NoResultException e) {
+                                // No problem if no results or is null
+                            }
+
+                            if (!codeExistsInDB) {
+                                // Check the orderList to ensure that there's also no duplication
+                                for (int x = 0; x < currentOrderList.size(); x++) {
+                                    if (currentOrderList.get(i).getCouponcode().equals(couponCode)) {
+                                        codeExists = true;
+                                        break;
+                                    } else {
+                                        codeExists = false;
+                                    }
+                                }
+                            }
+                            if (loopCount == 100) {
+                                System.out.println("ERROR: LOOP BREAK TO STOP INFINITE LOOP! ");
+                                System.out.println("");
+                                break;
+                            }
+
+                        } while (codeExists || codeExistsInDB);
+
+                        // If code is unique, add into the list
+                        if (!codeExists) {
+                            studOrder.setCouponcode(couponCode);
+                            currentOrderList.add(studOrder);
+                        } else {
+                            System.out.println("ERROR: Cannot add code " + couponCode + " as it already exists.");
+                        }
+                        
+                    // Set all the necessary fields
+                    studOrder.setChosendate(chosenDates.get(i));       // Store the date into the list of student orders
+                    studOrder.setStudentid(student); // Also set student ID
+                    studOrder.setIscanceled(false);
+                    studOrder.setIscanceled(false);
+                    studOrder.setCouponcode(couponCode);
+                    studOrder.setIsredeemed(false);
+                    studOrder.setTotalprice(studOrder.getTotalprice());
+                    
+                    studOrder.setOrderid(Auto.generateID("O", 10, count + i));    // Set order ID 
+                    
+                    for(Ordermeal om : studOrder.getOrdermealList()){
+                        om.setOrderid(studOrder);
+                    }
+               
+                    currentOrderList.add(studOrder);
+                    
+
+                    
+                    
+                    // Add to database
+                    utx.begin();
+                    em.persist(studOrder);
+                    utx.commit();
                 }
                 
-                // Add into student object
-                student.getStudentorderList().add(studOrder);
                 
-                // Save to database
-                utx.begin();
-                em.persist(studOrder);
-                utx.commit();
-                
+
                 //Update session
                 session.setAttribute("stud", student);
                 session.setAttribute("studOrder", null);
-                
+
                 //Redirect to my orders page
-                System.out.println("Payment successful");
+                request.setAttribute("successMsg", "You have successfully made an order.");
+            request.getRequestDispatcher("DisplayOrdersServlet").forward(request, response);
+            return;
 
             } catch (ConstraintViolationException ex) {
-                ex.getConstraintViolations();
+
+                System.out.println("ERROR: Couldn't merge student after payment.");
+                System.out.println(ex.getConstraintViolations());
             } catch (Exception ex) {
                 ex.printStackTrace();
                 System.out.println("Couldn't process payment!");

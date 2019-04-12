@@ -1,3 +1,8 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="Model.Meal"%>
+<%@page import="Model.Ordermeal"%>
+<%@page import="Model.Studentorder"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,24 +17,50 @@
     </head>
     <body>
         <%
-            session = request.getSession(false);
+            request.getSession(false);
+        
+        String permission = "";
+        
+        try {
+            permission = (String) session.getAttribute("permission");
             
-            String permission = (String) session.getAttribute("permission");
-            
-            // If user is not logged in, redirect to login page
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+            
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // If user is not logged in, redirect to login page
+        // Allow student only
+        if (!permission.equalsIgnoreCase("student")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+            Studentorder so = new Studentorder();
+            
+            try {
+                    so = (Studentorder) session.getAttribute("studentOrder");
+                } catch (Exception e) {
+                    // This will be triggered if the page is accessed directly, hence redirect to dashboard
+                    response.sendRedirect("studentDashboard.jsp");
                 }
-            else {
-                // Allow student only
-                if(!permission.equalsIgnoreCase("student")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
-        %>
+            
+                String orderId = so.getOrderid();
+                
+                // Set the chosen date
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(so.getChosendate());
+                String dateStr = cal.get(Calendar.DAY_OF_MONTH) + " " +  cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + ", " + cal.get(Calendar.YEAR) + " (" + cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH) + ")";
+                String couponCode = so.getCouponcode();
+                int totalPrice = so.getTotalprice();
+    %>
         <div class="outsideContainer">
 
             <h1>My Order</h1>
@@ -40,28 +71,50 @@
                 <a href=""><div class="couponPage">Print coupon code</div></a>
                     <br/>
                     <div class="orderDetails">
-                        <h2 id="orderId">O000001</h2>
+                        <h2 id="orderId"><%=orderId%></h2>
                         <br/>
-                        <p class="mealItem" >Spaghetti Carbonara w/  BBQ Pork Sauce</p><p class="lunch">Lunch</p><p class="quantity">x1</p>
+                        <%
+                        for(Ordermeal om : so.getOrdermealList()){
+                            
+                            Meal meal = om.getMealid();
+                            String mealName = om.getMealid().getMealname();
+                            int quantity = om.getQuantity();
+                        %>
+                        <p class="mealItem" ><%=mealName%></p>
+                        
+                        <!-- Display the meal time -->
+                        <%
+                        if(meal.getIsbreakfast()){
+                        %>
+                        <p class="breakfast">Breakfast</p>
+                        <%
+                            } else if(meal.getIslunch()){
+                        %>
+                        <p class="lunch">Lunch</p>
+                        <%
+                            } else{
+                        %>
+                        <p class="allDay">All Day</p>
+                        <%
+                            }
+                        %>
+                        
+                        <p class="quantity">x<%=quantity%></p>
                         <br/>
-                        <p class="mealItem" >Spaghetti Carbonara w/  BBQ Pork Sauce</p><p class="breakfast">Bkfast</p><p class="quantity">x1</p>
-                        <br/>
-                        <p class="mealItem" >Spaghetti Carbonara w/  BBQ Pork Sauce</p><p class="lunch">Lunch</p><p class="quantity">x1</p>
-                        <br/>
-                        <p class="mealItem" >Spaghetti Carbonara w/  BBQ Pork Sauce</p><p class="breakfast">Bkfast</p><p class="quantity">x1</p>
+                        <%}%>
                         <br/>
                         <br/>
                         <p class="smallText">to be served on</p>
                         <br/>
-                        <p class="chosenDate" id="chosenDate">14 May, 2019 (Tuesday)</p>
+                        <p class="chosenDate" id="chosenDate"><%=dateStr%></p>
                         <br/>
                         <p class="smallText">total price</p>
                         <br/>
-                        <p class="totalPrice" id="totalPrice">1200 Credits</p>
+                        <p class="totalPrice" id="totalPrice"><%=totalPrice%> Credits</p>
                         <br/>
                         <p class="smallText">coupon code</p>
                         <br/>
-                        <p class="couponCode" id="couponCode">aK5sXmS</p>
+                        <p class="couponCode" id="couponCode"><%=couponCode%></p>
                         <br/>
                         <br/>
                         <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable">Cancel Order</div></a>
@@ -71,7 +124,7 @@
         </div>
         <a href=""><div class="back" style="margin-bottom: 30px;">Back</div></a>
         <div class="toggleDisableConfirmation">
-            <h5>Discontinue order?</h5>
+            <h5>Cancel order?</h5>
             <p>The order will be canceled and you will receive an 80% refund.</p>
             <a href="#"><div class="toggleDisableConfirm">Yes</div></a>
             <a href="#"><div class="toggleDisableCancel">No</div></a>

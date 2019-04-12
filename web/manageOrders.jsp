@@ -15,30 +15,29 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link href="CSS/manageRecords.css" rel="stylesheet">
         <link href="CSS/commonStyles.css" rel="stylesheet">
-        <title>My orders</title>
+        <title>Manage food</title>
     </head>
     <body>
-                <%
+        <%
             session = request.getSession(false);
-            
+
             String permission = (String) session.getAttribute("permission");
-            
+
             // If user is not logged in, redirect to login page
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
-            else {
-                // Allow student only
-                if(!permission.equalsIgnoreCase("student")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                // Allow staff only
+                if (!permission.equalsIgnoreCase("student")) {
+                    request.setAttribute("errorMsg", "You are not allowed to visit that page.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;
                 }
         %>
         <h1>My Orders</h1><br><br>
-        <h4 id="subtitle">Here you can manage orders. Viewing orders also allow you to print the coupon code.</h4>
+        <h4 id="subtitle">Here you can manage your orders. Click manage to view order details.</h4>
 
         <!-- Search bar -->
         <form class="searchForm">
@@ -48,59 +47,44 @@
         <table class="recordTable">
             <tr>
                 <td>
+                    <a href="calendarStudent.jsp">
                         <div class="add">
                             +
                         </div>
+                    </a>
                 </td>
-                <td>
-                    <div class="record">
-                        <h6>O00001</h6>
-                        <p>5 meals</p>
-                        <p>20305 credits</p>
-                        <a href=""><div class="updateButton">Update</div></a>
-                        <a href=""><div class="viewButton">View</div></a>
-                    </div>
-                </td>
-                <td>
-                    <div class="record">
-                        <h6>O00001</h6>
-                        <p>5 meals</p>
-                        <p>20305 credits</p>
-                        <a href=""><div class="updateButton">Update</div></a>
-                        <a href=""><div class="viewButton">View</div></a>
-                    </div>
-                </td>
-            </tr>
+                ${queryResult}
         </table>
     </div>
         <div><button class="nextButton" href="" type="submit" >Back</button></div>
-        
         <%}%>
 </body>
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
         $(".editButton").hover(function () {
-            $("#subtitle").html("Edit orders (or view details).");
+            $("#subtitle").html("Edit food (or view details).");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here you can manage orders. Edit orders to view their details.");
+            $("#subtitle").html("Here you can manage your orders. Click manage to view order details.");
             $("#subtitle").css("color", "white");
         });
         $(".add").hover(function () {
-            $("#subtitle").html("Add new orders.");
+            $("#subtitle").html("Add new order.");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here you can manage orders. Edit orders to view their details.");
+           $("#subtitle").html("Here you can manage your orders. Click manage to view order details.");
             $("#subtitle").css("color", "white");
         });
         $(".searchBar").hover(function () {
             $("#subtitle").html("Search by ID or name.");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here you can manage orders. Edit orders to view their details.");
+            $("#subtitle").html("Here you can manage your orders. Click manage to view order details.");
             $("#subtitle").css("color", "white");
         });
     });
 </script>
+        
 </html>

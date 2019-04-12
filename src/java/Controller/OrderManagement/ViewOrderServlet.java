@@ -6,13 +6,12 @@
 package Controller.OrderManagement;
 
 import Controller.MealManagement.*;
-import Model.*;
+import Model.Meal;
+import Model.Mealfood;
+import Model.Studentorder;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,18 +22,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-import util.*;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "MealQuantityServlet", urlPatterns = {"/MealQuantityServlet"})
-public class MealQuantityServlet extends HttpServlet {
-    
+
+@WebServlet(name = "ViewOrderServlet", urlPatterns = {"/ViewOrderServlet"})
+public class ViewOrderServlet extends HttpServlet {
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -52,20 +48,20 @@ public class MealQuantityServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+         HttpSession session = request.getSession(false);
         
-        HttpSession session = request.getSession(false);
-            
-           String permission = "";
-
+        String permission = "";
+        String previousUrl = "";
+        
         try {
             permission = (String) session.getAttribute("permission");
-
+            
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-
+            
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -80,64 +76,31 @@ public class MealQuantityServlet extends HttpServlet {
             return;
         } else {
             
-            //Values
-            Studentorder studOrder = new Studentorder();
-            List<Ordermeal> orderMealList = (List<Ordermeal>) session.getAttribute("orderMealList");
- 
+            Studentorder so = new Studentorder();
+            String orderId = "";
             
-            // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
-            //Hence, redirect to first page.
-            if (orderMealList == null) {
-                response.sendRedirect("DisplayFoodSelectionServlet");
-            }
-            
-            try{
-
-                int totalPrice = 0;
-            for(int i=0; i<orderMealList.size(); i++){
-                
-                //Get the meal ID from the list
-                String mealId = orderMealList.get(i).getMealid().getMealid();
-                
-                // Using the meal ID, get its respective quantities from the JSP form
-                int quantity = Integer.parseInt(request.getParameter(mealId));
-                
-                // Insert the obtained quantity into the object from the list
-                orderMealList.get(i).setQuantity(quantity);
-                orderMealList.get(i).setIscanceled(false);
-                orderMealList.get(i).setQuantity(quantity);
-                
-                totalPrice += quantity * orderMealList.get(i).getMealid().getPrice();
-            }
-            
-            
-            studOrder.setTotalprice(totalPrice);
-            studOrder.setOrdermealList(orderMealList);
-                
-            
-                for (int i = 0; i < orderMealList.size(); i++) {
-                    System.out.println(orderMealList.get(i).getMealid().getMealid() + " x " + orderMealList.get(i).getQuantity());
-                }
-
-                //Save into session first
-                session.setAttribute("orderMealList", orderMealList);
-                session.setAttribute("studOrder", studOrder);
-
-                //Update step status
-                session.setAttribute("step", "stepThree");
-
-                //Next step's page
-                request.getRequestDispatcher("studentOrderPayment.jsp").forward(request, response);
-                return;
-
-                // END OF STEP 1
-            } catch (Exception ex) {
-                System.out.println("ERROR: Could not calculate meal quantity: " + ex.getMessage());
-                ex.printStackTrace();
-                request.setAttribute("errorMsg", "Oops! Meal quantity did not succeed for some reason.");
-                request.getRequestDispatcher("SelectMealServlet").forward(request, response);
+            try {
+                orderId = request.getParameter("orderId");
+                so = em.find(Studentorder.class, orderId);
+            } catch (Exception e) {
+                // If exception is thrown, just redirect student to dashboard
+                response.sendRedirect("dashboardStudent.jsp");
                 return;
             }
+
+            try {
+
+                // Set studentOrder to session so it can be displayed
+               session.setAttribute("studentOrder", so);
+                
+                request.getRequestDispatcher("viewOrder.jsp").forward(request, response);
+                return;
+
+            } catch (Exception e) {
+                System.out.println("Could not obtain order list: " + e.getMessage());
+                e.printStackTrace();
+            }
+
         }
     }
 

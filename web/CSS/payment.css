@@ -125,3 +125,10 @@ form input:focus{
     -o-border-radius: 50px;
     -ms-border-radius: 50px;
 }
+
+
+.subtotal{
+    display: inline-block;
+    text-align: left;
+    width: 50%;
+}

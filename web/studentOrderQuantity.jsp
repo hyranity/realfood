@@ -55,6 +55,7 @@
 
 
         <form action="MealQuantityServlet" method="POST" id="mealQuantityForm">
+            <div class="mainContainer">
             ${queryResultQuantity}
             
            <div class="total">
@@ -62,7 +63,7 @@
             </div>
 
             <br/>
-            
+            </div>
             <h6 class="credits">${totalPrice} credits</h6>
 
             <div class="nextButtonDiv">

@@ -41,7 +41,7 @@
             <h4 id="subtitle">Here's your dashboard.</h4>
             <div class="credits">1000 Credits</div>
             <div class="buttonsContainer">
-                <a href="#"><div class="buttonDiv" id="order">my orders</div></a>
+                <a href="DisplayOrdersServlet"><div class="buttonDiv" id="order">my orders</div></a>
                 <a href="#"><div class="buttonDiv" id="notification">my notifications</div></a>
                 <br/>
                 <a href="calendarStudent.jsp"><div class="buttonDiv" id="makeOrder">make an order</div></a>

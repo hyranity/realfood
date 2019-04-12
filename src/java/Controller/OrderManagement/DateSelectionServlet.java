@@ -9,6 +9,9 @@ import Model.Meal;
 import Model.Mealfood;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
@@ -67,19 +70,39 @@ public class DateSelectionServlet extends HttpServlet {
             try {
 
                 String dateValue[];
+                List<Date> chosenDates = new ArrayList();
 
                 try {
-                    dateValue = request.getParameterValues("dateValue");
-                    System.out.println(dateValue[0]);
+                    dateValue = request.getParameterValues("chosenDates");
+                   int exceptionTrigger = dateValue.length;
                 } catch (NullPointerException e) {
                     request.setAttribute("errorMsg", "Please select a date!");
                     request.getRequestDispatcher("calendarStudent.jsp").forward(request, response);
                     return;
                 }
                 
+                for (int i = 0; i < dateValue.length; i++) {
+                    // Split the date value
+                    int indexOfDivider = dateValue[i].indexOf('/');                                                                             // Locate the first divider
+                    int day = Integer.parseInt(dateValue[i].substring(0, indexOfDivider));                                    // Extract the first char to the one before the divider
+                    String currentDateValue = dateValue[i].substring(indexOfDivider, dateValue[i].length());    // Extract the new string, from the divider to the end of the string
+                    indexOfDivider = dateValue[i].indexOf('/');                                                                                    // Repeat the steps
+                    int month = Integer.parseInt(dateValue[i].substring(0, indexOfDivider));                              // Extract the month
+                    currentDateValue = dateValue[i].substring(indexOfDivider, dateValue[i].length());               // Extract the new string, from the divider to the end of the string
+                    indexOfDivider = dateValue[i].indexOf('/');                                                                                   // Repeat the steps
+                    int year = Integer.parseInt(dateValue[i].substring(0, indexOfDivider)) + 2000;                         // Extract the year, plus 2000
+                    
+                    Date date = new SimpleDateFormat("dd/MM/yyyy").parse(dateValue[i]);
+
+                    //NOTE: Apologize for using deprecated methods and classes, but it's the simplest I could understand and hence used due to time constraints
+                    // Set date fields
+                    
+                    chosenDates.add(date);
+                }
+                
                 
                 // Set the result to session
-                session.setAttribute("dateValue", dateValue);
+                session.setAttribute("chosenDates", chosenDates);
                 
 
                 // Send the formatted list to JSP
