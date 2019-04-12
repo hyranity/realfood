@@ -5,11 +5,8 @@
  */
 package Controller.OrderManagement;
 
-import Controller.MealManagement.*;
 import Model.*;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
@@ -27,8 +24,8 @@ import javax.transaction.UserTransaction;
  *
  * @author mast3
  */
-@WebServlet(name = "SelectMealServlet", urlPatterns = {"/SelectMealServlet"})
-public class SelectMealServlet extends HttpServlet {
+@WebServlet(name = "SelectMealEditServlet", urlPatterns = {"/SelectMealEditServlet"})
+public class SelectMealEditServlet extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -86,6 +83,16 @@ public class SelectMealServlet extends HttpServlet {
             request.getRequestDispatcher("dashboardStudent.jsp").forward(request, response);
             return;
         }
+        
+        // Verify that the student accessed this properly
+            Studentorder studOrder = new Studentorder();
+            try {
+                // Load the student's order from session
+                studOrder = (Studentorder) session.getAttribute("studOrderEdit");
+            } catch (Exception e) {
+                // If any error, means that the steps are not followed correctly
+                response.sendRedirect("DisplayOrdersServlet");
+            }
 
         // Get array of food IDs from form
         String[] mealChoice = request.getParameterValues("mealChoice");
@@ -101,33 +108,57 @@ public class SelectMealServlet extends HttpServlet {
         }
 
         //Values
-        List<Ordermeal> orderMealList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
-
-     
+        List<Ordermeal> newOrderMealList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
+        
+        //STEP 1 - SELECT MEAL COMPONENTS (FOOD)
         try {
 
             utx.begin();
 
             for (int i = 0; i < mealChoice.length; i++) {
-                //Obtain each meal using the mealId from the array.
+                //Obtain each food using the mealId from the array.
                 Meal meal = em.find(Meal.class, mealChoice[i]);
-                // Store the obtained meal object into orderMeal list
                 Ordermeal om = new Ordermeal();
                 om.setMealid(meal);
-                orderMealList.add(om);
+                newOrderMealList.add(om);
             }
 
+
+            for (int i = 0; i < mealChoice.length; i++) {
+                //Obtain each food using the foodID from the array.
+                Meal meal = em.find(Meal.class, mealChoice[i]);
+                boolean found = false;
+
+                // Loop through the existing mealFood list. 
+                for(Ordermeal om : studOrder.getOrdermealList()){
+                    
+                    // If there's the same one, store the EXISTING data into the new list
+                    if(meal.getMealid().equals(om.getMealid().getMealid())){
+                        newOrderMealList.add(om);
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if(!found){
+                        // If the new one doesn't exist, store the NEW data into the new list
+                        Ordermeal newOm = new Ordermeal();
+                        newOm.setMealid(meal);
+                        newOrderMealList.add(newOm);
+                    }
+            }
+            
             utx.commit();
             
             
 
             //Save into session first
-            session.setAttribute("orderMealList", orderMealList);
+            session.setAttribute("orderMealList", newOrderMealList);
 
             //Update step status
             session.setAttribute("step", "stepTwo");
 
-            //Print the chosen meal for next page
+            //Print the chosen food for next page
             String queryResultQuantity = "";
 
             int totalPrice = 0;
@@ -135,7 +166,7 @@ public class SelectMealServlet extends HttpServlet {
             
             
             //Prints the query results and format it 
-            for (Ordermeal om : orderMealList) {
+            for (Ordermeal om : newOrderMealList) {
                 queryResultQuantity += "<div class=\"recordQuantity\">\n"
                         + "                <div class=\"frontPart\">\n"
                         + "                    <p class=\"name\" style=\"color: black;\">" + om.getMealid().getMealname() + "</p>\n"
@@ -156,14 +187,15 @@ public class SelectMealServlet extends HttpServlet {
             //Next step's page
             request.setAttribute("queryResultQuantity", queryResultQuantity);
             request.setAttribute("totalPrice", totalPrice);
-            request.getRequestDispatcher("studentOrderQuantity.jsp").forward(request, response);
+            request.getRequestDispatcher("studentOrderQuantityUpdate.jsp").forward(request, response);
             
 
+            // END OF STEP 1
         } catch (Exception ex) {
             System.out.println("ERROR: Could not add meal into mealList: " + ex.getMessage());
             ex.printStackTrace();
             request.setAttribute("errorMsg", "Oops! Your meal selection failed for some reason.");
-            request.getRequestDispatcher("DisplayMealsServlet").forward(request, response);
+            request.getRequestDispatcher("DisplayMealEditServlet").forward(request, response);
             return;
         }
     }

@@ -24,7 +24,6 @@
             session = request.getSession(false);
             
             String permission = "";
-            String[] dateValue = null;
             Student stud = new Student();
 
             try {
