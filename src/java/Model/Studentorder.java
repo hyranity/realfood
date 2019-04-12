@@ -40,7 +40,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Studentorder.findByCouponcode", query = "SELECT s FROM Studentorder s WHERE s.couponcode = :couponcode")
     , @NamedQuery(name = "Studentorder.findByIsredeemed", query = "SELECT s FROM Studentorder s WHERE s.isredeemed = :isredeemed")
     , @NamedQuery(name = "Studentorder.findByIscanceled", query = "SELECT s FROM Studentorder s WHERE s.iscanceled = :iscanceled")
-    , @NamedQuery(name = "Studentorder.findByTotalprice", query = "SELECT s FROM Studentorder s WHERE s.totalprice = :totalprice")})
+    , @NamedQuery(name = "Studentorder.findByTotalprice", query = "SELECT s FROM Studentorder s WHERE s.totalprice = :totalprice")
+    , @NamedQuery(name = "Studentorder.findByDatecanceled", query = "SELECT s FROM Studentorder s WHERE s.datecanceled = :datecanceled")})
 public class Studentorder implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,6 +73,9 @@ public class Studentorder implements Serializable {
     @NotNull
     @Column(name = "TOTALPRICE")
     private int totalprice;
+    @Column(name = "DATECANCELED")
+    @Temporal(TemporalType.DATE)
+    private Date datecanceled;
     @JoinColumn(name = "STUDENTID", referencedColumnName = "STUDENTID")
     @ManyToOne(optional = false)
     private Student studentid;
@@ -140,6 +144,14 @@ public class Studentorder implements Serializable {
 
     public void setTotalprice(int totalprice) {
         this.totalprice = totalprice;
+    }
+
+    public Date getDatecanceled() {
+        return datecanceled;
+    }
+
+    public void setDatecanceled(Date datecanceled) {
+        this.datecanceled = datecanceled;
     }
 
     public Student getStudentid() {

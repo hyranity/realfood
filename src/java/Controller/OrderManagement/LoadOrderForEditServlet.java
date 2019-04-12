@@ -87,20 +87,25 @@ public class LoadOrderForEditServlet extends HttpServlet {
             try {
                 // Get the Studentorder using the ID chosen
                 studOrder = em.find(Studentorder.class, request.getParameter("orderId"));
-                
+                studOrder.getOrderid(); // Triggers null pointer if null
             } catch (Exception e) {
                 // Any exception occured means that the student did not do the procedure correctly, so redirect to dashboard
-                response.sendRedirect("dashboardStudent.jsp");
+                System.out.println("Couldn't load order.");
+                request.setAttribute("errorMsg", "Oops! We couldn't load your order for editing.");
+                request.getRequestDispatcher("DisplayOrdersServlet").forward(request, response);
+                return;
             }
+            
+            // Get the original student order details and set into session
+                session.setAttribute("currentStudOrder", em.find(Studentorder.class, studOrder.getOrderid()));
             
             
             try{
 
                 // Set the Studentorder to the session so that it can be used later for the editing steps
                 session.setAttribute("studOrderEdit", studOrder);
-
                 //Next step's page
-                request.getRequestDispatcher("DisplayMealsEditServlet").forward(request, response);
+                response.sendRedirect("DisplayMealsEditServlet");
                 return;
                 
             } catch (Exception ex) {

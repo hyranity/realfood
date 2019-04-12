@@ -103,7 +103,7 @@ public class MealDiscontinuationServlet extends HttpServlet {
                 em.merge(meal);
                 utx.commit();
 
-                // Get related list of Mealmeal objects
+                // Get related list of Mealorder objects
                 TypedQuery<Mealfood> query = em.createQuery("SELECT mf FROM Mealfood mf where mf.mealid = :mealId", Mealfood.class).setParameter("mealId", meal);
                 List<Mealfood> mealFoodList = query.getResultList();
 

@@ -186,12 +186,26 @@
 }
 
 .successMsg{
-    color: green;
-    margin: 10px;
+    color: white;
+    font-weight: bold;
     text-align: center;
+    background-color: green;
+    width: 30%;
     display: inline-block;
-    background-color: black;
+}
+
+.successMsgAbsolute{
+    color: green;
+    font-weight: bold;
+    text-align: center;
     width: 600px;
+    position: absolute;
+    top: 160px;
+    left: 50%;
+    margin-left: -300px;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 13px;
 }
 
 

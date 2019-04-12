@@ -19,6 +19,7 @@ import javax.transaction.UserTransaction;
 import Model.*;
 import java.util.*;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
@@ -29,7 +30,7 @@ import util.CodeGenerator;
  *
  * @author mast3
  */
-@WebServlet(name = "ProcessPaymentServlet", urlPatterns = {"/ProcessPaymentServlet"})
+@WebServlet(name = "ProcessOrderUpdateServlet", urlPatterns = {"/ProcessOrderUpdateServlet"})
 public class ProcessOrderUpdateServlet extends HttpServlet {
 
     @PersistenceContext
@@ -67,8 +68,6 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
-        
-        
 
         // If user is not logged in, redirect to login page
         // Allow student only
@@ -78,13 +77,16 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
             return;
         } else {
 
-            // Attempt to get student order from session
+            // Attempt to get session variables
             Studentorder studOrder = new Studentorder();
+            Studentorder currentStudOrder = new Studentorder();
+            boolean isARefund = false;
             try {
                 studOrder = (Studentorder) session.getAttribute("studOrderEdit");
-               
+                currentStudOrder = (Studentorder) session.getAttribute("currentStudOrder");
+                isARefund = (boolean) session.getAttribute("isARefund");
                 // Exception trigger
-                studOrder.getOrderid(); // If this is null, it will cause an exception, which will redirect the student to first step.
+                currentStudOrder.getOrderid(); // If this is null, it will cause an exception, which will redirect the student to first step.
 
                 if (studOrder == null) {
                     response.sendRedirect("DisplayOrdersServlet");
@@ -96,8 +98,6 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
                 response.sendRedirect("DisplayOrdersServlet");
                 return;
             }
-            
-            // ================
 
             try {
                 // Get student from session, which won't be null if the previous validations are passed
@@ -105,130 +105,98 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
 
                 // Get the latest student details
                 student = em.find(Student.class, student.getStudentid());
-                
-                // Add to database
-                    utx.begin();
-                    em.merge(student);
-                    utx.commit();
-                
-                    
-                    // Charge the student
-                    student.setCredits(student.getCredits() - (studOrder.getTotalprice()));
 
-                //For generating ID
-                TypedQuery<Studentorder> query = em.createQuery("SELECT s FROM Studentorder s", Studentorder.class);
-                int count = query.getResultList().size();
+                int price = currentStudOrder.getTotalprice() - studOrder.getTotalprice();
 
-                // Create duplicate date objects, depending on how many dates have been chosen
-                List<Date> chosenDates = (List<Date>) session.getAttribute("chosenDates");
-                int dayCount = chosenDates.size();
-                
+                // Charge the student (or Refund the student if its negative, since x - -y = x + y)
+                student.setCredits(student.getCredits() - price);
+
+                // Save to database
+                utx.begin();
+                em.merge(student);
+                utx.commit();
 
 
-                List<Studentorder> currentOrderList = student.getStudentorderList();     // Get the current order list
+                // Initiate the element
+                Studentorder so = studOrder;
 
-                // Create the orders. One order for each date
-                for (int i = 0; i < chosenDates.size(); i++) {
-                    
-                    // Initiate the element
-                    Studentorder so= studOrder;
-                    
-                 
+                // COUPON CODE REGENERATION
+                String couponCode = "";
+                int loopCount = 0;
 
-                    // COUPON CODE GENERATION
-                    String couponCode = "";
-                    int loopCount = 0;
+                boolean codeExists = false;
+                boolean codeExistsInDB = false;
+                do {
+                    codeExists = false;
+                    codeExistsInDB = false;
+                    loopCount++;
+                    try {
+                        //Generate coupon code
+                        CodeGenerator codeGenerator = new CodeGenerator();
+                        couponCode = codeGenerator.generateCode(7);
 
-                        boolean codeExists = false;
-                        boolean codeExistsInDB = false;
-                        do {
-                            codeExists = false;
-                            codeExistsInDB = false;
-                            loopCount++;
-                            try {
-                                //Generate coupon code
-                                CodeGenerator codeGenerator = new CodeGenerator();
-                                couponCode = codeGenerator.generateCode(7);
+                        // Check database to ensure that there's no duplication
+                        TypedQuery<Studentorder> checkQuery = em.createQuery("SELECT so FROM Studentorder so WHERE so.couponcode = :couponCode", Studentorder.class).setParameter("couponCode", couponCode);
+                        Studentorder tempStudentOrder = checkQuery.getSingleResult();
 
-                                // Check database to ensure that there's no duplication
-                                TypedQuery<Studentorder> checkQuery = em.createQuery("SELECT so FROM Studentorder so WHERE so.couponcode = :couponCode", Studentorder.class).setParameter("couponCode", couponCode);
-                                Studentorder tempStudentOrder = checkQuery.getSingleResult();
-
-                                if (tempStudentOrder.getOrderid() != null) {
-                                    codeExists = true;
-                                    codeExistsInDB = true;
-                                    System.out.println("Same coupon in DB! = " + couponCode);
-                                } else {
-                                    codeExists = false;
-                                }
-
-                            } catch (NoResultException e) {
-                                // No problem if no results or is null
-                            }
-
-                            if (!codeExistsInDB) {
-                                // Check the orderList to ensure that there's also no duplication
-                                for (int x = 0; x < currentOrderList.size(); x++) {
-                                    if (currentOrderList.get(i).getCouponcode().equals(couponCode)) {
-                                        codeExists = true;
-                                        break;
-                                    } else {
-                                        codeExists = false;
-                                    }
-                                }
-                            }
-                            if (loopCount == 100) {
-                                System.out.println("ERROR: LOOP BREAK TO STOP INFINITE LOOP! ");
-                                System.out.println("");
-                                break;
-                            }
-
-                        } while (codeExists || codeExistsInDB);
-
-                        // If code is unique, add into the list
-                        if (!codeExists) {
-                            studOrder.setCouponcode(couponCode);
-                            currentOrderList.add(studOrder);
+                        if (tempStudentOrder.getOrderid() != null) {
+                            codeExists = true;
+                            codeExistsInDB = true;
+                            System.out.println("Same coupon in DB! = " + couponCode);
                         } else {
-                            System.out.println("ERROR: Cannot add code " + couponCode + " as it already exists.");
+                            codeExists = false;
                         }
-                        
-                    // Set all the necessary fields
-                    studOrder.setChosendate(chosenDates.get(i));       // Store the date into the list of student orders
-                    studOrder.setStudentid(student); // Also set student ID
-                    studOrder.setIscanceled(false);
-                    studOrder.setIscanceled(false);
-                    studOrder.setCouponcode(couponCode);
-                    studOrder.setIsredeemed(false);
-                    studOrder.setTotalprice(studOrder.getTotalprice());
-                    
-                    studOrder.setOrderid(Auto.generateID("O", 10, count + i));    // Set order ID 
-                    
-                    for(Ordermeal om : studOrder.getOrdermealList()){
-                        om.setOrderid(studOrder);
-                    }
-               
-                    currentOrderList.add(studOrder);
-                    
 
-                    
-                    
-                    // Add to database
-                    utx.begin();
-                    em.persist(studOrder);
-                    utx.commit();
+                    } catch (NoResultException e) {
+                        // No problem if no results or is null
+                    }
+
+                    if (loopCount == 100) {
+                        System.out.println("ERROR: LOOP BREAK TO STOP INFINITE LOOP! ");
+                        System.out.println("");
+                        break;
+                    }
+
+                } while (codeExists || codeExistsInDB);
+
+                // If code is unique, set it
+                if (!codeExists) {
+                    studOrder.setCouponcode(couponCode);
                 }
+
+                // Set all the necessary fields
+                studOrder.setChosendate(currentStudOrder.getChosendate());
+                studOrder.setStudentid(student); // Also set student ID
+                studOrder.setIscanceled(false);
+                studOrder.setIscanceled(false);
+                studOrder.setCouponcode(couponCode);
+                studOrder.setIsredeemed(false);
+                studOrder.setTotalprice(studOrder.getTotalprice());
+
+                studOrder.setOrderid(currentStudOrder.getOrderid());    // Set order ID 
+
+                for (Ordermeal om : studOrder.getOrdermealList()) {
+                    om.setOrderid(studOrder);
+                }
+                utx.begin();
+                // Delete all the relationships with the current order
+                    Query deleteQuery = em.createQuery("DELETE FROM Ordermeal om WHERE om.orderid = :orderId").setParameter("orderId", studOrder);
+                    deleteQuery.executeUpdate();
+                    System.out.println("Ordermeal relationships deleted.");
+
+                // Update  database
                 
-                
+                em.merge(studOrder);
+                utx.commit();
 
                 //Update session
                 session.setAttribute("stud", student);
-                session.setAttribute("studOrder", null);
+                session.setAttribute("studOrder", studOrder);
 
                 //Redirect to my orders page
-                request.setAttribute("successMsg", "You have successfully made an order.");
-            request.getRequestDispatcher("DisplayOrdersServlet").forward(request, response);
-            return;
+                request.setAttribute("successMsg", "You have successfully updated your order.");
+                request.getRequestDispatcher("viewOrder.jsp" + studOrder.getOrderid()).forward(request, response);
+                return;
 
             } catch (ConstraintViolationException ex) {
 

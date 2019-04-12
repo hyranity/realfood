@@ -115,13 +115,6 @@ public class SelectMealEditServlet extends HttpServlet {
 
             utx.begin();
 
-            for (int i = 0; i < mealChoice.length; i++) {
-                //Obtain each food using the mealId from the array.
-                Meal meal = em.find(Meal.class, mealChoice[i]);
-                Ordermeal om = new Ordermeal();
-                om.setMealid(meal);
-                newOrderMealList.add(om);
-            }
 
 
             for (int i = 0; i < mealChoice.length; i++) {
@@ -131,6 +124,7 @@ public class SelectMealEditServlet extends HttpServlet {
 
                 // Loop through the existing mealFood list. 
                 for(Ordermeal om : studOrder.getOrdermealList()){
+                    
                     
                     // If there's the same one, store the EXISTING data into the new list
                     if(meal.getMealid().equals(om.getMealid().getMealid())){
@@ -145,6 +139,7 @@ public class SelectMealEditServlet extends HttpServlet {
                         Ordermeal newOm = new Ordermeal();
                         newOm.setMealid(meal);
                         newOrderMealList.add(newOm);
+                        
                     }
             }
             

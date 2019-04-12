@@ -43,13 +43,17 @@
                 
              // Verify that the student accessed this properly
             Studentorder studOrder = new Studentorder();
+            Studentorder currentStudOrder = new Studentorder();
             try {
                 // Load the student's order from session
                 studOrder = (Studentorder) session.getAttribute("studOrderEdit");
+                currentStudOrder = (Studentorder) session.getAttribute("currentStudOrder");
             } catch (Exception e) {
                 // If any error, means that the steps are not followed correctly
                 response.sendRedirect("DisplayOrdersServlet");
             }
+            
+            int originalPrice = currentStudOrder.getTotalprice();
         %>
         <div class="stepsContainer">
             <h1>steps</h1>
@@ -68,7 +72,8 @@
             ${queryResultQuantity}
             
            <div class="total">
-                <p id="totalPrice">Total: ${totalPrice} credits</p>
+               <p style="color: white;">Original total: <%=originalPrice%> credits</p>
+                <p id="totalPrice">New total: ${totalPrice} credits</p>
             </div>
 
             <br/>
@@ -114,7 +119,7 @@
                 });
 
 
-                $("#totalPrice").html("Total: " + sum + " credits");
+                $("#totalPrice").html("New total: " + sum + " credits");
 
             });
         });

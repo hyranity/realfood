@@ -82,9 +82,13 @@ public class DisplayMealsEditServlet extends HttpServlet {
             try {
                 // Load the student's order from session
                 studOrder = (Studentorder) session.getAttribute("studOrderEdit");
+                studOrder.getOrderid(); // Triggers null exception if it is null
             } catch (Exception e) {
                 // If any error, means that the steps are not followed correctly
-                response.sendRedirect("DisplayOrdersServlet");
+                System.out.println("Couldn't get student order on" + request.getContextPath());
+                request.setAttribute("errorMsg", "Hmm, it seems we could not load order.");
+                request.getRequestDispatcher("DisplayOrdersServlet").forward(request, response);
+                return;
             }
 
             try {

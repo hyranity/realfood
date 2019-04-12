@@ -77,17 +77,19 @@
                 int totalPrice = studOrder.getTotalprice();
                 int originalPrice = currentStudOrder.getTotalprice();
                 int grandTotal = originalPrice - totalPrice;
+                int originalGrandTotal = currentStudOrder.getTotalprice();
                 boolean isARefund = true;
                 String totalStr ="";
                 
-                if(grandTotal <= 0){
-                    totalStr = "Total charged: " + grandTotal; // If positive means student is charged
+                if(grandTotal < 0){
+                    totalStr = "Total charged: " + java.lang.Math.abs(grandTotal); // If negative means student will be charged, hence convert negative credits to display
+                    
                     isARefund = false; // Since this charges the student, then it is not a refund
                 }
                 else
-                    totalStr = "Total refunded: " + java.lang.Math.abs(grandTotal); // If negative means student will be refunded, hence convert negative credits to display
+                    totalStr = "Total refunded " + grandTotal; // If positive means student is charged
                 
-                
+                grandTotal = java.lang.Math.abs(grandTotal);
                 
 // For formatting the dates
 SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
@@ -109,12 +111,12 @@ session.setAttribute("isARefund", isARefund);
        <!------------>
 
         <h1 class="title">Update Confirmation</h1>
-        <h5 id="subtitle">Date(s) booked:</h5>
+        <h5 id="subtitle">Date booked:</h5>
         <!-- Print the date -->
         <h6 style="color: gold; font-size: 15px; ">
           <%=dateStr%>
         </h6>
-
+<div class="mainContainer2">
         <%
             for (int i = 0; i < studOrder.getOrdermealList().size(); i++) {
                 Ordermeal om = studOrder.getOrdermealList().get(i);
@@ -123,7 +125,7 @@ session.setAttribute("isARefund", isARefund);
                 int price = om.getMealid().getPrice();
                 int quantity = om.getQuantity();
         %>
-        <div class="mainContainer2">
+        
             <div class="recordQuantity2">
                 <div class="frontPart">
                     <p class="name"><%=mealName%></p>
@@ -137,7 +139,8 @@ session.setAttribute("isARefund", isARefund);
             <br/>
             <%}%>
             <div class="total2">
-                    <p style=""><%=totalPrice%> credits (per date) x 1 day</p>
+                    <p style="">Original: <%=originalGrandTotal%> credits</p>
+                    <p style="">New: <%=totalPrice%> credits</p>
                 <p style="font-size: 24px; color: gold;"><%=totalStr%> credits</p>
                 <p style="color: darkcyan; margin-top: 100px;">Note: You are updating a single day's order only.</p>
             </div>
@@ -160,7 +163,7 @@ session.setAttribute("isARefund", isARefund);
                         // Since it's a refund, display REFUND button
                     } else if(isARefund){
                     %>
-                    <a class="nextButton" href="ProcessPaymentServlet" type="submit">REFUND <%=grandTotal%> CREDITS</a>
+                    <a class="nextButton" href="ProcessOrderUpdateServlet" type="submit">REFUND <%=grandTotal%> CREDITS</a>
                  
                     <%
                         // Since not a refund and student can afford, show PAY button

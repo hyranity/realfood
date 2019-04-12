@@ -32,7 +32,7 @@ import util.*;
  *
  * @author mast3
  */
-@WebServlet(name = "MealQuantityEditServlet", urlPatterns = {"/MealQuantityServlet"})
+@WebServlet(name = "MealQuantityEditServlet", urlPatterns = {"/MealQuantityEditServlet"})
 public class MealQuantityEditServlet extends HttpServlet {
     
     @PersistenceContext
@@ -134,8 +134,6 @@ public class MealQuantityEditServlet extends HttpServlet {
                 session.setAttribute("orderMealList", orderMealList);
                 session.setAttribute("studOrder", studOrder);
                 
-                // Get the original student order details and set into session
-                session.setAttribute("currentStudOrder", em.find(Studentorder.class, studOrder.getOrderid()));
 
                 //Update step status
                 session.setAttribute("step", "stepThree");
