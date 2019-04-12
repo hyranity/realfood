@@ -80,14 +80,27 @@ public class OrderCancellationServlet extends HttpServlet {
 
             try{
                 orderId = request.getParameter("orderId");
+                
+                
                 // Obtain order object from database
                 Studentorder studOrder = em.find(Studentorder.class, orderId);
+                
+                double refundRate = 0.8;
+                int creditRefunded = (int) java.lang.Math.round(refundRate * studOrder.getTotalprice());
+                
+                // Refund the student
+                student.setCredits(student.getCredits() + creditRefunded);
+                
+                utx.begin();
+                em.merge(student);
+                utx.commit();
 
                 // Cancel the order
                     studOrder.setIscanceled(true);
                     studOrder.setDatecanceled(Auto.getToday());
+                    request.setAttribute("successMsg", "Order has been cancelled.");
 
-                
+               
 
                 // Get related list of Ordermeal objects
                 TypedQuery<Ordermeal> query = em.createQuery("SELECT om FROM Ordermeal om where om.orderid = :orderId", Ordermeal.class).setParameter("orderId", studOrder);
@@ -97,33 +110,18 @@ public class OrderCancellationServlet extends HttpServlet {
                     // Cancel the associative entities
                    om.setIscanceled(true);
                     
-                   //Update the objects
-                    utx.begin();
-                    em.merge(om);
-                    utx.commit();
+                   utx.begin();
+                   em.merge(om);
+                   utx.commit();
                 }
-                studOrder.setOrdermealList(orderMealLists);
                 
-                
-               
-                
-                double refundRate = 0.8;
-                int creditRefunded = (int) java.lang.Math.round(refundRate * studOrder.getTotalprice());
-                
-                // Refund the student
-                student.setCredits(student.getCredits() + creditRefunded);
-                System.out.println(student.getCredits());
-                
-                 utx.begin();
+                 // Update the order object
+                utx.begin();
                 em.merge(studOrder);
-                em.merge(student);
                 utx.commit();
                 
-                System.out.println(studOrder.getOrderid());
-                System.out.println(studOrder.getIscanceled());
-                
                 request.setAttribute("successMsg", "Your order has been canceled.");
-                request.getRequestDispatcher("ViewOrderServlet?orderId"+orderId).forward(request, response);
+                request.getRequestDispatcher("ViewOrderServlet"+orderId).forward(request, response);
                 return;
                 
             } catch (ConstraintViolationException e) {

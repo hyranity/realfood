@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="Model.Meal"%>
@@ -62,6 +63,16 @@
                 String couponCode = so.getCouponcode();
                 int totalPrice = so.getTotalprice();
                 
+                Calendar today = Calendar.getInstance();
+                
+                boolean isBlockedFromCanceling = false;
+                boolean expired = false;
+                if( today.get(Calendar.DATE) == cal.get(Calendar.DATE)){
+                    isBlockedFromCanceling = true;
+                }
+                
+                if(today.get(Calendar.DATE) > cal.get(Calendar.DATE))
+                    expired = true;
                
         %>
         <div class="outsideContainer">
@@ -74,7 +85,7 @@
             <div class="orderContainer" >
                 
                  <%
-                    if(!so.getIscanceled() && !so.getIsredeemed()){
+                    if(!so.getIscanceled() && !so.getIsredeemed() && !expired ){
                     %>
                     <a href=""><div class="couponPage">Print coupon code</div></a>
                     
@@ -93,7 +104,13 @@
                     <div style="color: red; font-weight: bold;">(CANCELLED)</div>
                     
                     <%
-                    } else{
+                    } else  if(expired){
+                    %>
+                    <h2 id="orderId" style="color: red;"><%=orderId%></h2>
+                    <div style="color: red; font-weight: bold;">(EXPIRED)</div>
+                    
+                    <%
+                    }else{
                     %>
                     <h2 id="orderId"><%=orderId%></h2>
                     <%}%>
@@ -144,20 +161,28 @@
                     <br/>
                     <br/>
                     <%
-                        if (!so.getIscanceled() && !so.getIsredeemed()) {
+                        if (!so.getIscanceled() && !so.getIsredeemed() && !isBlockedFromCanceling && !expired) {
                     %>
-                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable">Cancel Order</div></a>
+                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable">Cancel Order</div></a>      
                     <a href="LoadOrderForEditServlet?orderId=<%=orderId%>"><div class="editOrderBt">Edit Order</div></a>
                     <%
                         }
                     %>
+                    <%
+                        if (isBlockedFromCanceling) {
+                    %>
+                     <div style="color: red; font-weight: bold; margin: 10px;">Can't cancel nor edit (Must cancel 1 day earlier)</div>
+                    <%
+                        }
+                    %>
+                    
                 </div>
 
             </div>
         </div>
-        <a href=""><div class="back" style="margin-bottom: 30px;">Back</div></a>
+        <a href="DisplayOrdersServlet"><div class="back" style="margin-bottom: 30px;">Back</div></a>
         <%
-            if (!so.getIscanceled()) {
+            if (!so.getIscanceled() && !so.getIsredeemed() && !isBlockedFromCanceling && !expired) {
         %>
         <div class="toggleDisableConfirmation">
             <h5>Cancel order?</h5>
