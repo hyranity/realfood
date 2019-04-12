@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.UserAccountManagemnet;
-
-import Model.*;
+package Controller.ReportGenerated;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,17 +12,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import javax.persistence.*;
 import javax.annotation.*;
 import javax.transaction.*;
+
 
 /**
  *
  * @author Richard Khoo
  */
-@WebServlet(name = "StudentAccountManagement", urlPatterns = {"/StudentAccountManagement"})
-public class StudentAccountManagement extends HttpServlet {
+@WebServlet(name = "DailyTransactionReport", urlPatterns = {"/DailyTransactionReport"})
+public class DailyTransactionReport extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,22 +41,12 @@ public class StudentAccountManagement extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        try {
-            String studentId = request.getParameter("studentId");
-            String cPassword = request.getParameter("cPassword");
-
-            utx.begin();
-            Student student = em.find(Student.class, studentId);
-            student.setPassword(cPassword);
-            utx.commit();
+        try{
+            Query query = em.createQuery("SELECT s FROM");	
             
-            request.getRequestDispatcher("studentProfile.jsp?studentid=" + studentId).forward(request, response);
-            
-        } catch (Exception ex) {
+        }catch (Exception ex){
             
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

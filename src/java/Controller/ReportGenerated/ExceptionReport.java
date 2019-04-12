@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.UserAccountManagemnet;
-
-import Model.*;
+package Controller.ReportGenerated;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,13 +16,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.persistence.*;
 import javax.annotation.*;
 import javax.transaction.*;
+import Model.*;
+import java.util.List;
+import Controller.MealManagement.*;
 
 /**
  *
  * @author Richard Khoo
  */
-@WebServlet(name = "StudentAccountManagement", urlPatterns = {"/StudentAccountManagement"})
-public class StudentAccountManagement extends HttpServlet {
+@WebServlet(name = "ExceptionReport", urlPatterns = {"/ExceptionReport"})
+public class ExceptionReport extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,7 +36,6 @@ public class StudentAccountManagement extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -43,22 +43,22 @@ public class StudentAccountManagement extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        try {
-            String studentId = request.getParameter("studentId");
-            String cPassword = request.getParameter("cPassword");
-
-            utx.begin();
-            Student student = em.find(Student.class, studentId);
-            student.setPassword(cPassword);
-            utx.commit();
-            
-            request.getRequestDispatcher("studentProfile.jsp?studentid=" + studentId).forward(request, response);
-            
-        } catch (Exception ex) {
-            
-        }
-        
+            try{
+                Query query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
+                List<Mealfood> Mealfood = query.getResultList();
+                
+                query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
+                List<Quantity> Quantity = query.getResultList();
+                
+                query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
+                List<CashRefund> CashRefund = query.getResultList();
+                
+                
+                String output = "";
+            }
+            catch(Exception ex){
+                
+            }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

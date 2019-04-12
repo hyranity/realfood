@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.UserAccountManagemnet;
-
-import Model.*;
+package Controller.ReportGenerated;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,8 +21,8 @@ import javax.transaction.*;
  *
  * @author Richard Khoo
  */
-@WebServlet(name = "StudentAccountManagement", urlPatterns = {"/StudentAccountManagement"})
-public class StudentAccountManagement extends HttpServlet {
+@WebServlet(name = "MonthlySalesReport", urlPatterns = {"/MonthlySalesReport"})
+public class MonthlySalesReport extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,7 +33,6 @@ public class StudentAccountManagement extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -43,22 +40,28 @@ public class StudentAccountManagement extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        try {
-            String studentId = request.getParameter("studentId");
-            String cPassword = request.getParameter("cPassword");
-
-            utx.begin();
-            Student student = em.find(Student.class, studentId);
-            student.setPassword(cPassword);
-            utx.commit();
-            
-            request.getRequestDispatcher("studentProfile.jsp?studentid=" + studentId).forward(request, response);
-            
-        } catch (Exception ex) {
-            
-        }
-        
+            try{
+                Query query = em.createQuery("MealFood.findAll);
+                Query query = em.createQuery("SELECT m FROM Mealfood m WHERE m da", Mealfood.class);
+                List<Mealfood> mealfood = query.getResultList();
+                mealfood.get(0).getDate();
+                
+                query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
+                List<Mealfood> MealID = query.getResultList();
+                mealfood
+                
+                query = em.createQuery("SELECT m FROM Meal m WHERE m.mealname = :mealname", Meal.class);
+                List<Mealfood> Product = query.getResultList();
+                
+                query = em.createQuery("Mealfood");
+                List<Mealfood> Quantity = query.getResultList();
+                
+                Typequery query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
+                List<Mealfood> Amount = query.getResultList();
+            }
+            catch(Exception ex){
+                
+            }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
