@@ -59,10 +59,7 @@ html, body{
 }
 
 
-input[type=checkbox]{
-    display: none;
-    margin: 0;
-}
+
 
 .weekday{
     color: white;
@@ -89,6 +86,11 @@ input[type=checkbox]{
 input:checked + label{
     background-color: darkgoldenrod;
     border-radius: 10px;
+}
+
+input[type=checkbox]{
+    display: none;
+    margin: 0;
 }
 
 .week{

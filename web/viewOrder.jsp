@@ -127,11 +127,17 @@
                             Meal meal = om.getMealid();
                             String mealName = om.getMealid().getMealname();
                             int quantity = om.getQuantity();
+                            
+                            if(om.getIsredeemed()){
+                    %>
+                    <p class="mealItem" style="color: white; background-color:darkgreen;"><%=mealName%></p>
+                    <%
+                    }else{
                     %>
                     <p class="mealItem" ><%=mealName%></p>
-
                     <!-- Display the meal time -->
                     <%
+                        }
                         if (meal.getIsbreakfast()) {
                     %>
                     <p class="breakfast">Breakfast</p>

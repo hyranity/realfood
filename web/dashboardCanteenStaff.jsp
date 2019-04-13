@@ -42,6 +42,7 @@
                 <br/>
                 <a href="#"><div class="buttonDiv" id="prep">order preparation</div></a>
                 <a href="staffProfile.jsp"><div class="buttonDiv" id="account">my account</div></a>
+                <a href="redeemOrder.jsp"><div class="buttonDiv" id="redeem">redeem order</div></a>
             </div>
             <a href="LogoutServlet"><div class="logout">logout</div></a>
         </div>
@@ -72,6 +73,11 @@
             });
             $("#account").hover(function () {
                 $("#subtitle").html("That is where you can view and edit your account details.");
+            }, function () {
+                $("#subtitle").html("Here's your dashboard.");
+            });
+            $("#redeem").hover(function () {
+                $("#subtitle").html("That is where you can redeem student's orders.");
             }, function () {
                 $("#subtitle").html("Here's your dashboard.");
             });

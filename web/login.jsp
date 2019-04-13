@@ -47,6 +47,8 @@
                 <div class="errorMsg">${errorMsg}</div>
                 <!-- Account message -->
                 <div class="accountMsg">${accountMsg}</div>
+                <!-- Success message -->
+                <div class="accountMsg">${successMsg}</div>
                 <!-- Login part -->
                 <h1 id="title">Login</h1>
                 <form method="POST" action="LoginServlet">
@@ -63,13 +65,13 @@
 
         <!-- Reset password overlay -->
         <div class="forgotPasswordOverlay">
-            <form action="" method="POST">
+            <form action="GenerateResetToken" method="POST">
                 <div class='closeBt'>x</div>
-                <h2>Stay calm! Help is here.        </h2>
+                <h2>Stay calm! Help is here.</h2>
                 <h5>Please enter your personal email that you've used to register your account. We'll email you a link which you can click to reset your password.</h5>
-                <input type="text" placeholder="email">
+                <input type="text" placeholder="email" name="recipientEmail">
                 <br/>
-                <a href=""><div class='resetBt'>Send reset link</div></a>
+                <input class='resetBt' type="submit" value="Send reset link">
             </form>
         </div>
 

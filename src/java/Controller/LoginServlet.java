@@ -100,6 +100,13 @@ public class LoginServlet extends HttpServlet {
 
                             //Password is correct, grant access by creating a session by creating a session for STUDENT
                             System.out.println("SUCCESS: Student login is successful.");
+                            
+                            // Update the student details with the latest from the school system
+                            stud.setFirstname(ss.getFirstname());
+                            stud.setLastname(ss.getLastname());
+                            stud.setMykad(ss.getMykad());
+                            stud.setDatejoined(ss.getDatejoined());
+                            
                             HttpSession session = request.getSession(true);
                             session.setAttribute("stud", stud);
                             session.setAttribute("permission", "student"); // Set permissions level

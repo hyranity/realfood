@@ -234,6 +234,9 @@ public class MealDetailsEditServlet extends HttpServlet {
                     //Update meal object
                     em.merge(meal);
                     utx.commit();
+                    
+                    // Clear meal session
+                    session.setAttribute("meal", null);
 
                     //Next step's page
                     System.out.println("Success! Meal with ID " + meal.getMealid() + "  is added.");

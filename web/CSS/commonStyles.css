@@ -1,3 +1,7 @@
+body{
+    font-family: Montserrat, sans-serif;
+}
+
 /* Steps CSS */
 .stepsContainer{
     margin-bottom: 20px;
@@ -186,11 +190,11 @@
 }
 
 .successMsg{
-    color: white;
+    color: green;
     font-weight: bold;
     text-align: center;
-    background-color: green;
-    width: 30%;
+    background-color: black;
+    width: 100%;
     display: inline-block;
 }
 
@@ -215,4 +219,41 @@ input[type=number]::-webkit-outer-spin-button{
     -webkit-appearance: none;
     -moz-appearace: none;
     appearance: none;
+}
+
+.backBt{
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  
+  background-color: white;
+  color: black;
+  padding: 10px;
+  border-radius: 14px;
+  border-width: 1px;
+  font-weight: bold;
+  transition: 0.5s;
+}
+
+.backBt:before {
+     opacity: 0;
+    font-weight: bold;
+  content: "\00ab";
+  display: none;
+  transition: 0.5s;
+
+}
+
+.backBt:hover:before {
+  opacity: 1;
+  right: 0;
+  display: inline-block;
+   transition: 0.5s;
+}
+
+.backBt:hover{
+    background-color: gold;
+    color: black;
+     transition: 0.5s;
+    margin-left: -25px;
 }

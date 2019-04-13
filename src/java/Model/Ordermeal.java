@@ -31,7 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Ordermeal.findAll", query = "SELECT o FROM Ordermeal o")
     , @NamedQuery(name = "Ordermeal.findByOrdermealid", query = "SELECT o FROM Ordermeal o WHERE o.ordermealid = :ordermealid")
     , @NamedQuery(name = "Ordermeal.findByQuantity", query = "SELECT o FROM Ordermeal o WHERE o.quantity = :quantity")
-    , @NamedQuery(name = "Ordermeal.findByIscanceled", query = "SELECT o FROM Ordermeal o WHERE o.iscanceled = :iscanceled")})
+    , @NamedQuery(name = "Ordermeal.findByIscanceled", query = "SELECT o FROM Ordermeal o WHERE o.iscanceled = :iscanceled")
+    , @NamedQuery(name = "Ordermeal.findByIsredeemed", query = "SELECT o FROM Ordermeal o WHERE o.isredeemed = :isredeemed")})
 public class Ordermeal implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,6 +49,10 @@ public class Ordermeal implements Serializable {
     @NotNull
     @Column(name = "ISCANCELED")
     private Boolean iscanceled;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ISREDEEMED")
+    private Boolean isredeemed;
     @JoinColumn(name = "MEALID", referencedColumnName = "MEALID")
     @ManyToOne(optional = false)
     private Meal mealid;
@@ -62,10 +67,11 @@ public class Ordermeal implements Serializable {
         this.ordermealid = ordermealid;
     }
 
-    public Ordermeal(Integer ordermealid, int quantity, Boolean iscanceled) {
+    public Ordermeal(Integer ordermealid, int quantity, Boolean iscanceled, Boolean isredeemed) {
         this.ordermealid = ordermealid;
         this.quantity = quantity;
         this.iscanceled = iscanceled;
+        this.isredeemed = isredeemed;
     }
 
     public Integer getOrdermealid() {
@@ -90,6 +96,14 @@ public class Ordermeal implements Serializable {
 
     public void setIscanceled(Boolean iscanceled) {
         this.iscanceled = iscanceled;
+    }
+
+    public Boolean getIsredeemed() {
+        return isredeemed;
+    }
+
+    public void setIsredeemed(Boolean isredeemed) {
+        this.isredeemed = isredeemed;
     }
 
     public Meal getMealid() {
