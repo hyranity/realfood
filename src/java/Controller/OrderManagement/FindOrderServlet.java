@@ -6,13 +6,13 @@
 package Controller.OrderManagement;
 
 import Controller.MealManagement.*;
-import Model.*;
+import Model.Meal;
+import Model.Mealfood;
+import Model.Studentorder;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,18 +23,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-import util.*;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "MealQuantityServlet", urlPatterns = {"/MealQuantityServlet"})
-public class MealQuantityServlet extends HttpServlet {
-    
+@WebServlet(name = "FindOrderServlet", urlPatterns = {"/FindOrderServlet"})
+public class FindOrderServlet extends HttpServlet {
+
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -52,10 +49,9 @@ public class MealQuantityServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
         HttpSession session = request.getSession(false);
-            
-           String permission = "";
+
+        String permission = "";
 
         try {
             permission = (String) session.getAttribute("permission");
@@ -74,71 +70,75 @@ public class MealQuantityServlet extends HttpServlet {
 
         // If user is not logged in, redirect to login page
         // Allow student only
-        if (!permission.equalsIgnoreCase("student")) {
+        if (!permission.equalsIgnoreCase("canteenStaff")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
-            
-            //Values
-            Studentorder studOrder = new Studentorder();
-            List<Ordermeal> orderMealList = (List<Ordermeal>) session.getAttribute("orderMealList");
- 
-            
-            // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
-            //Hence, redirect to first page.
-            if (orderMealList == null) {
-                response.sendRedirect("DisplayFoodSelectionServlet");
-            }
-            
-            try{
-
-                int totalPrice = 0;
-            for(int i=0; i<orderMealList.size(); i++){
+            boolean justAccessed = true;
+            //Displays messages if any
+            try {
+                request.setAttribute("successMsg", request.getAttribute("successMsg"));
+                request.setAttribute("errorMsg", request.getAttribute("errorMsg"));
                 
-                //Get the meal ID from the list
-                String mealId = orderMealList.get(i).getMealid().getMealid();
-                
-                // Using the meal ID, get its respective quantities from the JSP form
-                int quantity = Integer.parseInt(request.getParameter(mealId));
-                
-                // Insert the obtained quantity into the object from the list
-                orderMealList.get(i).setQuantity(quantity);
-                orderMealList.get(i).setIscanceled(false);
-                orderMealList.get(i).setIsredeemed(false);
-                orderMealList.get(i).setQuantity(quantity);
-                
-                totalPrice += quantity * orderMealList.get(i).getMealid().getPrice();
-            }
-            
-            
-            studOrder.setTotalprice(totalPrice);
-            studOrder.setOrdermealList(orderMealList);
-                
-            
-                for (int i = 0; i < orderMealList.size(); i++) {
-                    System.out.println(orderMealList.get(i).getMealid().getMealid() + " x " + orderMealList.get(i).getQuantity());
-                }
-
-                //Save into session first
-                session.setAttribute("orderMealList", orderMealList);
-                session.setAttribute("studOrder", studOrder);
-
-                //Update step status
-                session.setAttribute("step", "stepThree");
-
-                //Next step's page
-                request.getRequestDispatcher("studentOrderPayment.jsp").forward(request, response);
-                return;
-
-                // END OF STEP 1
+                if(request.getAttribute("successMsg") != null)
+                    justAccessed = false;
             } catch (Exception ex) {
-                System.out.println("ERROR: Could not calculate meal quantity: " + ex.getMessage());
-                ex.printStackTrace();
-                request.setAttribute("errorMsg", "Oops! Meal quantity did not succeed for some reason.");
-                request.getRequestDispatcher("SelectMealServlet").forward(request, response);
+                // No messages is fine.
+                
+            }
+
+            Studentorder so = new Studentorder();
+            String couponCode = "";
+
+            try {
+                couponCode = request.getParameter("couponCode");
+                TypedQuery<Studentorder> query = em.createQuery("SELECT so FROM Studentorder so WHERE so.couponcode = :couponCode", Studentorder.class).setParameter("couponCode", couponCode);
+                so = query.getSingleResult();
+            } catch (Exception e) {
+                // If exception is thrown, just show error message to staff 
+                request.setAttribute("errorMsg", "This coupon code is invalid.");
+                request.getRequestDispatcher("redeemOrder.jsp").forward(request, response);
                 return;
             }
+
+            try {
+                
+                if(so.getIscanceled()){
+                    request.setAttribute("errorMsg", "This order has already been canceled.");
+                request.getRequestDispatcher("redeemOrder.jsp").forward(request, response);
+                return;
+                }
+                
+                if(so.getIsredeemed() && justAccessed){
+                    request.setAttribute("errorMsg", "This order has already been redeemed.");
+                request.getRequestDispatcher("redeemOrder.jsp").forward(request, response);
+                return;
+                }
+                
+                // Check for expiry
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(so.getChosendate());
+                Calendar today = Calendar.getInstance();
+                
+                 if(today.get(Calendar.DATE) > cal.get(Calendar.DATE)){
+                    request.setAttribute("errorMsg", "This order has already expired.");
+                request.getRequestDispatcher("redeemOrder.jsp").forward(request, response);
+                return;
+                }
+                
+
+                // Set studentOrder to session so it can be displayed
+                session.setAttribute("studentOrderRedeem", so);
+                
+                request.getRequestDispatcher("redeemMeals.jsp").forward(request, response);
+                return;
+
+            } catch (Exception e) {
+                System.out.println("Could not obtain order list: " + e.getMessage());
+                e.printStackTrace();
+            }
+
         }
     }
 

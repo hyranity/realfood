@@ -14,12 +14,17 @@ h1{
 /* Main container */
 
 .mainContainer{
+    text-align: center;
     position: absolute;
     top: 50%;
      left: 0%;
     height: 300px;
      width: 100%;
      margin-top: -150px;
+}
+
+.topUpForm{
+    position: relative;
 }
 
 .topUpForm input{
@@ -75,25 +80,33 @@ input[type=number]::-webkit-outer-spin-button{
     color: darkcyan;
 }
 
-.back{
-    text-align: center;
-    background-color: black;
-    color: gold;
-    border-radius: 10px;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-.back:hover{
-    font-size: 20px;
-    color: white;
-}
-
 a{
     color: white;
     text-decoration: none;
 }
 
 .errorMsg{
-    top: 70px;
+    width: 100%;
 }
+
+.studInfo{
+    color: gold;
+    width: 500px;
+    margin-bottom: 40px;
+    border-style: solid;
+    display: inline-block;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.amountText{
+    border-style: solid;
+    width: 200px;
+    display: inline-block;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 10px;
+    margin-bottom: -20px;
+}
+
+

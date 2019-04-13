@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.OrderManagement;
+package Controller;
 
+import Controller.OrderManagement.*;
 import Controller.MealManagement.*;
-import Model.*;
+import Model.Meal;
+import Model.Mealfood;
+import Model.Student;
+import Model.Studentorder;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,18 +24,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
-import util.*;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "MealQuantityServlet", urlPatterns = {"/MealQuantityServlet"})
-public class MealQuantityServlet extends HttpServlet {
-    
+
+@WebServlet(name = "TopUpIDServlet", urlPatterns = {"/TopUpIDServlet"})
+public class TopUpIDServlet extends HttpServlet {
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -52,20 +50,19 @@ public class MealQuantityServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+         HttpSession session = request.getSession(false);
         
-        HttpSession session = request.getSession(false);
-            
-           String permission = "";
-
+        String permission = "";
+        
         try {
             permission = (String) session.getAttribute("permission");
-
+            
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-
+            
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -74,71 +71,48 @@ public class MealQuantityServlet extends HttpServlet {
 
         // If user is not logged in, redirect to login page
         // Allow student only
-        if (!permission.equalsIgnoreCase("student")) {
+        if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equalsIgnoreCase("manager")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
             
-            //Values
-            Studentorder studOrder = new Studentorder();
-            List<Ordermeal> orderMealList = (List<Ordermeal>) session.getAttribute("orderMealList");
- 
+            String studentId = "";
+            Student stud = new Student();
             
-            // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
-            //Hence, redirect to first page.
-            if (orderMealList == null) {
-                response.sendRedirect("DisplayFoodSelectionServlet");
-            }
-            
-            try{
-
-                int totalPrice = 0;
-            for(int i=0; i<orderMealList.size(); i++){
-                
-                //Get the meal ID from the list
-                String mealId = orderMealList.get(i).getMealid().getMealid();
-                
-                // Using the meal ID, get its respective quantities from the JSP form
-                int quantity = Integer.parseInt(request.getParameter(mealId));
-                
-                // Insert the obtained quantity into the object from the list
-                orderMealList.get(i).setQuantity(quantity);
-                orderMealList.get(i).setIscanceled(false);
-                orderMealList.get(i).setIsredeemed(false);
-                orderMealList.get(i).setQuantity(quantity);
-                
-                totalPrice += quantity * orderMealList.get(i).getMealid().getPrice();
-            }
-            
-            
-            studOrder.setTotalprice(totalPrice);
-            studOrder.setOrdermealList(orderMealList);
-                
-            
-                for (int i = 0; i < orderMealList.size(); i++) {
-                    System.out.println(orderMealList.get(i).getMealid().getMealid() + " x " + orderMealList.get(i).getQuantity());
-                }
-
-                //Save into session first
-                session.setAttribute("orderMealList", orderMealList);
-                session.setAttribute("studOrder", studOrder);
-
-                //Update step status
-                session.setAttribute("step", "stepThree");
-
-                //Next step's page
-                request.getRequestDispatcher("studentOrderPayment.jsp").forward(request, response);
-                return;
-
-                // END OF STEP 1
+            try {
+                 studentId = request.getParameter("studentId");
             } catch (Exception ex) {
-                System.out.println("ERROR: Could not calculate meal quantity: " + ex.getMessage());
-                ex.printStackTrace();
-                request.setAttribute("errorMsg", "Oops! Meal quantity did not succeed for some reason.");
-                request.getRequestDispatcher("SelectMealServlet").forward(request, response);
+                // Display error messages if any
+                System.out.println("ERROR: " + ex.getMessage());
+                request.setAttribute("errorMsg", "Hmm...we could not read your student ID as input for some reason.");
+                request.getRequestDispatcher("topUpValue.jsp").forward(request, response);
                 return;
             }
+            
+            stud = em.find(Student.class, studentId);
+            
+            // If the student ID is incorrect, show error messages and redirect to the previous page
+            if(stud == null){
+                request.setAttribute("errorMsg", "Oops! This student does not exist. Ensure that the student ID is correct.");
+                request.getRequestDispatcher("topUp.jsp").forward(request, response);
+                return;
+            }
+
+            try {
+
+                // Set student to session so it can be displayed
+               session.setAttribute("studTopUp", stud);
+               
+                request.getRequestDispatcher("topUpValue.jsp").forward(request, response);
+                return;
+
+            } catch (Exception e) {
+                request.setAttribute("errorMsg", "Hmm...we could not read your student ID as input for some reason.");
+                request.getRequestDispatcher("topUpValue.jsp").forward(request, response);
+                return;
+            }
+
         }
     }
 

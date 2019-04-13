@@ -65,19 +65,16 @@ public class TopUpServlet extends HttpServlet {
         
 
         try {
-            String studentId = request.getParameter("studentId");
+            
             int creditAmt = Integer.parseInt(request.getParameter("cashAmt")) * 100;
-            
             Student stud = new Student();
-            stud = em.find(Student.class, studentId);
             
-            // If the student ID is incorrect, show error messages and redirect to the previous page
-            if(stud == null){
-                request.setAttribute("errorMsg", "Oops! This student does not exist. Ensure that the student ID is correct.");
-                request.getRequestDispatcher("topUp.jsp").forward(request, response);
-                return;
+            try {
+                stud = (Student) session.getAttribute("studTopUp");
+            } catch (Exception ex) {
+                // If empty, means user skip to this page
+                response.sendRedirect("topUp.jsp");
             }
-            
             
             // Update the credit amount
             stud.setCredits(stud.getCredits() + creditAmt);
@@ -86,6 +83,9 @@ public class TopUpServlet extends HttpServlet {
             utx.begin();
             em.merge(stud);
             utx.commit();
+            
+            // Nullify the object after done
+            session.setAttribute("studTopUp", null);
             
             request.setAttribute("successMsg", "Success! Student " + stud.getStudentid() + "'s credits have been topped up.");
             request.getRequestDispatcher("topUp.jsp").forward(request, response);

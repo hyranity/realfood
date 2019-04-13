@@ -116,6 +116,7 @@ public class MealQuantityEditServlet extends HttpServlet {
                 // Insert the obtained quantity into the object from the list
                 orderMealList.get(i).setQuantity(quantity);
                 orderMealList.get(i).setIscanceled(false);
+                orderMealList.get(i).setIsredeemed(false);
                 orderMealList.get(i).setQuantity(quantity);
                 
                 totalPrice += quantity * orderMealList.get(i).getMealid().getPrice();

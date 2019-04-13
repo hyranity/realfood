@@ -211,6 +211,9 @@ public class MealFinalizationServlet extends HttpServlet {
                     //Persist meal object
                     em.persist(meal);
                     utx.commit();
+                    
+                    // Clear meal session
+                    session.setAttribute("meal", null);
 
                     //Next step's page
                     System.out.println("Success! Meal with ID " + meal.getMealid() + "  is added.");

@@ -37,11 +37,14 @@
         %>
         <div class="outsideContainer">
             <!-- Show alerts if any -->
-            <div class="errorMsg" style="position: relative;"></div>
-            <div class="successMsg">${successMsg}</div>
-
+            
             <h1>Create Food</h1>
-            <h5 id="subtitle">Here's where you can Create Food Details.</h5>
+            <br/>
+             <h5 id="subtitle">Here's where you can Create Food Details.</h5>
+             <br/>
+            <div class="successMsg">${successMsg}</div>
+            <br/>
+            <div class="errorMsg">${errorMsg}</div>      
             <br/>
             <div class="mainContainer">
 
@@ -53,7 +56,7 @@
                     <div>   
                         <input type="number" value="" placeholder="Calories" id="calories" name="calories" oninput="validity.valid || (value = '');" min="0" step="1" maxlength="4" required/>
                     </div>
-                    <input type="submit" value="Yes" style="color: green;" form="createForm">
+                    <input type="submit" value="Yes" style="color: green; z-index: 1;" form="createForm">
                     <br/>
                     <a href="#" onclick="confirmadding()"><div class="adding">Create</div></a>
                     <div class="addingConfirmation">
@@ -66,7 +69,7 @@
                 <br/>
             </div>
         </div>
-        <a href="displayStaff.jsp"><div class="back">Back</div></a>
+        <a href="dashboardCanteenStaff.jsp"><div class="back">Back</div></a>
 
         <div class="coverOverlay"></div>
         <%}%>

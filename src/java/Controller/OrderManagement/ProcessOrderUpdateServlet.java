@@ -168,7 +168,6 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
                 studOrder.setChosendate(currentStudOrder.getChosendate());
                 studOrder.setStudentid(student); // Also set student ID
                 studOrder.setIscanceled(false);
-                studOrder.setIscanceled(false);
                 studOrder.setCouponcode(couponCode);
                 studOrder.setIsredeemed(false);
                 studOrder.setTotalprice(studOrder.getTotalprice());

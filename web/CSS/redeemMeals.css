@@ -1,0 +1,42 @@
+
+input:checked + label{
+    background-color: darkgreen;
+    color: white;
+    display: inline-block;
+}
+
+input[type=checkbox]{
+    display: none;
+    margin: 0;
+}
+
+label{
+    background-color: gold;
+    color: black;
+    display: inline-block;
+    height: 100%;
+    padding: 9.5px;
+    transition: 0.2s;
+}
+
+label:hover{
+    background-color: darkgreen;
+}
+
+.redeemBt{
+    background-color: white;
+    box-shadow: none;
+    border-width: 0;
+    border-radius: 10px;
+   padding: 10px;
+    font-size: 17px;
+    color: black;
+    font-family: Montserrat, sans-serif;
+    font-weight: bold;
+    transition: 0.4s;
+}
+
+.redeemBt:hover{
+    color: gold;
+    background-color: black;
+}

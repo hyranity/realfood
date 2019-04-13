@@ -1,3 +1,6 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="Model.Mealfood"%>
+<%@page import="java.util.List"%>
 <%@page import="util.Auto"%>
 <%@page import="Model.Meal"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -71,6 +74,14 @@
                     dateDiscontinued = "not discontinued";
                     isDiscontinued = false;
                 }
+                
+ List<Mealfood> mealFoodList = new ArrayList();
+                try {
+                    mealFoodList = (List<Mealfood>) session.getAttribute("mealFoodList");
+                } catch (Exception ex) {
+                    // Display error messages if any
+                    System.out.println("ERROR: " + ex.getMessage());
+                }
 
         %>
         <!-- Steps -->
@@ -83,19 +94,20 @@
             </div>
         </div>
 
-        <div class="sideDisplay">
-
-            <div class="recordQuantity">
-                <div class="frontPart">
-                    <p class="name">Spaghetti Bolognese</p>
-
-                </div>
-                <div class="quantityEditor">
-                    <p class="value">1500 Credits</p>
-                    <p class="quantity" data-quantity="5">x2</p>
-
-                </div>
+         <div class="sideDisplay">
+            <h3 style="color: gold;">Food selection summary</h3>
+            <br/>
+                <%
+                    for (Mealfood mf : mealFoodList) {
+                        String foodName = mf.getFoodid().getFoodname();
+                        int quantity = mf.getQuantity();
+                %>
+               <div class="recordQuantity">
+                    <p class="name"><b><%=foodName%> x<%=quantity%></b></p>
+                    <br/>
             </div>
+            <% } %>
+            
         </div>
 
         <div class="outsideContainer"><br/><br/><br/>

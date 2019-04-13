@@ -38,20 +38,20 @@
 
         %>
         <div class="mainContainer">
-            <h1>Credit Point Top Up</h1>
-            <h5 style="font-size: 20px; margin-top: -20px;">Enter student's ID</h5>
+            <h1>Redeem Order</h1>
+            <h5 style="font-size: 20px; margin-top: -20px;">Enter coupon code</h5>
 
             <!-- Show alerts if any -->
             <div class="errorMsg">${errorMsg}</div>
                 <div class="successMsg">${successMsg}</div>
                 
-                <form action="TopUpIDServlet" method="POST" id="topUpForm" name="topUpForm">
+                <form action="FindOrderServlet" method="POST" id="findOrderForm" name="findOrderForm">
                     
             <div class="topUpForm">
                 
-                    <input type="text" maxlength="10" placeholder="Student ID" name="studentId" id="studentid" required/>
+                    <input type="text" maxlength="14" placeholder="Coupon Code" name="couponCode" required/>
                     <br/>
-                    <button type="submit" form="topUpForm" value="Submit">next</button>
+                    <button type="submit" form="findOrderForm" value="Submit">next</button>
                     <br/>
                     <br/>
                     </div>
@@ -64,17 +64,4 @@
         %>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#cashAmt").on("input", function () {
-                //Code is possible thanks to Neha Jain @ https://stackoverflow.com/questions/18510845/maxlength-ignored-for-input-type-number-in-chrome
-                //Checks if the number is too long
-                if (this.value.length > this.maxLength) {
-                    this.value = this.value.slice(0, this.maxLength);
-                }
-                var $creditAmt = $("#cashAmt").val() * 100;
-                $(".creditAmount").text($creditAmt);
-            });
-        });
-    </script>
 </html>

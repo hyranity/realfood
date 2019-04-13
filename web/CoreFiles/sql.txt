@@ -106,6 +106,7 @@ create table OrderMeal (
     mealID VARCHAR(10) references meal(mealID) NOT NULL,
     quantity INTEGER NOT NULL,
     isCanceled boolean NOT NULL,
+    isRedeemed boolean NOT NULL,
     
     primary key (orderMealID)
 );

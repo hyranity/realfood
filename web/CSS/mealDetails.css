@@ -38,7 +38,7 @@ input[type=checkbox]{
     border: 1px solid gold;
     display: border-box;
     border-radius: 15px;
-    width: 250px;
-    height: 60px;
+    width: 300px;
     background-color: black;
+    padding: 10px;
 }
