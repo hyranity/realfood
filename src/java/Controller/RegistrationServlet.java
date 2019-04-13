@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -91,13 +92,70 @@ public class RegistrationServlet extends HttpServlet {
             return;
         }
 
+        //Verify email of BOTH tables.
+        // Find existing student details to prevent duplicate emails
+        TypedQuery<Student> query = em.createQuery("SELECT s FROM Student s WHERE  s.email = :email", Student.class).setParameter("email", email);
+        Student studChecking = new Student();
+
+        boolean exists = true;
+        try {
+            studChecking = query.getSingleResult();
+        } catch (NoResultException ex) {
+            // If null, means no existing user
+            System.out.println("No result. This is unique");
+            exists = false;
+        }
+
+        if (exists) {
+            if (userType.equalsIgnoreCase("staff")) {
+                request.setAttribute("errorMsg", "Hey! You entered a student's email. You can't use that.");
+                request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
+                return;
+            } else if (userType.equalsIgnoreCase("student")) {
+                request.setAttribute("errorMsg", "Hold on! You have already registered. Please login!");
+                request.getRequestDispatcher("studentRegistration.jsp").forward(request, response);
+                return;
+            } else {
+                request.setAttribute("errorMsg", "Unknown registration detected.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+        }
+
+        // Find existing staff details to prevent duplicate records
+        TypedQuery<Staff> staffQuery = em.createQuery("SELECT s FROM Staff s WHERE s.email = :email", Staff.class).setParameter("email", email);
+        Staff staffChecking = new Staff();
+
+        exists = true;
+        try {
+            staffChecking = staffQuery.getSingleResult();
+        } catch (NoResultException ex) {
+            // If null, means no existing user
+            exists = false;
+        }
+
+        if (exists) {
+            if (userType.equalsIgnoreCase("staff")) {
+                request.setAttribute("errorMsg", "Hold on! This staff has already been registered. Please login!");
+                request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
+                return;
+            } else if (userType.equalsIgnoreCase("student")) {
+                request.setAttribute("errorMsg", "Hey! You entered a staff's email. You can't use that.");
+                request.getRequestDispatcher("studentRegistration.jsp").forward(request, response);
+                return;
+            } else {
+                request.setAttribute("errorMsg", "Unknown registration detected.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+        }
+
         // If entered from student registration form
         if (userType.equalsIgnoreCase("student")) {
 
             try {
 
                 Schoolsystemstudent ss = new Schoolsystemstudent();
-                utx.begin();
 
                 //Searches the "external database" School System for an enrolled student with the given ID.
                 // TypedQuery<Schoolsystemstudent> query = em.createQuery("SELECT ss FROM Schoolsystemstudent ss WHERE ss.studentid = :studentid and ss.isenrolled = true", Schoolsystemstudent.class).setParameter("studentid", request.getParameter("studentId"));
@@ -109,12 +167,12 @@ public class RegistrationServlet extends HttpServlet {
                 if (ss == null) {
                     System.out.println("ERROR! No student found!");
                     request.setAttribute("errorMsg", "Oops! This student does not exist at the school. Are you sure that the ID is correct?");
-                    request.getRequestDispatcher(previousUrl).forward(request, response);
+                    request.getRequestDispatcher("studentRegistration.jsp").forward(request, response);
                     return;
                 } else if (!ss.getIsenrolled()) {  // If student is no longer enrolled
                     System.out.println("ERROR! The student is no longer enrolled.");
                     request.setAttribute("errorMsg", "Oops! This student is no longer enrolled. We only accept enrolled students.");
-                    request.getRequestDispatcher(previousUrl).forward(request, response);
+                    request.getRequestDispatcher("studentRegistration.jsp").forward(request, response);
                     return;
 
                 } else {
@@ -144,6 +202,7 @@ public class RegistrationServlet extends HttpServlet {
                     stud.setPasswordsalt(hasher.getSalt());
 
                     // Insert the student object
+                    utx.begin();
                     em.persist(stud);
                     utx.commit();
 
@@ -158,48 +217,46 @@ public class RegistrationServlet extends HttpServlet {
                 // This will be triggered if something went wrong.
                 request.setAttribute("errorMsg", "Oops! We couldn't register you for some reason.");
                 request.getRequestDispatcher("studentRegistration.jsp").forward(request, response);
+                ex.printStackTrace();
                 return;
             }
         } else {
             try {
                 Staff staff = new Staff();
+
+                staff = new Staff();
+
+                //Generate ID
+                staffQuery = em.createQuery("SELECT s FROM Staff s", Staff.class);
+                int count = query.getResultList().size();
+
+                //Transfer existing student details into the new account
+                staff.setStaffid(Auto.generateID("EMP", 8, count));    // Set staff ID
+                staff.setFirstname(request.getParameter("fname"));
+                staff.setLastname(request.getParameter("lname"));
+                staff.setEmail(request.getParameter("email")); //Email can be student's personal email
+                staff.setGender(request.getParameter("gender").charAt(0));
+                staff.setMykad(request.getParameter("myKad"));
+                staff.setIshired(true);
+
+                // Set fixed values
+                staff.setDatejoined(Auto.getToday());
+                staff.setStaffrole("canteenStaff");     // This is because there is only 1 manager account (admin account).
+
+                //Hash the password and store the salt 
+                Hasher hasher = new Hasher(request.getParameter("password"));
+                staff.setPassword(hasher.getHashedPassword());
+                staff.setPasswordsalt(hasher.getSalt());
+
+                //Insert the staff object
                 utx.begin();
+                em.persist(staff);
+                utx.commit();
 
-                
-                    staff = new Staff();
-                    
-                    //Generate ID
-                    TypedQuery<Staff> query = em.createQuery("SELECT s FROM Staff s", Staff.class);
-                    int count = query.getResultList().size();
-                    
-                    
-                    //Transfer existing student details into the new account
-                    staff.setStaffid(Auto.generateID("EMP", 8, count));    // Set staff ID
-                    staff.setFirstname(request.getParameter("fname"));
-                    staff.setLastname(request.getParameter("lname"));
-                    staff.setEmail(request.getParameter("email")); //Email can be student's personal email
-                    staff.setGender(request.getParameter("gender").charAt(0));
-                    staff.setMykad(request.getParameter("myKad"));
-                    staff.setIshired(true);
-
-                    // Set fixed values
-                    staff.setDatejoined(Auto.getToday());
-                    staff.setStaffrole("canteenStaff");     // This is because there is only 1 manager account (admin account).
-
-                    //Hash the password and store the salt 
-                    Hasher hasher = new Hasher(request.getParameter("password"));
-                    staff.setPassword(hasher.getHashedPassword());
-                    staff.setPasswordsalt(hasher.getSalt());
-
-                    //Insert the staff object
-                    em.persist(staff);
-                    utx.commit();
-
-                    //Login successful message
-                    request.setAttribute("accountMsg", "Staff registration is successful! The staff may login now.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                
+                //Login successful message
+                request.setAttribute("accountMsg", "Staff registration is successful! The staff may login now.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
 
             } catch (Exception ex) {
                 ex.printStackTrace();

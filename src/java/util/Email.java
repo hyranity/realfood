@@ -49,7 +49,7 @@ public class Email {
     }
     
     private Session createSession(Properties props){
-        return Session.getDefaultInstance(props, new javax.mail.Authenticator(){
+        return Session.getInstance(props, new javax.mail.Authenticator(){
             protected PasswordAuthentication getPasswordAuthentication(){
                 return new PasswordAuthentication(from, "Jl303803");
             }
