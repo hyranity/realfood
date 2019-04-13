@@ -44,20 +44,25 @@ public class ExceptionReport extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             try{
-                Query query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
-                List<Mealfood> Mealfood = query.getResultList();
+                Query query = em.createQuery("SELECT o FROM Ordermeal o WHERE o.ordermealid = :ordermealid", Ordermeal.class);
+                List<Ordermeal> mealID = query.getResultList();
                 
-                query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
-                List<Quantity> Quantity = query.getResultList();
+                query = em.createQuery("SELECT o FROM Ordermeal o WHERE o.quantity = :quantity", Ordermeal.class);
+                List<Ordermeal> quantity = query.getResultList();
                 
-                query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
-                List<CashRefund> CashRefund = query.getResultList();
+                query = em.createQuery("SELECT o FROM Ordermeal o WHERE o.iscanceled = :iscanceled", Ordermeal.class);
+                List<Ordermeal> cashRefund = query.getResultList();
                 
                 
                 String output = "";
+                
+                output += "<tr>" + "<td>" + mealID + "</td>" + "<td>" + quantity + "</td>" +
+                        "<td>" + cashRefund + "</td>" + "</tr>";
+                
             }
             catch(Exception ex){
-                
+                request.setAttribute("output", ex);
+                request.getRequestDispatcher("exceptionReport.jsp");
             }
     }
 

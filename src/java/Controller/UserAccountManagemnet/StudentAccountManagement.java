@@ -45,7 +45,8 @@ public class StudentAccountManagement extends HttpServlet {
             throws ServletException, IOException {
         
         try {
-            String studentId = request.getParameter("studentId");
+            
+            String studentId = request.getParameter("studentid");
             String cPassword = request.getParameter("cPassword");
 
             utx.begin();

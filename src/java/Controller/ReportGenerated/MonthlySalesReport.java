@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.persistence.*;
 import javax.annotation.*;
 import javax.transaction.*;
+import Model.*;
+import java.util.List;
+import Controller.MealManagement.*;
 
 /**
  *
@@ -41,27 +44,47 @@ public class MonthlySalesReport extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             try{
-                Query query = em.createQuery("MealFood.findAll);
-                Query query = em.createQuery("SELECT m FROM Mealfood m WHERE m da", Mealfood.class);
-                List<Mealfood> mealfood = query.getResultList();
-                mealfood.get(0).getDate();
                 
-                query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
-                List<Mealfood> MealID = query.getResultList();
-                mealfood
+                Query query = em.createQuery("SELECT m FROM Meal m", Meal.class);
+                List<Meal> mealList = query.getResultList();
+                
+                query = em.createQuery("SELECT m FROM Meal m WHERE m.mealid = :mealid", Meal.class);
+                List<Meal> MealDate = query.getResultList();
+                
+                query = em.createQuery("SELECT m FROM Meal m WHERE m.mealid = :mealid", Meal.class);
+                List<Meal> MealID = query.getResultList();
                 
                 query = em.createQuery("SELECT m FROM Meal m WHERE m.mealname = :mealname", Meal.class);
-                List<Mealfood> Product = query.getResultList();
+                List<Meal> Product = query.getResultList();
                 
-                query = em.createQuery("Mealfood");
-                List<Mealfood> Quantity = query.getResultList();
+                query = em.createQuery("SELECT m FROM Mealfood m WHERE m.quantity = :quantity", Mealfood.class);
+                List<Mealfood> quantity = query.getResultList();
                 
-                Typequery query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
-                List<Mealfood> Amount = query.getResultList();
+                query = em.createQuery("SELECT m FROM Meal m WHERE m.price = :price", Meal.class);
+                List<Meal> Amount = query.getResultList();
+                
+                String outputMonthly = "";
+  
+                for (int i = 1; i <= mealList.size(); i++) {
+  
+                Meal meal = mealList.get(i);
+    
+                 outputMonthly += "<tr>"
+                  + "<td>" + i + "</td>"
+                  + "<td>" + "<DATE>" + "</td>"
+                  + "<td>" + MealID + "</td>"
+                  + "<td>" + Product + "</td>"
+                  + "<td>" + quantity + "</td>"
+                  + "<td>" + Amount + "</td>"
+                  + "</tr>";
+                 
+            }
             }
             catch(Exception ex){
-                
-            }
+                request.setAttribute("outputMonthly", ex);
+                request.getRequestDispatcher("monthlySalesReport.jsp");
+    }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

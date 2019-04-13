@@ -12,10 +12,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import javax.persistence.*;
 import javax.annotation.*;
 import javax.transaction.*;
-
+import Model.*;
+import java.util.List;
+import Controller.MealManagement.*;
 
 /**
  *

@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.persistence.*;
 import javax.annotation.*;
 import javax.transaction.*;
+import Model.*;
+import java.util.List;
+import Controller.MealManagement.*;
 
 /**
  *
@@ -42,16 +45,22 @@ public class SummaryReport extends HttpServlet {
             throws ServletException, IOException {
             try{
                 Query query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
-                List<Mealfood> Mealfood = query.getResultList();
+                List<Mealfood> month = query.getResultList();
                 
-                query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
-                List<Quantity> Quantity = query.getResultList();
+                query = em.createQuery("SELECT m FROM Mealfood m WHERE m.mealfoodid = :mealfoodid", Mealfood.class);
+                List<Mealfood> mealID = query.getResultList();
                 
-                query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
-                List<CashRefund> CashRefund = query.getResultList();
+                query = em.createQuery("SELECT m FROM Meal m WHERE m.price = :price", Meal.class);
+                List<Meal> amount = query.getResultList();
+                
+                String outputSummary = "";
+                
+                outputSummary += "<tr>" + "<td>" + month + "</td>" + "<td>" + mealID + "</td>" +
+                        "<td>" + amount + "</td>" + "</tr>";
             }
             catch(Exception ex){
-                
+                request.setAttribute("outputSummary", ex);
+                request.getRequestDispatcher("summaryReport.jsp");
             }
     }
 
