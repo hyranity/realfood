@@ -22,7 +22,8 @@ import util.*;
 
 /**
  *
- * IMPORTANT: This is to be run when admin account is to be set to default settings (eg. when manager is changed)
+ * IMPORTANT: This is to be run when admin account is to be set to default
+ * settings (eg. when manager is changed)
  */
 @WebServlet(name = "AdminResetServlet", urlPatterns = {"/AdminResetServlet"})
 public class AdminResetServlet extends HttpServlet {
@@ -52,12 +53,11 @@ public class AdminResetServlet extends HttpServlet {
             try {
                 TypedQuery<Staff> query = em.createQuery("SELECT s FROM Staff s WHERE s.staffid = :staffid and s.staffrole = :role", Staff.class).setParameter("staffid", "EMPMAN").setParameter("role", "manager");
                 manager = query.getSingleResult();
-                
-                
+
             } catch (Exception e) {
                 // If null, this error is okay because it means there's no existing manager (admin) account. Program will proceed to create the account.
                 System.out.println("ERROR: Unable to get admin account: " + e.getMessage());
-                
+
             }
 
             if (manager == null) {
@@ -70,6 +70,10 @@ public class AdminResetServlet extends HttpServlet {
             }
 
             utx.commit();
+
+            request.setAttribute("sucessMsg", "Manager account is restored successfully. Use the default credentials to login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
         } catch (Exception ex) {
             System.out.println("Unable to resolve admin account: " + ex.getMessage());
             ex.printStackTrace();

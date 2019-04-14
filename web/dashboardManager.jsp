@@ -21,7 +21,7 @@
     <body>
         <%
             session = request.getSession(false);
-            // If user is not logged in, redirect to login page
+            
             if (session.getAttribute("staff") == null) {
                 if (session.getAttribute("stud") != null) {
                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
@@ -34,7 +34,14 @@
                 }
             } else {
                 //Ensure that this is the manager.
-                Staff staff = (Staff) session.getAttribute("staff");
+                Staff staff = new Staff();
+                
+                try {
+                        staff = (Staff) session.getAttribute("staff");
+                    } catch (Exception ex) {
+                        // If null, send to dashboard (user accessed this page incorrectly)
+                        response.sendRedirect("dashboardManager.jsp");
+                    }
 
                 //If not manager, log him/her out and give a warning.
                 if (!staff.getStaffrole().equalsIgnoreCase("manager")) {
@@ -51,7 +58,7 @@
             <div class="buttonsContainer">
                 <a href="DisplayStaffServlet"><div class="buttonDiv" id="staff">manage canteen staff</div></a>
                 <a href="#"><div class="buttonDiv" id="report">view reports</div></a>
-                <a href="#"><div class="buttonDiv" id="account">my account</div></a>
+                <a href="managerProfile.jsp"><div class="buttonDiv" id="account">my account</div></a>
             </div>
             <a href="LogoutServlet"><div class="logout">logout</div></a>
         </div>

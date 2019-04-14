@@ -130,6 +130,11 @@ public class LoginServlet extends HttpServlet {
                     request.setAttribute("errorMsg", "Oops! Seems like you've entered an incorrect staff ID or password.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                 } else {
+                    
+                    if(!staff.getIshired()){
+                    request.setAttribute("errorMsg", "I'm sorry, but you have been dismissed as a staff; hence your access is denied.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    }
 
                     // Compare password
                     Hasher hasher = new Hasher(password, staff.getPasswordsalt());    // Use the stored student's salt to hash to login password

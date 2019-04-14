@@ -20,7 +20,7 @@
     </head>
     <body
         <%
-            // If user is not logged in, redirect to login page
+            
             session = request.getSession(false);
             if (session.getAttribute("staff") == null) {
                 if (session.getAttribute("stud") != null) {

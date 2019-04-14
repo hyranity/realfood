@@ -54,7 +54,7 @@ public class FoodQuantityServlet extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         
-        // If user is not logged in, redirect to login page
+        
         if (session.getAttribute("permission") == null) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);

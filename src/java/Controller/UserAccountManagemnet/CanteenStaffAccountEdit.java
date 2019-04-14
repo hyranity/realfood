@@ -25,8 +25,8 @@ import util.Hasher;
  *
  * @author Richard Khoo
  */
-@WebServlet(name = "StudentAccountManagement", urlPatterns = {"/StudentAccountManagement"})
-public class StudentAccountManagement extends HttpServlet {
+@WebServlet(name = "CanteenStaffAccountEdit", urlPatterns = {"/CanteenStaffAccountEdit"})
+public class CanteenStaffAccountEdit extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -64,13 +64,12 @@ public class StudentAccountManagement extends HttpServlet {
         }
 
         
-        // Allow student only
-        if (!permission.equalsIgnoreCase("student")) {
+        // Allow staff only
+        if (!permission.equalsIgnoreCase("canteenStaff")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
-            String email = "";
             String password = "";
             String cPassword = "";
             String currentPassword = "";
@@ -79,24 +78,23 @@ public class StudentAccountManagement extends HttpServlet {
                 currentPassword = request.getParameter("currentPassword");
             } catch (Exception ex) {
                 // Means user entered this servlet incorrectly, hence redirect
-                response.sendRedirect("dashboardStudent.jsp");
+                response.sendRedirect("dashboardCanteenStaff.jsp");
             }
 
-            if (email == null || password == null || cPassword == null || currentPassword == null) {
+            if (password == null || cPassword == null || currentPassword == null) {
                 //Means user entered this servlet wrongly, hence redirect
-                response.sendRedirect("dashboardStudent.jsp");
+                response.sendRedirect("dashboardCanteenStaff.jsp");
             }
 
-            boolean emailUpdated = false;
             boolean passwordUpdated = false;
 
-            // Get student from session
-            Student student = new Student();
+            // Get staff from session
+            Staff staff = new Staff();
 
             try {
-                student = (Student) session.getAttribute("stud");
+                staff = (Staff) session.getAttribute("staff");
 
-                if (student == null) {
+                if (staff == null) {
                     request.setAttribute("errorMsg", "Please login.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;
@@ -111,85 +109,60 @@ public class StudentAccountManagement extends HttpServlet {
 
             if (currentPassword == "") {
                 request.setAttribute("errorMsg", "Please enter current password to save the changes.");
-                request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                request.getRequestDispatcher("staffProfile.jsp").forward(request, response);
                 return;
             }
 
             // Ensure that the password is correct first, or else details are not updated
-            Hasher checkPass = new Hasher(currentPassword, student.getPasswordsalt());
+            Hasher checkPass = new Hasher(currentPassword, staff.getPasswordsalt());
 
             // If not same
-            if (!checkPass.getHashedPassword().equals(student.getPassword())) {
+            if (!checkPass.getHashedPassword().equals(staff.getPassword())) {
                 request.setAttribute("errorMsg", "You've entered your current password wrongly. Please try again");
-                request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                request.getRequestDispatcher("staffProfile.jsp").forward(request, response);
                 return;
-            }
-
-            // Attempts to get email
-            try {
-                email = request.getParameter("email");
-
-                if (!email.equals(student.getEmail())) {
-                    if (email == "") {
-                        request.setAttribute("errorMsg", "Please don't leave your email blank.");
-                        request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
-                        return;
-                    } else {
-                        // Update the email if the field is not empty
-                        student.setEmail(email);
-                        emailUpdated = true;
-                    }
-                }
-
-            } catch (Exception ex) {
-                // If not updated its okay, since the user didn't edit anything
             }
 
             // Attemps to get password
             try {
                 password = request.getParameter("password");
                 cPassword = request.getParameter("cPassword");
-                
-                 if(password != "" && cPassword != ""){
+
+                if (password != "" && cPassword != "") {
 
                     if (!cPassword.equals(password)) {
                         // If password entered is not the same
                         request.setAttribute("errorMsg", "Your new password and the confirmation do not match.");
-                        request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                        request.getRequestDispatcher("staffProfile.jsp").forward(request, response);
                         return;
                     }
 
                     Hasher hasher = new Hasher(password);
-                    student.setPassword(hasher.getHashedPassword());
-                    student.setPasswordsalt(hasher.getSalt());
+                    staff.setPassword(hasher.getHashedPassword());
+                    staff.setPasswordsalt(hasher.getSalt());
                     passwordUpdated = true;
-                    }
-                 else if (cPassword == "" && password == "") {
-                    
-                   // Nothing happens if both are empty
-      
-                }
-                 else{
-                     if (cPassword == "" && password == "") {
+                } else if (cPassword == "" && password == "") {
+
+                    // Nothing happens if both are empty
+                } else {
+                    if (cPassword == "" && password == "") {
                         request.setAttribute("errorMsg", "To update your password, fill in all password fields.");
-                        request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                        request.getRequestDispatcher("staffProfile.jsp").forward(request, response);
                         return;
                     }
-                    
+
                     if (cPassword == "") {
                         request.setAttribute("errorMsg", "Please enter confirmation password.");
-                        request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                        request.getRequestDispatcher("staffProfile.jsp").forward(request, response);
                         return;
                     }
-                    
+
                     if (password == "") {
                         request.setAttribute("errorMsg", "Please enter new password if you wish to change it.");
-                        request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                        request.getRequestDispatcher("staffProfile.jsp").forward(request, response);
                         return;
                     }
-                 }
-                
-                
+                }
 
             } catch (Exception ex) {
                 // If not updated its okay, since the user didn't edit anything
@@ -199,27 +172,22 @@ public class StudentAccountManagement extends HttpServlet {
 
                 // Save into database
                 utx.begin();
-                em.merge(student);
+                em.merge(staff);
                 utx.commit();
 
                 // Update the one in session
-                session.setAttribute("stud", student);
+                session.setAttribute("staff", staff);
 
                 String successMsg = "";
-                if (emailUpdated && passwordUpdated) {
-                    successMsg = "Your email and password has been updated.";
-                } else if (passwordUpdated) {
+                if (passwordUpdated) {
                     successMsg = "Your password has been updated.";
-                } else if (emailUpdated) {
-                    successMsg = "Your email has been updated.";
                 } else {
                     successMsg = "Nothing has been updated.";
-
                 }
 
-                // Notify student
+                // Notify staff
                 request.setAttribute("successMsg", successMsg);
-                request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                request.getRequestDispatcher("staffProfile.jsp").forward(request, response);
                 return;
             } catch (Exception ex) {
 

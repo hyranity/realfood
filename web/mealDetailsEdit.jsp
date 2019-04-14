@@ -19,7 +19,7 @@
         <%
             session = request.getSession(false);
 
-            // If user is not logged in, redirect to login page
+            
             if (session.getAttribute("permission") == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -187,7 +187,7 @@
             } else {
             %>
             <h5>Re-enable meal?</h5>
-            <p>The meal will be discontinued.</p>
+            <p>The meal will continue again.</p>
             <%
                 }
             %>
