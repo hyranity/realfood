@@ -101,28 +101,36 @@
                     <a href="#" onclick="confirmtoggleOverlay()"> <div class="toggleOverlay" id="rehire">Re-hire</div></a>
                     <%}%>
                     <div>
+                        <label>Staff ID</label><br/>
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="staffid" readonly/>
                     </div>
                     <div id="nameDiv"> 
+                        <label>Username</label><br/>
                         <input type="text" class="name" placeholder="First Name" value="<%=firstName%>"  name="fname" required/>
                         <input type="text" class="name" placeholder="Last Name" value="<%=lastName%>" name="lname" required/>
                     </div>
                     <div>
+                        <label>Gender</label><br/>
                         <input type="text" value="<%=gender%>" placeholder="Gender" id="gender"  name="gender" required/>
                     </div>
                     <div>
+                        <label>Email</label><br/>
                         <input type="text" value="<%=email%>" placeholder="Email" id="email" name="email" required/>
                     </div>
                     <div>
+                        <label>Mykad Number</label><br/>
                         <input type="text" value="<%=myKad%>" placeholder="MyKAD" id="myKAD" name="myKAD" required/>
                     </div>
                     <div>
+                        <label>Date Joined</label><br/>
                         <input type="text" value="Joined: <%=dateJoined%>" id="dateJoined"  style="background-color: darkgray;"  readonly/>
                     </div>
                     <div>
+                        <label>Date Dismissed</label><br/>
                         <input type="text" value="<%=dateDismissed%>" id="dateDismissed"  style="background-color: darkgray; font-weight: 500;"  readonly/>
                     </div>
                     <div>
+                        <label>Password</label><br/>
                         <input type="password"  placeholder="Manager Password" id="managerPassword" name="managerPassword" required/>
                     </div>
                     <br/>
