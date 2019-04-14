@@ -17,7 +17,7 @@
             <div class="mainContainer">
 
                 <form action="#" class="form">
-                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable">Unenroll</div></a>
+                    <a href="#" onclick="confirmtoggleOverlay()"> <div class="toggleOverlay">Unenroll</div></a>
                     <div>
                         <input type="text" value="STU00294" style="background-color: darkgray;"  id="studentid" readonly/>
                     </div>
@@ -45,11 +45,11 @@
             </div>
         </div>
         <a href="displayStudents.jsp"><div class="back">back</div></a>
-        <div class="toggleDisableConfirmation">
+        <div class="toggleConfirmation">
             <h5>Unenroll student?</h5>
             <p>The student will not be able to use the system anymore.</p>
-            <a href="#"><div class="toggleDisableConfirm">Yes</div></a>
-            <a href="#"><div class="toggleDisableCancel">No</div></a>
+            <a href="#"><div class="overlayConfirm">Yes</div></a>
+            <a href="#"><div class="overlayCancel">No</div></a>
         </div>
 
     </body>
@@ -100,7 +100,7 @@
                                         $("#subtitle").html("Here's where you can view and edit student's details.");
                                         $("#subtitle").css("color", "white");
                                     });
-                                    $(".toggleDisable").hover(function () {
+                                    $(".toggleOverlay").hover(function () {
                                         $("#subtitle").html("Unenroll the student");
                                         $("#subtitle").css("color", "red");
                                     }, function () {
@@ -108,14 +108,14 @@
                                         $("#subtitle").css("color", "white");
                                     });
 
-                                    $(".toggleDisable").click(function confirmtoggleDisable() {
-                                        $(".toggleDisableConfirmation").css("display", "inline-block");
+                                    $(".toggleOverlay").click(function confirmtoggleOverlay() {
+                                        $(".toggleConfirmation").css("display", "inline-block");
                                         $(".outsideContainer").css("opacity", "0.5");
                                         $(".outsideContainer :input").prop("disabled", true);
                                     });
 
-                                    $(".toggleDisableCancel").click(function confirmtoggleDisable() {
-                                        $(".toggleDisableConfirmation").css("display", "none");
+                                    $(".overlayCancel").click(function confirmtoggleOverlay() {
+                                        $(".toggleConfirmation").css("display", "none");
                                         $(".outsideContainer").css("opacity", "1");
                                         $(".outsideContainer :input").prop("disabled", false);
                                     });

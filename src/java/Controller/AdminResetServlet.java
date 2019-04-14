@@ -71,7 +71,7 @@ public class AdminResetServlet extends HttpServlet {
 
             utx.commit();
 
-            request.setAttribute("sucessMsg", "Manager account is restored successfully. Use the default credentials to login.");
+            request.setAttribute("successMsg", "Manager account is restored successfully. Use the default credentials to login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } catch (Exception ex) {

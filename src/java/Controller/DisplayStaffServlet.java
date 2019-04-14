@@ -48,6 +48,9 @@ public class DisplayStaffServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         HttpSession session = session = request.getSession(false);
+        
+        // clear the session of any unwanted obejcts
+        session.setAttribute("staffForEdit", null);
 
             String permission = "";
 

@@ -59,12 +59,12 @@ public class ProcessManagerEdit extends HttpServlet {
             }
 
         } catch (NullPointerException ex) {
-            request.setAttribute("errorMsg", "Please login.");
+            request.setAttribute("errorMsg", "Please login.");  
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        // Allow student only
+        // Allow manager only
         if (!permission.equalsIgnoreCase("manager")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -91,7 +91,7 @@ public class ProcessManagerEdit extends HttpServlet {
                 return;
             }
 
-            if (email == null || fname == null || lname == null || managerPassword == null || myKad == null) {
+            if (email == null || fname == null || lname == null || managerPassword == null || myKad == null || inputGender == null || password == null || cPassword == null) {
                 //Means user entered this servlet wrongly, hence redirect
                 System.out.println("One field is null.");
                 response.sendRedirect("dashboardManager.jsp");
@@ -103,9 +103,8 @@ public class ProcessManagerEdit extends HttpServlet {
             Staff manager = new Staff();
 
             try {
-                staff = (Staff) session.getAttribute("staffForEdit");
-                manager = (Staff) session.getAttribute("staff");
-
+                staff = (Staff) session.getAttribute("staff");
+                staff.getGender();
                 if (staff == null) {
                     request.setAttribute("errorMsg", "Please login.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -121,29 +120,31 @@ public class ProcessManagerEdit extends HttpServlet {
 
             if (managerPassword == "") {
                 request.setAttribute("errorMsg", "Please enter your password to save the changes.");
-                request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
                 return;
             }
 
             // Ensure that the password is correct first, or else details are not updated
-            Hasher checkPass = new Hasher(managerPassword, manager.getPasswordsalt());
+            Hasher checkPass = new Hasher(managerPassword, staff.getPasswordsalt());
 
             // If not same
-            if (!checkPass.getHashedPassword().equals(manager.getPassword())) {
+            if (!checkPass.getHashedPassword().equals(staff.getPassword())) {
                 request.setAttribute("errorMsg", "You've entered your password wrongly. Please try again");
-                request.getRequestDispatcher("editStaff.jsp").forward(request, response);
+                request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
                 return;
             }
 
             // Update gender if different
             char gender = ' ';
+            
             if (inputGender.equalsIgnoreCase("male") || inputGender.equalsIgnoreCase("m")) {
                 gender = 'M';
+                
             } else if (inputGender.equalsIgnoreCase("female") || inputGender.equalsIgnoreCase("f")) {
                 gender = 'F';
             } else {
                 request.setAttribute("errorMsg", "Sorry, we accept genders to be either Male or Female.");
-                request.getRequestDispatcher("editStaff.jsp").forward(request, response);
+                request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
                 return;
             }
 
@@ -168,8 +169,8 @@ public class ProcessManagerEdit extends HttpServlet {
 
                 successMsg += "last name";
             }
-
-            if (gender != staff.getGender()) {
+            
+                if (gender != staff.getGender()) {
                 staff.setGender(gender);
 
                 if (successMsg != "") {
@@ -207,7 +208,7 @@ public class ProcessManagerEdit extends HttpServlet {
                 if (!cPassword.equals(password)) {
                     // If password entered is not the same
                     request.setAttribute("errorMsg", "Your new password and the confirmation do not match.");
-                    request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                    request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
                     return;
                 }
 
@@ -225,19 +226,19 @@ public class ProcessManagerEdit extends HttpServlet {
             } else {
                 if (cPassword == "" && password == "") {
                     request.setAttribute("errorMsg", "To update your password, fill in all password fields.");
-                    request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                    request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
                     return;
                 }
 
                 if (cPassword == "") {
                     request.setAttribute("errorMsg", "Please enter confirmation password.");
-                    request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                    request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
                     return;
                 }
 
                 if (password == "") {
                     request.setAttribute("errorMsg", "Please enter new password if you wish to change it.");
-                    request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                    request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
                     return;
                 }
             }
@@ -260,17 +261,17 @@ public class ProcessManagerEdit extends HttpServlet {
 
                 // Notify student
                 request.setAttribute("successMsg", successMsg);
-                request.getRequestDispatcher("editStaff.jsp").forward(request, response);
+                request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
                 return;
             } catch (ConstraintViolationException ex) {
                 System.out.println(ex.getConstraintViolations());
                 request.setAttribute("errorMsg", "Oops, seems we can't update the details for some reason");
-                request.getRequestDispatcher("editStaff.jsp").forward(request, response);
+                request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
                 return;
 
             } catch (Exception ex) {
                 request.setAttribute("errorMsg", "Oops, seems we can't update the details for some reason");
-                request.getRequestDispatcher("editStaff.jsp").forward(request, response);
+                request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
                 return;
             }
         }

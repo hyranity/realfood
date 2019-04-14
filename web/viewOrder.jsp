@@ -174,7 +174,7 @@
                     <%
                         if (!so.getIscanceled() && !so.getIsredeemed() && !isBlockedFromCanceling && !expired) {
                     %>
-                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable">Cancel Order</div></a>      
+                    <a href="#" onclick="confirmtoggleOverlay()"> <div class="toggleOverlay">Cancel Order</div></a>      
                     <a href="LoadOrderForEditServlet?orderId=<%=orderId%>"><div class="editOrderBt">Edit Order</div></a>
                     <%
                         }
@@ -195,11 +195,11 @@
         <%
             if (!so.getIscanceled() && !so.getIsredeemed() && !isBlockedFromCanceling && !expired) {
         %>
-        <div class="toggleDisableConfirmation">
+        <div class="toggleConfirmation">
             <h5>Cancel order?</h5>
             <p>The order will be canceled and you will receive an 80% refund.</p>
-            <a href="OrderCancellationServlet?orderId=<%=orderId%>"><div class="toggleDisableConfirm">Yes</div></a>
-            <a href="#"><div class="toggleDisableCancel">No</div></a>
+            <a href="OrderCancellationServlet?orderId=<%=orderId%>"><div class="overlayConfirm">Yes</div></a>
+            <a href="#"><div class="overlayCancel">No</div></a>
         </div>
         <%}%>
         <h6 class="credits">1000 credits</h6>
@@ -260,7 +260,7 @@
                                 $("#subtitle").css("color", "white");
                             });
 
-                            $(".toggleDisable").hover(function () {
+                            $(".toggleOverlay").hover(function () {
                                 $("#subtitle").html("Cancel the order.");
                                 $("#subtitle").css("color", "red");
                             }, function () {
@@ -282,14 +282,14 @@
                                 $("#subtitle").css("color", "white");
                             });
 
-                            $(".toggleDisable").click(function confirmtoggleDisable() {
-                                $(".toggleDisableConfirmation").css("display", "inline-block");
+                            $(".toggleOverlay").click(function confirmtoggleOverlay() {
+                                $(".toggleConfirmation").css("display", "inline-block");
                                 $(".outsideContainer").css("opacity", "0.5");
                                 $(".outsideContainer :input").prop("disabled", true);
                             });
 
-                            $(".toggleDisableCancel").click(function confirmtoggleDisable() {
-                                $(".toggleDisableConfirmation").css("display", "none");
+                            $(".overlayCancel").click(function confirmtoggleOverlay() {
+                                $(".toggleConfirmation").css("display", "none");
                                 $(".outsideContainer").css("opacity", "1");
                                 $(".outsideContainer :input").prop("disabled", false);
                             });

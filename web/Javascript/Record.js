@@ -52,24 +52,24 @@ $(document).ready(function () {
         $("#subtitle").css("color", "white");
     });
 
-    $(".toggleDisable").click(function toggleDisable() {
-        $(".toggleDisableConfirmation").css("display", "inline-block");
+    $(".toggleOverlay").click(function toggleOverlay() {
+        $(".toggleConfirmation").css("display", "inline-block");
         $(".outsideContainer :input").prop("disabled", true);
     });
 
-    $(".toggleDisableCancel").click(function confirmToggle() {
-        $(".toggleDisableConfirmation").css("display", "none");
+    $(".overlayCancel").click(function confirmToggle() {
+        $(".toggleConfirmation").css("display", "none");
         $(".outsideContainer :input").prop("disabled", false);
     });
 
 // The following code allows a "disabling" overlay 
-    $(".toggleDisable").click(function () {
+    $(".toggleOverlay").click(function () {
         $(".coverOverlay").css("display", "block");
-        $(".toggleDisableConfirmation").css("z-index", "1");
+        $(".toggleConfirmation").css("z-index", "1");
     });
 
-    $(".toggleDisableCancel").click(function () {
+    $(".overlayCancel").click(function () {
         $(".coverOverlay").css("display", "none");
-        $(".toggleDisableConfirmation").css("z-index", "0");
+        $(".toggleConfirmation").css("z-index", "0");
     });
 });

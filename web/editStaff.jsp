@@ -94,11 +94,11 @@
                 <form action="CanteenStaffAccountEditByManager" class="form">
                     <%                        if (staff.getIshired()) {
                     %>
-                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable" id="dismiss">Dismiss</div></a>
+                    <a href="#" onclick="confirmtoggleOverlay()"> <div class="toggleOverlay" id="dismiss">Dismiss</div></a>
                     <%
                     } else {
                     %>
-                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable" id="rehire">Re-hire</div></a>
+                    <a href="#" onclick="confirmtoggleOverlay()"> <div class="toggleOverlay" id="rehire">Re-hire</div></a>
                     <%}%>
                     <div>
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="staffid" readonly/>
@@ -117,7 +117,7 @@
                         <input type="text" value="<%=myKad%>" placeholder="MyKAD" id="myKAD" name="myKAD" required/>
                     </div>
                     <div>
-                        <input type="text" value="Joined: 16 March, 2017" id="dateJoined"  style="background-color: darkgray;"  readonly/>
+                        <input type="text" value="Joined: <%=dateJoined%>" id="dateJoined"  style="background-color: darkgray;"  readonly/>
                     </div>
                     <div>
                         <input type="text" value="<%=dateDismissed%>" id="dateDismissed"  style="background-color: darkgray; font-weight: 500;"  readonly/>
@@ -132,7 +132,7 @@
             </div>
         </div>
         <a href="DisplayStaffServlet"><div class="back">Back</div></a>
-        < <div class="toggleDisableConfirmation">
+        < <div class="toggleConfirmation">
             <%
                 if (isHired) {
             %>
@@ -146,8 +146,8 @@
             <%
                 }
             %>
-            <a href="ToggleStaffDismissal"><div class="toggleDisableConfirm">Yes</div></a>
-            <a href="#"><div class="toggleDisableCancel">No</div></a>
+            <a href="ToggleStaffDismissal"><div class="overlayConfirm">Yes</div></a>
+            <a href="#"><div class="overlayCancel">No</div></a>
         </div>
         <div class="coverOverlay"></div>
         <%}%>
@@ -213,29 +213,29 @@
                                 $("#subtitle").html("Here's where you can view and edit staff's details.");
                                 $("#subtitle").css("color", "white");
                             });
-                            $(".toggleDisable").hover(function () {
+                            $(".toggleOverlay").hover(function () {
                                 $("#subtitle").html("Dismiss the staff");
                                 $("#subtitle").css("color", "red");
                             }, function () {
                                 $("#subtitle").html("Here's where you can view and edit staff's details.");
                                 $("#subtitle").css("color", "white");
                             });
-                            $(".toggleDisable").click(function confirmtoggleDisable() {
-                                $(".toggleDisableConfirmation").css("display", "inline-block");
+                            $(".toggleOverlay").click(function confirmtoggleOverlay() {
+                                $(".toggleConfirmation").css("display", "inline-block");
                                 $(".outsideContainer :input").prop("disabled", true);
                             });
-                            $(".toggleDisableCancel").click(function confirmtoggleDisable() {
-                                $(".toggleDisableConfirmation").css("display", "none");
+                            $(".overlayCancel").click(function confirmtoggleOverlay() {
+                                $(".toggleConfirmation").css("display", "none");
                                 $(".outsideContainer :input").prop("disabled", false);
                             });<!--  The following code allows a "disabling" overlay -->
-                            $(".toggleDisable").click(function () {
+                            $(".toggleOverlay").click(function () {
                                 $(".coverOverlay").css("display", "block");
-                                $(".toggleDisableConfirmation").css("z-index", "1");
+                                $(".toggleConfirmation").css("z-index", "1");
                             });
 
-                            $(".toggleDisableCancel").click(function () {
+                            $(".overlayCancel").click(function () {
                                 $(".coverOverlay").css("display", "none");
-                                $(".toggleDisableConfirmation").css("z-index", "0");
+                                $(".toggleConfirmation").css("z-index", "0");
                             });
                         });
     </script>
