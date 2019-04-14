@@ -48,18 +48,18 @@ public class Notification implements Serializable {
     private String notificationid;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 30)
     @Column(name = "TITLE")
     private String title;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 200)
     @Column(name = "DESCRIPTION")
     private String description;
     @Basic(optional = false)
     @NotNull
     @Column(name = "DATEISSUED")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateissued;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "notificationid")
     private List<Notificationstudent> notificationstudentList;
