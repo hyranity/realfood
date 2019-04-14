@@ -10,6 +10,7 @@ import Model.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +21,7 @@ import javax.persistence.*;
 import javax.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.transaction.*;
+import util.Auto;
 import util.Hasher;
 
 /**
@@ -82,7 +84,13 @@ public class DisplayStats extends HttpServlet {
                // Get number of orders this past 7 days
                Calendar firstDay = Calendar.getInstance();
                firstDay.add(Calendar.DAY_OF_YEAR,  -7);
-
+               
+               System.out.println(firstDay.get(Calendar.DAY_OF_MONTH));
+               
+               List<Studentorder> orderList = em.createQuery("SELECT so FROM Studentorder so WHERE so.chosendate BETWEEN :firstDay AND :today").setParameter("firstDay", Auto.calToDate(firstDay)).setParameter("today", Auto.getToday()).getResultList();
+               
+               // Get total calories consumed.
+               
                 // Notify student
                 /* request.setAttribute("successMsg", "");
                 request.getRequestDispatcher("studentStats.jsp").forward(request, response);
