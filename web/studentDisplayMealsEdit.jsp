@@ -94,6 +94,7 @@
             </div>
 
         </form>
+        <!-- Display student's credits -->
         <h6 class="credits"><%=credits%> credits</h6>
         <%}%>
     </body>

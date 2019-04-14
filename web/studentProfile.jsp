@@ -97,7 +97,8 @@
             </div>
         </div>
                     <a  href="dashboardStudent.jsp"><div class="back">back</div></a>
-        <h6 class="credits">1000 credits</h6>
+             <!-- Display student's credits -->
+            <h6 class="credits"><%=credits%> credits</h6>
     </div>
     <%
         }

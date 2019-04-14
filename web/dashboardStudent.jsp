@@ -27,7 +27,7 @@
 
             String permission = "";
          
-             (if student attribute in session is null)
+            /* (if student attribute in session is null)*/
             if( session.getAttribute("stud") == null){
                 // Set error message
                 request.setAttribute("errorMsg", "Oops! Please login.");
@@ -45,7 +45,8 @@
         <div class="dashboardContainer">
             <h1>Welcome, <%=fname%> <span class="badge badge-success">Student</span></h1>
             <h4 id="subtitle">Here's your dashboard.</h4>
-            <div class="credits">1000 Credits</div>
+            <!-- Display student's credits -->
+            <h6 class="credits"><%=credits%> credits</h6>
             <div class="buttonsContainer">
                 <a href="DisplayOrdersServlet"><div class="buttonDiv" id="order">my orders</div></a>
                 <a href="#"><div class="buttonDiv" id="notification">my notifications</div></a>
@@ -55,6 +56,7 @@
             </div>
             <a href="LogoutServlet"><div class="logout">logout</div></a>
         </div>
+
             <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
