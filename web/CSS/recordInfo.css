@@ -64,7 +64,7 @@ h6{
 
 
 
-#name{
+.name{
     overflow: hidden;
     display: inline-block;
     width: 82px;

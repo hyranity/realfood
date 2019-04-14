@@ -42,20 +42,21 @@
                 Staff staff = new Staff();
                 try {
                     staff = (Staff) session.getAttribute("staffForEdit");
-                    staff.getFirstname();
+                    staff.getGender();
                 } catch (Exception ex) {
                     // If null, redirect
                     response.sendRedirect("DisplayStaffServlet");
                 }
                 String id = staff.getStaffid();
-                String fname = staff.getFirstname();
-                String lname = staff.getLastname();
+               
                 boolean isHired = staff.getIshired();
                 String myKad = staff.getMykad();
                 String dateJoined = Auto.dateToString(staff.getDatejoined());
                 String dateDismissed = "";
                 String email = staff.getEmail();
                 String gender = "";
+                 String firstName = staff.getFirstname();
+                String lastName = staff.getLastname();
 
                 //Gender setting
                 if (staff.getGender() == 'M') {
@@ -86,6 +87,8 @@
             <h1>Edit Canteen Staff</h1>
             <h5 id="subtitle">Here's where you can view and edit staff's details.</h5>
             <br/>
+            <div class="errorMsg">${errorMsg}</div>
+            <div class="successMsg">${successMsg}</div>
             <div class="mainContainer">
 
                 <form action="CanteenStaffAccountEditByManager" class="form">
@@ -100,9 +103,9 @@
                     <div>
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="staffid" readonly/>
                     </div>
-                    <div id="nameDiv">
-                        <input type="text" id="name" placeholder="First Name" value="<%=fname%>"  name="fname" required/>
-                        <input type="text" id="name" placeholder="Last Name" value="<%=lname%>" name="lname" required/>
+                    <div id="nameDiv"> 
+                        <input type="text" class="name" placeholder="First Name" value="<%=firstName%>"  name="fname" required/>
+                        <input type="text" class="name" placeholder="Last Name" value="<%=lastName%>" name="lname" required/>
                     </div>
                     <div>
                         <input type="text" value="<%=gender%>" placeholder="Gender" id="gender"  name="gender" required/>

@@ -24,10 +24,10 @@ import util.Hasher;
 
 /**
  *
- * @author Richard Khoo
+ * @author Johann
  */
-@WebServlet(name = "CanteenStaffAccountEditByManager", urlPatterns = {"/CanteenStaffAccountEditByManager"})
-public class CanteenStaffAccountEditByManager extends HttpServlet {
+@WebServlet(name = "ProcessManagerEdit", urlPatterns = {"/ProcessManagerEdit"})
+public class ProcessManagerEdit extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -77,6 +77,9 @@ public class CanteenStaffAccountEditByManager extends HttpServlet {
             String lname = request.getParameter("lname");
             String myKad = request.getParameter("myKAD");
             String inputGender = request.getParameter("gender");
+            String password = request.getParameter("password");
+            String cPassword = request.getParameter("cPassword");
+
             String successMsg = "";
 
             try {
@@ -131,8 +134,8 @@ public class CanteenStaffAccountEditByManager extends HttpServlet {
                 request.getRequestDispatcher("editStaff.jsp").forward(request, response);
                 return;
             }
-            
-             // Update gender if different
+
+            // Update gender if different
             char gender = ' ';
             if (inputGender.equalsIgnoreCase("male") || inputGender.equalsIgnoreCase("m")) {
                 gender = 'M';
@@ -198,6 +201,47 @@ public class CanteenStaffAccountEditByManager extends HttpServlet {
                 successMsg += "MyKAD";
             }
 
+            // UPDATE PASSWORD
+            if (password != "" && cPassword != "") {
+
+                if (!cPassword.equals(password)) {
+                    // If password entered is not the same
+                    request.setAttribute("errorMsg", "Your new password and the confirmation do not match.");
+                    request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                    return;
+                }
+
+                Hasher hasher = new Hasher(password);
+                staff.setPassword(hasher.getHashedPassword());
+                staff.setPasswordsalt(hasher.getSalt());
+                if (successMsg != "") {
+                    successMsg += ", ";
+                }
+
+                successMsg += "password";
+            } else if (cPassword == "" && password == "") {
+
+                // Nothing happens if both are empty
+            } else {
+                if (cPassword == "" && password == "") {
+                    request.setAttribute("errorMsg", "To update your password, fill in all password fields.");
+                    request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                    return;
+                }
+
+                if (cPassword == "") {
+                    request.setAttribute("errorMsg", "Please enter confirmation password.");
+                    request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                    return;
+                }
+
+                if (password == "") {
+                    request.setAttribute("errorMsg", "Please enter new password if you wish to change it.");
+                    request.getRequestDispatcher("studentProfile.jsp").forward(request, response);
+                    return;
+                }
+            }
+
             try {
 
                 // Save into database
@@ -206,7 +250,7 @@ public class CanteenStaffAccountEditByManager extends HttpServlet {
                 utx.commit();
 
                 // Update the one in session
-                session.setAttribute("staffForEdit", staff);
+                session.setAttribute("staff", staff);
 
                 if (successMsg == "") {
                     successMsg = "Nothing has been updated";
