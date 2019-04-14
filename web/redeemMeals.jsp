@@ -118,6 +118,11 @@
                     <input type="checkbox" id="<%=omId%>" value="<%=omId%>" name="chosenMeals" disabled checked>
                     <label  class="mealItem" for="<%=omId%>" ><%=mealName%></label>
                     <%
+                    } else if(om.getIscanceled()){
+                    %>
+                    <input type="checkbox" id="<%=omId%>" value="<%=omId%>" name="chosenMeals" style="background-color: red;" disabled>
+                    <label  class="mealItem" for="<%=omId%>" ><%=mealName%></label>
+                    <%
                     } else{
                     %>
                     <input type="checkbox" id="<%=omId%>" value="<%=omId%>" name="chosenMeals">

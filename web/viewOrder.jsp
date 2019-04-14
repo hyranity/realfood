@@ -132,7 +132,12 @@
                     %>
                     <p class="mealItem" style="color: white; background-color:darkgreen;"><%=mealName%></p>
                     <%
-                    }else{
+                    }else if(om.getIscanceled()){
+                    %>
+                    <p class="mealItem" style="color: white; background-color: red;"><%=mealName%></p>
+                    <!-- Display the meal time -->
+                    <%
+                        }else{
                     %>
                     <p class="mealItem" ><%=mealName%></p>
                     <!-- Display the meal time -->
@@ -140,7 +145,7 @@
                         }
                         if (meal.getIsbreakfast()) {
                     %>
-                    <p class="breakfast">Breakfast</p>
+                    <p class="breakfast">Bkfast</p>
                     <%
                     } else if (meal.getIslunch()) {
                     %>

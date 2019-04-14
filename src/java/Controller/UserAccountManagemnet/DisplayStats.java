@@ -3,39 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.OrderManagement;
+package Controller.UserAccountManagemnet;
 
-import Controller.MealManagement.*;
 import Model.*;
+
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import javax.persistence.*;
+import javax.annotation.*;
 import javax.servlet.http.HttpSession;
-import javax.transaction.UserTransaction;
-import javax.validation.ConstraintViolationException;
-import util.Auto;
+import javax.transaction.*;
+import util.Hasher;
 
 /**
  *
- * @author mast3
+ * @author Richard Khoo
  */
-@WebServlet(name = "OrderCancellationServlet", urlPatterns = {"/OrderCancellationServlet"})
-public class OrderCancellationServlet extends HttpServlet {
-
-    @PersistenceContext
-    EntityManager em;
-    @Resource
-    UserTransaction utx;
+@WebServlet(name = "DisplayStats", urlPatterns = {"/DisplayStats"})
+public class DisplayStats extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,18 +38,21 @@ public class OrderCancellationServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @PersistenceContext
+    EntityManager em;
+    @Resource
+    UserTransaction utx;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
 
         String permission = "";
-        String orderId = "";
-        Student student = new Student();
+        Student studentFromSession = new Student();
+
         try {
             permission = (String) session.getAttribute("permission");
-            student = (Student) session.getAttribute("stud");
-
+            studentFromSession = (Student) session.getAttribute("stud");
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -70,70 +65,33 @@ public class OrderCancellationServlet extends HttpServlet {
             return;
         }
 
-        // Allow staff only
+        
+        // Allow student only
         if (!permission.equalsIgnoreCase("student")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
+           try{
+               
+               Student stud = new Student();
+               
+               // Use the student object in session to get the one from database
+               stud = em.find(Student.class, studentFromSession.getStudentid());
+               
+               // Get number of orders this past 7 days
+               Calendar firstDay = Calendar.getInstance();
+               firstDay.add(Calendar.DAY_OF_YEAR,  -7);
 
-            try {
-                orderId = request.getParameter("orderId");
-
-                // Obtain order object from database
-                Studentorder studOrder = em.find(Studentorder.class, orderId);
-
-                // Count those that are not canceled.
-                int totalPrice = 0;
-                for (Ordermeal om : studOrder.getOrdermealList()) {
-                    if (!om.getIscanceled()) {
-                        totalPrice += om.getQuantity() * om.getMealid().getPrice();
-                        om.setIscanceled(true);
-                    }
-                }
-                
-                // Cancel the order
-                studOrder.setIscanceled(true);
-                studOrder.setDatecanceled(Auto.getToday());
-                request.setAttribute("successMsg", "Order has been cancelled.");
-
-
-                // Update the order object
-                utx.begin();
-                em.merge(studOrder);
-                utx.commit();
-
-
-                double refundRate = 0.8;
-                int creditRefunded = (int) java.lang.Math.round(refundRate * totalPrice);
-
-                System.out.println("totalPrice before rate: " + totalPrice);
-
-                // Refund the student
-                Student stud = em.find(Student.class, student.getStudentid());
-                stud.setCredits(stud.getCredits() + creditRefunded);
-                
-                utx.begin();
-                em.merge(stud);
-                utx.commit();
-
-                // Update the student in session
-                session.setAttribute("stud", stud);
-
-                request.setAttribute("successMsg", "Your order has been canceled.");
-                request.getRequestDispatcher("ViewOrderServlet" + orderId).forward(request, response);
-                return;
-
-            } catch (ConstraintViolationException e) {
-                System.out.println(e.getConstraintViolations());
+                // Notify student
+                /* request.setAttribute("successMsg", "");
+                request.getRequestDispatcher("studentStats.jsp").forward(request, response);
+                return;*/
             } catch (Exception ex) {
-                System.out.println("ERROR: Could not cancel order: " + ex.getMessage());
-                request.setAttribute("errorMsg", "Oops! Order cancellation did not succeed for some reason.");
-                request.getRequestDispatcher("viewOrder.jsp").forward(request, response);
-                ex.printStackTrace();
-                return;
+
             }
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

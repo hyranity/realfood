@@ -156,5 +156,19 @@ public class Auto {
         return obj;
     }
     
+    public Calendar dateToCal(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        
+        return cal;
+    }
+    
+    public Date calToDate(Calendar cal){
+        Date date = cal.getTime();
+        return date;
+    }
+    
+    
+    
    
 }
