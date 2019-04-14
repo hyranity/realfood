@@ -13,6 +13,7 @@
     </head>
     <body>
         <%
+            
             session = request.getSession(false);
 
             String permission = "";
@@ -87,7 +88,7 @@
             <br/>
             <div class="mainContainer">
 
-                <form action="#" class="form">
+                <form action="CanteenStaffAccountEditByManager" class="form">
                     <%                        if (staff.getIshired()) {
                     %>
                     <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable" id="dismiss">Dismiss</div></a>
@@ -100,17 +101,17 @@
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="staffid" readonly/>
                     </div>
                     <div id="nameDiv">
-                        <input type="text" id="name" placeholder="First Name" value="<%=fname%>"  name="fname"/>
-                        <input type="text" id="name" placeholder="Last Name" value="<%=lname%>" name="lname"/>
+                        <input type="text" id="name" placeholder="First Name" value="<%=fname%>"  name="fname" required/>
+                        <input type="text" id="name" placeholder="Last Name" value="<%=lname%>" name="lname" required/>
                     </div>
                     <div>
-                        <input type="text" value="<%=gender%>" placeholder="Gender" id="gender"  name="gender"/>
+                        <input type="text" value="<%=gender%>" placeholder="Gender" id="gender"  name="gender" required/>
                     </div>
                     <div>
-                        <input type="text" value="<%=email%>" placeholder="Email" id="email" name="email"/>
+                        <input type="text" value="<%=email%>" placeholder="Email" id="email" name="email" required/>
                     </div>
                     <div>
-                        <input type="text" value="<%=myKad%>" placeholder="MyKAD" id="myKAD" name="myKAD"/>
+                        <input type="text" value="<%=myKad%>" placeholder="MyKAD" id="myKAD" name="myKAD" required/>
                     </div>
                     <div>
                         <input type="text" value="Joined: 16 March, 2017" id="dateJoined"  style="background-color: darkgray;"  readonly/>
