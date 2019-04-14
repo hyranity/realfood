@@ -18,7 +18,6 @@
     <body>
         <%
             session = request.getSession(false);
-            Student stud = new Student();
             
             String permission = (String) session.getAttribute("permission");
             
@@ -28,7 +27,7 @@
                     return;
                 }
             else {
-                
+                Student stud = (Student) session.getAttribute("stud");
                 int credits = stud.getCredits();    // Obtain student's credits amount
                 
                 // Allow manager only
@@ -65,38 +64,47 @@
 
                 <form action="StudentAccountManagement" class="form">
                     <div>
+                        <label>Student ID</label><br/>
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="studentid"/>
                     </div>
                     <div id="nameDiv">
+                        <label>Username</label><br/>
                         <input type="text" id="name" style="background-color: darkgray;" value="<%=fname%>" readonly />
                         <input type="text" id="name" style="background-color: darkgray;" value="<%=lname%>" readonly/>
                     </div>
                     <div>
+                        <label>Gender</label><br/>
                         <input type="text" value="<%=gender%>" style="background-color: darkgray;" id="gender" readonly />
                     </div>
                     <div>
+                        <label>Date Joined</label><br/>
                         <input type="text" value="Joined: <%=dateJoined%>" style="background-color: darkgray;" id="dateJoined" readonly />
                     </div>
                     <div>
+                        <label>Email</label><br/>
                         <input type="text" value="<%=email%>" placeholder="Email" id="email" name="email"/>
                     </div>
                     <div>
+                        <label>MyKad Number</label><br/>
                         <input type="text" value="<%=myKad%>" style="background-color: darkgray;" id="myKAD" readonly />
                     </div>
                     <div>
-                        <input type="password" placeholder="New Password" id="password" name="password"/>
+                        <label>New Password</label><br/>
+                        <input type="password" placeholder="New Password" minlength="6" maxlength="20" id="password" name="password"/>
                     </div>
                     <div>
-                        <input type="password"  placeholder="Confirmation Password" id="cPassword" name="cPassword" />
+                        <label>Confirm Password</label><br/>
+                        <input type="password"  placeholder="Confirmation Password" minlength="6" maxlength="20" id="cPassword" name="cPassword" />
                     </div>
                     <div>
-                        <input type="password"  placeholder="Current Password" id="currentPassword" name="currentPassword" required/>
+                        <label>Old Password</label><br/>
+                        <input type="password"  placeholder="Current Password" minlength="6" maxlength="20" id="currentPassword" name="currentPassword" required/>
                     </div>
                     <input type="submit" value="Save changes" class="submitBtn">
                 </form>
             </div>
         </div>
-                    <a  href="dashboardStudent.jsp"><div class="back">back</div></a>
+                    <a style="display: block; margin-bottom: 20px;" href="dashboardStudent.jsp"><div class="back">Back</div></a>
              <!-- Display student's credits -->
             <h6 class="credits"><%=credits%> credits</h6>
     </div>

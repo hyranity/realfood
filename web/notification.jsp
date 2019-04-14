@@ -9,6 +9,8 @@
 <%@page import="java.util.Calendar"%>
 <%@page import="Model.Notificationstudent"%>
 <%@page import="Model.Student"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,6 +22,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link href="CSS/notification.css" rel="stylesheet">
         <link href="CSS/commonStyles.css" rel="stylesheet">
+        <link href="CSS/students.css" rel="stylesheet">
         <link href="CSS/recordInfo.css" rel="stylesheet">
         <title>My Notifications</title>
     </head>
@@ -50,6 +53,9 @@
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             } else {
+                
+                Student stud = (Student) session.getAttribute("stud");
+                int credits = stud.getCredits();    // Obtain student's credits amount
                 List<Notificationstudent> nsList = new ArrayList();
                 try {
                     nsList = (List<Notificationstudent>) session.getAttribute("nsList");
@@ -113,9 +119,11 @@
                 }
             %>
 
-            <div><br/><br/><button class="nextButton" href="dashboardStudent.jsp" type="submit" >Back</button></div>
+            <div><br/><br/><a class="nextButton" href="dashboardStudent.jsp" type="submit" >Back</a></div>
         </div>
         <div class="coverOverlay"></div>
+        <!-- Display student's credits -->
+            <h6 class="credits"><%=credits%> credits</h6>
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

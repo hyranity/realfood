@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,6 +16,7 @@
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link href="CSS/manageRecords.css" rel="stylesheet">
+        <link href="CSS/students.css" rel="stylesheet">
         <link href="CSS/commonStyles.css" rel="stylesheet">
         <title>My orders</title>
     </head>
@@ -30,6 +33,9 @@
                     return;
                 }
             else {
+                Student stud = (Student) session.getAttribute("stud");
+                int credits = stud.getCredits();    // Obtain student's credits amount
+                
                 // Allow student only
                 if(!permission.equalsIgnoreCase("student")){
                      request.setAttribute("errorMsg", "You are not allowed to visit that page.");
@@ -58,8 +64,10 @@
                 ${queryResult}
         </table> 
     </div>
-        <div><button class="nextButton" href="dashboardStudent.jsp"  >Back</button></div>
-        <%}%>
+        <!-- Display student's credits -->
+            <h6 class="credits"><%=credits%> credits</h6>
+        <div><a class="nextButton" href="dashboardStudent.jsp"  >Back</a></div>
+        <%}%>     
 </body>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>

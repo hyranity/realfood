@@ -19,7 +19,6 @@
             session = request.getSession(false);
 
             String permission = "";
-            Student stud = new Student();
 
             try {
                 permission = (String) session.getAttribute("permission");
@@ -56,6 +55,7 @@
                 response.sendRedirect("DisplayOrdersServlet");
             }
             
+            Student stud = (Student) session.getAttribute("stud");
             int credits = stud.getCredits();    // Obtain student's credits amount
             int originalPrice = currentStudOrder.getTotalprice();
         %>

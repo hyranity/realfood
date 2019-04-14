@@ -30,7 +30,6 @@ and open the template in the editor.
         <%
             session = request.getSession(false);
             String permission = "";
-            Student stud = new Student();
 
             try {
                 permission = (String) session.getAttribute("permission");
@@ -54,6 +53,8 @@ and open the template in the editor.
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             } else {
+            Student stud = (Student) session.getAttribute("stud");
+            int credits = stud.getCredits();    // Obtain student's credits amount
         %>
 
         <%
@@ -264,7 +265,7 @@ and open the template in the editor.
 
                 </form>
                 <br/>
-                <button class="nextButton" href="" type="submit" >Back</button>&nbsp;
+                <a class="nextButton" href="dashboardStudent.jsp" type="submit" >Back</a>&nbsp;
                 <input class="nextButton" type="submit" form="calendarForm">
             </div>
             <div class="setting">Set the first day as: 
@@ -285,7 +286,6 @@ and open the template in the editor.
                 %>
             </div>
         </div>
-
 
         <%}%>
     </body>

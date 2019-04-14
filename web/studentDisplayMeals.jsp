@@ -24,7 +24,6 @@
             session = request.getSession(false);
 
             String permission = "";
-            Student stud = new Student();
 
             try {
                 permission = (String) session.getAttribute("permission");
@@ -48,6 +47,7 @@
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             } else {
+                Student stud = (Student) session.getAttribute("stud");
                 int credits = stud.getCredits();    // Obtain student's credits amount
         %>
         <div class="stepsContainer">
@@ -78,7 +78,7 @@
 
             </div>
             <div>
-                <input class="nextButton" form="mealOrder">Back</button>
+                <a class="nextButton" form="mealOrder" href="calendarStudent.jsp">Back</a>
                 <button class="nextButton">Next step</button>
                 <br/><br/><br/>
             </div>

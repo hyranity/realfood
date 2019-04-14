@@ -25,7 +25,6 @@
             session = request.getSession(false);
 
             String permission = "";
-            Student stud = new Student();
 
             try {
                 permission = (String) session.getAttribute("permission");
@@ -59,6 +58,7 @@
                 // If any error, means that the steps are not followed correctly
                 response.sendRedirect("DisplayOrdersServlet");
             }
+            Student stud = (Student) session.getAttribute("stud");
             int credits = stud.getCredits();    // Obtain student's credits amount
         %>
         <div class="stepsContainer">
