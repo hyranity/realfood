@@ -31,7 +31,7 @@
                 return;
             }
 
-            // If user is not logged in, redirect to login page
+            
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -63,11 +63,11 @@
             </div>
         </div>
         <a href="ManageFoodServlet"><div class="back">Back</div></a>
-        <div class="toggleDisableConfirmation">
+        <div class="toggleConfirmation">
             ${discontinueDialog}
 
-            <a href="FoodDiscontinuationServlet?foodId=${foodId}"><div class="toggleDisableConfirm">Yes</div></a>
-            <a href="#"><div class="toggleDisableCancel">No</div></a>
+            <a href="FoodDiscontinuationServlet?foodId=${foodId}"><div class="overlayConfirm">Yes</div></a>
+            <a href="#"><div class="overlayCancel">No</div></a>
         </div>
         <div class="coverOverlay"></div>
         <%}%>

@@ -27,7 +27,7 @@
 
             String permission = "";
          
-            // If user is not logged in, redirect to login page (if student attribute in session is null)
+             (if student attribute in session is null)
             if( session.getAttribute("stud") == null){
                 // Set error message
                 request.setAttribute("errorMsg", "Oops! Please login.");

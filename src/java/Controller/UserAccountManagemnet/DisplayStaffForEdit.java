@@ -3,17 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.MealManagement;
+package Controller.UserAccountManagemnet;
 
-import Model.Food;
+import Controller.OrderManagement.*;
+import Controller.MealManagement.*;
 import Model.Meal;
 import Model.Mealfood;
+import Model.Staff;
+import Model.Studentorder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
@@ -23,16 +25,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
-import javax.validation.ConstraintViolationException;
-import util.Auto;
 
 /**
  *
  * @author mast3
  */
-@WebServlet(name = "MealDiscontinuationServlet", urlPatterns = {"/MealDiscontinuationServlet"})
-public class MealDiscontinuationServlet extends HttpServlet {
 
+@WebServlet(name = "DisplayStaffForEdit", urlPatterns = {"/DisplayStaffForEdit"})
+public class DisplayStaffForEdit extends HttpServlet {
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -50,13 +50,13 @@ public class MealDiscontinuationServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(false);
+         HttpSession session = request.getSession(false);
         
         String permission = "";
-        String mealId = "";
+        String previousUrl = "";
+        
         try {
             permission = (String) session.getAttribute("permission");
-            
             
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
@@ -71,79 +71,40 @@ public class MealDiscontinuationServlet extends HttpServlet {
         }
 
         
-        // Allow staff only
-        if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+        // Allow manager only
+        if (!permission.equalsIgnoreCase("manager")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
-
-            try{
-                mealId = request.getParameter("mealId");
-                utx.begin();
-                // Obtain meal object from database
-                Meal meal = em.find(Meal.class, mealId);
-                System.out.println(meal.getMealid());
-
-                // If the meal is currently discontinued
-                if (meal.getIsdiscontinued()) {
-                    // Toggle it
-                    meal.setIsdiscontinued(false);
-                    meal.setDatediscontinued(null);
-                    request.setAttribute("successMsg", "Meal has been re-enabled.");
-                } else {
-                    // If the meal is currently not discontinued
-                    // Toggle it
-                    meal.setIsdiscontinued(true);
-                   meal.setDatediscontinued(Auto.getToday());
-                   request.setAttribute("successMsg", "Meal has been discontinued.");
-                }
-                
-                // Update the meal object
-                em.merge(meal);
-                utx.commit();
-                
-                utx.begin();
-                // Get related list of Mealorder objects
-                TypedQuery<Mealfood> query = em.createQuery("SELECT mf FROM Mealfood mf where mf.mealid = :mealId", Mealfood.class).setParameter("mealId", meal);
-                List<Mealfood> mealFoodList = query.getResultList();
-
-                for (Mealfood mf : mealFoodList) {
-                    // If the mealFood is currently discontinued
-                    if (mf.getIsdiscontinued()) {
-                        // Toggle it
-                        mf.setIsdiscontinued(false);
-                    } else {
-                        // If the mealFood is currently not discontinued
-                        // Toggle it
-                        mf.setIsdiscontinued(true);
-                    }   
-                    
-                    
-                    //Update the objects
-                    em.merge(mf);
-                }
-                
-                // Update it
-                em.merge(meal);
-                utx.commit();
-                
-                //Update the meal in session
-                session.setAttribute("meal", meal);
-                
-                
-                request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
-                return;
-                
-            } catch (ConstraintViolationException e) {
-                System.out.println(e.getConstraintViolations());
-            } catch (Exception ex) {
-                System.out.println("ERROR: Could not discontinue meal: " + ex.getMessage());
-                request.setAttribute("errorMsg", "Oops! Meal discontinuation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
-                ex.printStackTrace();
+            
+            Staff staff = new Staff();
+            String staffId = "";
+            
+            try {
+                staffId = request.getParameter("staffId");
+                staff = em.find(Staff.class, staffId);
+                staff.getGender();
+            } catch (Exception e) {
+                // If exception is thrown, just redirect manager
+                response.sendRedirect("DisplayStaffServlet");
+                e.printStackTrace();
                 return;
             }
+
+            try {
+
+                // Set staff to session so it can be displayed
+               session.setAttribute("staffForEdit", staff);
+                
+                request.getRequestDispatcher("editStaff.jsp").forward(request, response);
+                return;
+
+            } catch (Exception e) {
+                System.out.println("Could not obtain staff: " + e.getMessage());
+                e.printStackTrace();
+            }
+
         }
     }
 

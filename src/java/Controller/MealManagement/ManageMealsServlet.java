@@ -66,7 +66,7 @@ public class ManageMealsServlet extends HttpServlet {
             return;
         }
 
-        // If user is not logged in, redirect to login page
+        
         // Allow staff only
         if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");

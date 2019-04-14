@@ -70,7 +70,7 @@ public class ProcessPaymentServlet extends HttpServlet {
         
         
 
-        // If user is not logged in, redirect to login page
+        
         // Allow student only
         if (!permission.equalsIgnoreCase("student")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");

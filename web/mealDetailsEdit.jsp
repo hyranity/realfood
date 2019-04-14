@@ -19,7 +19,7 @@
         <%
             session = request.getSession(false);
 
-            // If user is not logged in, redirect to login page
+            
             if (session.getAttribute("permission") == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -121,11 +121,11 @@
                 <form action="MealDetailsEditServlet" class="form">
                     <%                        if (!isDiscontinued) {
                     %>
-                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable" id="discontinue">Discontinue</div></a>
+                    <a href="#" onclick="confirmtoggleOverlay()"> <div class="toggleOverlay" id="discontinue">Discontinue</div></a>
                     <%
                     } else {
                     %>
-                    <a href="#" onclick="confirmtoggleDisable()"> <div class="toggleDisable" id="enable">Re-enable</div></a>
+                    <a href="#" onclick="confirmtoggleOverlay()"> <div class="toggleOverlay" id="enable">Re-enable</div></a>
                     <%}%>
                     <div>
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="mealId" name="mealId" readonly/>
@@ -177,7 +177,7 @@
             </div>
         </div>
         <a href="displayMeals.jsp"><div class="back">Back</div></a><br/><br/>
-        <div class="toggleDisableConfirmation">
+        <div class="toggleConfirmation">
             <%
                 if (!isDiscontinued) {
             %>
@@ -187,12 +187,12 @@
             } else {
             %>
             <h5>Re-enable meal?</h5>
-            <p>The meal will be discontinued.</p>
+            <p>The meal will continue again.</p>
             <%
                 }
             %>
-            <a href="MealDiscontinuationServlet?mealId=<%=id%>"><div class="toggleDisableConfirm">Yes</div></a>
-            <a href="#"><div class="toggleDisableCancel">No</div></a>
+            <a href="MealDiscontinuationServlet?mealId=<%=id%>"><div class="overlayConfirm">Yes</div></a>
+            <a href="#"><div class="overlayCancel">No</div></a>
         </div>
         <%}%>
     </body>
@@ -265,7 +265,7 @@
                                 $("#subtitle").css("color", "white");
                             });
 
-                            $(".toggleDisable").hover(function () {
+                            $(".toggleOverlay").hover(function () {
                                 $("#subtitle").html("Discontinue the meal");
                                 $("#subtitle").css("color", "red");
                             }, function () {
@@ -273,14 +273,14 @@
                                 $("#subtitle").css("color", "white");
                             });
 
-                            $(".toggleDisable").click(function confirmtoggleDisable() {
-                                $(".toggleDisableConfirmation").css("display", "inline-block");
+                            $(".toggleOverlay").click(function confirmtoggleOverlay() {
+                                $(".toggleConfirmation").css("display", "inline-block");
                                 $(".outsideContainer").css("opacity", "0.5");
                                 $(".outsideContainer :input").prop("disabled", true);
                             });
 
-                            $(".toggleDisableCancel").click(function confirmtoggleDisable() {
-                                $(".toggleDisableConfirmation").css("display", "none");
+                            $(".overlayCancel").click(function confirmtoggleOverlay() {
+                                $(".toggleConfirmation").css("display", "none");
                                 $(".outsideContainer").css("opacity", "1");
                                 $(".outsideContainer :input").prop("disabled", false);
                             });

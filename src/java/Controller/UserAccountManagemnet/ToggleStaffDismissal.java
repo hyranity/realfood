@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.MealManagement;
+package Controller.UserAccountManagemnet;
 
+import Controller.MealManagement.*;
 import Model.Food;
 import Model.Meal;
 import Model.Mealfood;
+import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -30,8 +32,8 @@ import util.Auto;
  *
  * @author mast3
  */
-@WebServlet(name = "MealDiscontinuationServlet", urlPatterns = {"/MealDiscontinuationServlet"})
-public class MealDiscontinuationServlet extends HttpServlet {
+@WebServlet(name = "ToggleStaffDismissal", urlPatterns = {"/ToggleStaffDismissal"})
+public class ToggleStaffDismissal extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -70,69 +72,43 @@ public class MealDiscontinuationServlet extends HttpServlet {
             return;
         }
 
-        
-        // Allow staff only
-        if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
+        // Allow manager only
+        if (!permission.equals("manager")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
 
             try{
-                mealId = request.getParameter("mealId");
-                utx.begin();
-                // Obtain meal object from database
-                Meal meal = em.find(Meal.class, mealId);
-                System.out.println(meal.getMealid());
-
-                // If the meal is currently discontinued
-                if (meal.getIsdiscontinued()) {
+      
+                // Obtain staff object from database
+                Staff staff = (Staff) session.getAttribute("staffForEdit");
+                // If the staff is currently not hired
+                if (!staff.getIshired()) {
                     // Toggle it
-                    meal.setIsdiscontinued(false);
-                    meal.setDatediscontinued(null);
-                    request.setAttribute("successMsg", "Meal has been re-enabled.");
+                    staff.setIshired(true);
+                    staff.setDatedismissed(null);
+                    request.setAttribute("successMsg", "Staff has been re-hired.");
                 } else {
-                    // If the meal is currently not discontinued
+                    // If the staff is currently hired
                     // Toggle it
-                    meal.setIsdiscontinued(true);
-                   meal.setDatediscontinued(Auto.getToday());
-                   request.setAttribute("successMsg", "Meal has been discontinued.");
+                   staff.setIshired(false);
+                   staff.setDatedismissed(Auto.getToday());
+                   request.setAttribute("successMsg", "Staff has been dismissed.");
                 }
                 
-                // Update the meal object
-                em.merge(meal);
-                utx.commit();
-                
+             
                 utx.begin();
-                // Get related list of Mealorder objects
-                TypedQuery<Mealfood> query = em.createQuery("SELECT mf FROM Mealfood mf where mf.mealid = :mealId", Mealfood.class).setParameter("mealId", meal);
-                List<Mealfood> mealFoodList = query.getResultList();
-
-                for (Mealfood mf : mealFoodList) {
-                    // If the mealFood is currently discontinued
-                    if (mf.getIsdiscontinued()) {
-                        // Toggle it
-                        mf.setIsdiscontinued(false);
-                    } else {
-                        // If the mealFood is currently not discontinued
-                        // Toggle it
-                        mf.setIsdiscontinued(true);
-                    }   
-                    
-                    
-                    //Update the objects
-                    em.merge(mf);
-                }
-                
+               
                 // Update it
-                em.merge(meal);
+                em.merge(staff);
                 utx.commit();
                 
                 //Update the meal in session
-                session.setAttribute("meal", meal);
+                session.setAttribute("staffForEdit", staff);
                 
                 
-                request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
+                request.getRequestDispatcher("editStaff.jsp").forward(request, response);
                 return;
                 
             } catch (ConstraintViolationException e) {

@@ -241,6 +241,7 @@ public class RegistrationServlet extends HttpServlet {
 
                 // Set fixed values
                 staff.setDatejoined(Auto.getToday());
+                
                 staff.setStaffrole("canteenStaff");     // This is because there is only 1 manager account (admin account).
 
                 //Hash the password and store the salt 

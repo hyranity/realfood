@@ -13,6 +13,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
         <link href="CSS/recordInfo.css" rel="stylesheet">
         <link href="CSS/students.css" rel="stylesheet">
+        <link href="CSS/commonStyles.css" rel="stylesheet">
     </head>
     <body>
         <%
@@ -20,7 +21,7 @@
             Student stud = new Student();
             
             String permission = (String) session.getAttribute("permission");
-            // If user is not logged in, redirect to login page
+            
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -56,11 +57,13 @@
         <div class="outsideContainer">
 
             <h1 >My Account</h1>
-            <h5 id="subtitle">Here's your account details.</h5>
+            <h5 id="subtitle">Here's your account details. Hover over a field for more info.</h5>
+            <div class="errorMsg">${errorMsg}</div>
+            <div class="successMsg">${successMsg}</div>
             <br/>
             <div class="mainContainer">
 
-                <form action="#" class="form">
+                <form action="StudentAccountManagement" class="form">
                     <div>
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="studentid"/>
                     </div>
@@ -75,22 +78,25 @@
                         <input type="text" value="Joined: <%=dateJoined%>" style="background-color: darkgray;" id="dateJoined" readonly />
                     </div>
                     <div>
-                        <input type="text" value="<%=email%>" placeholder="Email" id="email" />
+                        <input type="text" value="<%=email%>" placeholder="Email" id="email" name="email"/>
                     </div>
                     <div>
                         <input type="text" value="<%=myKad%>" style="background-color: darkgray;" id="myKAD" readonly />
                     </div>
                     <div>
-                        <input type="password" value="" placeholder="Password" id="password" required/>
+                        <input type="password" placeholder="New Password" id="password" name="password"/>
                     </div>
                     <div>
-                        <input type="password" value="" placeholder="Confirmation Password" id="cPassword" required/>
+                        <input type="password"  placeholder="Confirmation Password" id="cPassword" name="cPassword" />
                     </div>
-                    <button type="submit" class="submitBtn">Update password</button>
+                    <div>
+                        <input type="password"  placeholder="Current Password" id="currentPassword" name="currentPassword" required/>
+                    </div>
+                    <input type="submit" value="Save changes" class="submitBtn">
                 </form>
             </div>
         </div>
-        <div class="back" href="studentDashboard.jsp">back</div>
+                    <a  href="dashboardStudent.jsp"><div class="back">back</div></a>
         <h6 class="credits">1000 credits</h6>
     </div>
     <%
@@ -106,56 +112,63 @@
             $("#subtitle").html("That's your student ID. It uniquely defines you.");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here's your account details. ");
+            $("#subtitle").html("Here's your account details. Hover over a field for more info. ");
             $("#subtitle").css("color", "white");
         });
         $("#nameDiv").hover(function () {
             $("#subtitle").html("That's your name. It's you...right?");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here's your account details. ");
+            $("#subtitle").html("Here's your account details. Hover over a field for more info. ");
             $("#subtitle").css("color", "white");
         });
         $("#gender").hover(function () {
             $("#subtitle").html("That's your gender. Don't go changing genders now.");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here's your account details. ");
+            $("#subtitle").html("Here's your account details. Hover over a field for more info. ");
             $("#subtitle").css("color", "white");
         });
         $("#dateJoined").hover(function () {
             $("#subtitle").html("That's when you first joined. Having fun so far?");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here's your account details. ");
+            $("#subtitle").html("Here's your account details. Hover over a field for more info. ");
             $("#subtitle").css("color", "white");
         });
         $("#email").hover(function () {
             $("#subtitle").html("That's your email given by the school.");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here's your account details. ");
+            $("#subtitle").html("Here's your account details. Hover over a field for more info. ");
             $("#subtitle").css("color", "white");
         });
         $("#myKAD").hover(function () {
             $("#subtitle").html("That's your myKAD number. Don't show it to others.");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here's your account details. ");
+            $("#subtitle").html("Here's your account details. Hover over a field for more info. ");
             $("#subtitle").css("color", "white");
         });
         $("#password").hover(function () {
             $("#subtitle").html("That's your password. You may edit it with a new one.");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here's your account details. ");
+            $("#subtitle").html("Here's your account details. Hover over a field for more info. ");
             $("#subtitle").css("color", "white");
         });
         $("#cPassword").hover(function () {
             $("#subtitle").html("That's where you're supposed to type the confirmation password if you've edited your password..");
             $("#subtitle").css("color", "gold");
         }, function () {
-            $("#subtitle").html("Here's your account details. ");
+            $("#subtitle").html("Here's your account details. Hover over a field for more info. ");
+            $("#subtitle").css("color", "white");
+        });
+        $("#currentPassword").hover(function () {
+            $("#subtitle").html("Type your current password there if you would like to update any of the details.");
+            $("#subtitle").css("color", "gold");
+        }, function () {
+            $("#subtitle").html("Here's your account details. Hover over a field for more info. ");
             $("#subtitle").css("color", "white");
         });
     });

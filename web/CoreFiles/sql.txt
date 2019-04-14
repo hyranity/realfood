@@ -123,6 +123,7 @@ create table Staff (
     passwordSalt VARCHAR(40) NOT NULL,
     password VARCHAR(40) NOT NULL,
     email VARCHAR(50) NOT NULL,
+    dateDismissed DATE,
     
     primary key (staffID)
 );

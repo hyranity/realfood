@@ -47,24 +47,34 @@ public class DisplayStaffServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        HttpSession session = request.getSession(false);
-        // If user is not logged in, redirect to login page
-        if (session.getAttribute("staff") == null) {
-            request.setAttribute("errorMsg", "Oops! Please login.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
-            return;
-            
-        } else {
-            //Ensure that this is the manager.
-            Staff manager = (Staff) session.getAttribute("staff");
+        HttpSession session = session = request.getSession(false);
+        
+        // clear the session of any unwanted obejcts
+        session.setAttribute("staffForEdit", null);
 
-            //If not manager, log him/her out and give a warning.
-            if (!manager.getStaffrole().equalsIgnoreCase("manager")) {
-                session.invalidate();
-                request.setAttribute("errorMsg", "Hey! You are not allowed to visit that page.");
+            String permission = "";
+
+            try {
+                permission = (String) session.getAttribute("permission");
+
+                if (permission == null) {
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+
+            } catch (NullPointerException ex) {
+                request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
-            } else {
+            }
+
+            // Allow staff only
+            if (!permission.equalsIgnoreCase("manager")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else  {
 
                 List<Staff> staffList = new ArrayList();
                 String queryResults = ""; //This is used to print the data in the JSP
@@ -77,7 +87,7 @@ public class DisplayStaffServlet extends HttpServlet {
                 String badge = "<span class=\"badge badge-primary\">Canteen Staff</span>";
                 String breaks = "<br/><br/>";
                 String status = "";
-                String editButton = "<a href=\"\"><div class=\"editButton\">Edit</div></a>";
+                
                 String outerPartTwo = "</div>";
 
                 try {
@@ -90,12 +100,15 @@ public class DisplayStaffServlet extends HttpServlet {
                 }
 
                 for (Staff canteenStaff : staffList) {
+                    if(canteenStaff.getIshired())
+                        status = "<p class=\"status\" style=\"color: green; font-weight: bold;\">Hired</p>";
+                    else
+                        status = "<p class=\"status\" style=\"color: red; font-weight: bold;\">Dismissed</p>";
 
                     id = "<h6>" + canteenStaff.getStaffid() + "</h6>";
                     fname = "<p>" + canteenStaff.getFirstname() + "</p>";
                     lname = "<p>" + canteenStaff.getLastname() + "</p>";
-                    status = "<p class=\"status\" style=\"color: green; font-weight: bold;\">" + canteenStaff.getFirstname() + "</p>";
-
+                    String editButton = "<a href=\"DisplayStaffForEdit?staffId=" + canteenStaff.getStaffid()  +" \"><div class=\"editButton\">Edit</div></a>";
                     queryResults += outerPartOne + id + fname + lname + badge + breaks + status + editButton + outerPartTwo;
                 }
 
@@ -103,7 +116,7 @@ public class DisplayStaffServlet extends HttpServlet {
                 request.getRequestDispatcher("displayStaff.jsp").forward(request, response);
                 return;
             }
-        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

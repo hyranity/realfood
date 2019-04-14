@@ -39,7 +39,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Staff.findByMykad", query = "SELECT s FROM Staff s WHERE s.mykad = :mykad")
     , @NamedQuery(name = "Staff.findByPasswordsalt", query = "SELECT s FROM Staff s WHERE s.passwordsalt = :passwordsalt")
     , @NamedQuery(name = "Staff.findByPassword", query = "SELECT s FROM Staff s WHERE s.password = :password")
-    , @NamedQuery(name = "Staff.findByEmail", query = "SELECT s FROM Staff s WHERE s.email = :email")})
+    , @NamedQuery(name = "Staff.findByEmail", query = "SELECT s FROM Staff s WHERE s.email = :email")
+    , @NamedQuery(name = "Staff.findByDatedismissed", query = "SELECT s FROM Staff s WHERE s.datedismissed = :datedismissed")})
 public class Staff implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -98,6 +99,9 @@ public class Staff implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "EMAIL")
     private String email;
+    @Column(name = "DATEDISMISSED")
+    @Temporal(TemporalType.DATE)
+    private Date datedismissed;
 
     public Staff() {
     }
@@ -206,6 +210,14 @@ public class Staff implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getDatedismissed() {
+        return datedismissed;
+    }
+
+    public void setDatedismissed(Date datedismissed) {
+        this.datedismissed = datedismissed;
     }
 
     @Override

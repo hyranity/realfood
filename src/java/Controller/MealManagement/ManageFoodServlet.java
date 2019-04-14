@@ -69,7 +69,7 @@ public class ManageFoodServlet extends HttpServlet {
         }
 
 
-        // If user is not logged in, redirect to login page
+        
         if (permission == null) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);

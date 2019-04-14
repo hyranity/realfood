@@ -64,7 +64,7 @@ h6{
 
 
 
-#name{
+.name{
     overflow: hidden;
     display: inline-block;
     width: 82px;
@@ -111,9 +111,9 @@ h6{
     font-size: 17px;
 }
 
-/* toggleDisable CSS */
+/* toggleOverlay CSS */
 
-.toggleDisable{
+.toggleOverlay{
     color: red;
     position: relative;
     text-decoration: none;
@@ -126,7 +126,7 @@ h6{
     margin: 10px;
 }
 
-.toggleDisable:hover{
+.toggleOverlay:hover{
     background-color: red;
     color: white;
 }
@@ -135,7 +135,7 @@ a{
     text-decoration: none;
 }
 
-.toggleDisableConfirmation{
+.toggleConfirmation{
     text-align: center;
     display: none;
     position: absolute;
@@ -151,17 +151,17 @@ a{
     
 }
 
-.toggleDisableConfirmation h5{
+.toggleConfirmation h5{
     font-size: 20px;
     margin-bottom: 10px;
 }
 
-.toggleDisableConfirmation p{
+.toggleConfirmation p{
     margin-bottom: 10px;
 }
 
 
-.toggleDisableConfirm{
+.overlayConfirm{
     border-color: gold;
     border-width: 1px;
     border-style: solid;
@@ -173,11 +173,11 @@ a{
     margin: 10px;
 }
 
-.toggleDisableConfirm:hover{
+.overlayConfirm:hover{
     border-color: red;
 }
 
-.toggleDisableCancel{
+.overlayCancel{
     border-color: gold;
     border-width: 1px;
     border-style: solid;
@@ -190,7 +190,7 @@ a{
     margin-bottom: 0;
 }
 
-.toggleDisableCancel:hover{
+.overlayCancel:hover{
     border-color: green;
 }
 
@@ -199,7 +199,7 @@ a{
 }
 
 /*Add CSS */
-/* toggleDisable CSS */
+/* toggleOverlay CSS */
 
 .adding{
     color: green;
