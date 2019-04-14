@@ -35,6 +35,19 @@ function myFunction() {
 }
 
 
+/*enable and disable*/
+var checkBox = document.getElementById('acceptTerm');
+ var submitButton = document.getElementById('submit');
+ // when unchecked or checked, run the function
+ checkBox.onchange = function(){
+if(this.checked){
+    submitButton.disabled = false;
+} else {
+    submitButton.disabled = true;
+}
+
+}
+
 /*under contruct*/
 /*var userID = document.getElementById("userID").value == "";
 

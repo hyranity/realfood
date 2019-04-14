@@ -89,6 +89,10 @@
                         <input type="text" value="<%=myKad%>" style="background-color: darkgray;" id="myKAD" readonly />
                     </div>
                     <div>
+                        <label>Old Password</label><br/>
+                        <input type="password"  placeholder="Current Password" minlength="6" maxlength="20" id="currentPassword" name="currentPassword" required/>
+                    </div>
+                    <div>
                         <label>New Password</label><br/>
                         <input type="password" placeholder="New Password" minlength="6" maxlength="20" id="password" name="password"/>
                     </div>
@@ -96,10 +100,7 @@
                         <label>Confirm Password</label><br/>
                         <input type="password"  placeholder="Confirmation Password" minlength="6" maxlength="20" id="cPassword" name="cPassword" />
                     </div>
-                    <div>
-                        <label>Old Password</label><br/>
-                        <input type="password"  placeholder="Current Password" minlength="6" maxlength="20" id="currentPassword" name="currentPassword" required/>
-                    </div>
+                    
                     <input type="submit" value="Save changes" class="submitBtn">
                 </form>
             </div>

@@ -48,38 +48,48 @@
 
                 <form action="CanteenStaffAccountEdit" class="form">
                     <div>
+                        <label>Staff ID</label><br/>
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="empId"/>
                     </div>
                     <div id="nameDiv">
+                        <label>Username</label><br/>
                         <input type="text" id="name" style="background-color: darkgray;" value="<%=fname%>" readonly />
                         <input type="text" id="name" style="background-color: darkgray;" value="<%=lname%>" readonly/>
                     </div>
                     <div>
+                        <label>Gender</label><br/>
                         <input type="text" value="<%=gender%>" style="background-color: darkgray;" id="gender"  readonly/>
                     </div>
                     <div>
+                        <label>Date Joined</label><br/>
                         <input type="text" value="Joined: <%=dateJoined%>" style="background-color: darkgray;" id="dateJoined" readonly />
                     </div>
                     <div>
+                        <label>Email</label><br/>
                         <input type="text" value="<%=email%>" style="background-color: darkgray;" id="staffEmail" readonly />
                     </div>
                     <div>
+                        <label>MyKad Number</label><br/>
                         <input type="text" value="<%=myKad%>" style="background-color: darkgray;" id="myKAD" readonly />
                     </div>
                     <div>
-                        <input type="password" value="" placeholder="Password" id="password" name="password" required/>
+                        <label>Old Password</label><br/>
+                        <input type="password"  placeholder="Current Password" minlength="6" maxlength="20" id="currentPassword" name="currentPassword" required/>
                     </div>
                     <div>
-                        <input type="password" value="" placeholder="Confirmation Password" id="cPassword" name="cPassword" required/>
+                        <label>New Password</label><br/>
+                        <input type="password" value="" placeholder=" New Password" id="password" minlength="6" maxlength="20" name="password" required/>
                     </div>
                     <div>
-                        <input type="password"  placeholder="Current Password" id="currentPassword" name="currentPassword" required/>
+                        <label>Confirm Password</label><br/>
+                        <input type="password" value="" placeholder="Confirmation Password" minlength="6" maxlength="20" id="cPassword" name="cPassword" required/>
                     </div>
+                    
                     <input type="submit" value="Update password" class="submitBtn">
                 </form>
             </div>
         </div>
-        <a href="dashboardCanteenStaff.jsp"><div class="back">Back</div></a>
+        <a style="display: block; margin-bottom: 20px;" href="dashboardCanteenStaff.jsp"><div class="back">Back</div></a>
     </div>
     <%
         }

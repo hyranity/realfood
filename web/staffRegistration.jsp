@@ -81,11 +81,11 @@
                         
                         <div class="formGroup" >
                             <input type="checkbox" onclick="myFunction()" id="showPass" /><label style="text-align: center;" for="showPass" id="showPassLabel">Click here to show password</label><br>
-                            <input type="checkbox" onchange="document.getElementById('submit').disabled = !this.checked;" id="acceptTerm"/><label class="termService" for="acceptTerm">Click here to Agree To Our <a style="color: white;">Terms & Conditions</a> </label>
+                            <input type="checkbox" id="acceptTerm"/><label class="termService" for="acceptTerm">Click here to Agree To Our <a style="color: white;">Terms & Conditions</a> </label>
                         </div>
                         
                         <div class="formButton" style="text-align: center">
-                            <input type="submit" name="submit" id="submit" class="submitButton" value="Sign up" style="text-align: center"/>
+                            <input type="submit" name="submit" id="submit" class="submitButton" value="Sign up" style="text-align: center" disabled/>
                         </div>
                         
                     </form>

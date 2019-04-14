@@ -56,7 +56,7 @@
                 ${queryResult}
         </table>
     </div>
-        <div><button class="nextButton" href="" type="submit" >Back</button></div>
+        <div><a class="nextButton" href="dashboardCanteenStaff.jsp" type="butoon" >Back</a></div>
         <%}%>
 </body>
 
