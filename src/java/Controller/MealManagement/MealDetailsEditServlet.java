@@ -5,11 +5,16 @@
  */
 package Controller.MealManagement;
 
+import ExtendedClasses.Notifier;
 import Model.Food;
 import Model.Meal;
 import Model.Mealfood;
+import Model.Ordermeal;
+import Model.Student;
+import Model.Studentorder;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -70,7 +75,6 @@ public class MealDetailsEditServlet extends HttpServlet {
             return;
         }
 
-        
         // Allow staff only
         if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
@@ -119,8 +123,9 @@ public class MealDetailsEditServlet extends HttpServlet {
 
                 try {
                     mealChecking = query.getSingleResult();
-                    if(mealChecking.getMealid().equals(meal.getMealid()))
+                    if (mealChecking.getMealid().equals(meal.getMealid())) {
                         existsAlready = false;
+                    }
                 } catch (NoResultException ex) {
                     existsAlready = false;
                 }
@@ -159,7 +164,7 @@ public class MealDetailsEditServlet extends HttpServlet {
                     //Generate ID
                     meal.setMealid(request.getParameter("mealId"));
                     System.out.println(imageLink.length());
-                    if(imageLink.length()>200){
+                    if (imageLink.length() > 200) {
                         request.setAttribute("errorMsg", "Image URL is too long!");
                         System.out.println("Image URL is too long.");
                         request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
@@ -197,12 +202,12 @@ public class MealDetailsEditServlet extends HttpServlet {
                         }
 
                     }
-                    
+
                     // Delete all the relationships with the current meal
                     Query deleteQuery = em.createQuery("DELETE FROM Mealfood mf WHERE mf.mealid = :mealid").setParameter("mealid", meal);
                     deleteQuery.executeUpdate();
                     System.out.println("Mealfood relationships deleted.");
-                    
+
                     /*
                     Meal existingMeal = em.find(Meal.class, meal.getMealid());
                     
@@ -220,10 +225,8 @@ public class MealDetailsEditServlet extends HttpServlet {
                             }
                         }
                     }
-                    */
-                    
+                     */
                     int count = 0;
-
 
                     // Set the meal ID of child objects
                     for (int i = 0; i < meal.getMealfoodList().size(); i++) {
@@ -234,9 +237,84 @@ public class MealDetailsEditServlet extends HttpServlet {
                     //Update meal object
                     em.merge(meal);
                     utx.commit();
-                    
+
                     // Clear meal session
                     session.setAttribute("meal", null);
+
+                    // Get a list of affected students
+                    List<Studentorder> orderList = new ArrayList();
+                    List<Student> alreadyNotifiedStudents = new ArrayList();
+
+                    boolean hasRelatedOrders = true;
+
+                    try {
+                        orderList = (List<Studentorder>) em.createQuery("SELECT so FROM Studentorder so WHERE so.iscanceled = false AND so.isredeemed = false").getResultList();
+                    } catch (Exception ex) {
+                        hasRelatedOrders = false;
+                    }
+
+                    if (hasRelatedOrders) {
+                        for (Studentorder so : orderList) {
+                            boolean stillHasUncanceled = false;
+                            boolean isAffected = false;
+
+                            //Refund them
+                            Student stud = so.getStudentid();
+
+                            // Get total price
+                            int totalPrice = 0;
+                            for (Ordermeal om : so.getOrdermealList()) {
+                                System.out.println(om.getMealid().getMealid() + " AND " + meal.getMealid());
+                                // Only if the associative entity has the meal, then cancel
+                                if (om.getMealid().getMealid().equals(meal.getMealid())) {
+                                    System.out.println("MATCH FOUND FOR ORDERMEAL " + om.getOrdermealid());
+                                    if (!om.getIscanceled() && !om.getIsredeemed()) {
+                                        // Since this person has 1. The meal in order 2. Hasn't cancel or redeemed it yet, he is affected
+                                        isAffected = true;
+                                    }
+                                }
+
+                                if (!om.getIscanceled()) {
+                                    stillHasUncanceled = true;
+                                }
+                            }
+
+                            // Cancel the entire order if the only meal ordered is canceled
+                            if (!stillHasUncanceled) {
+                                so.setIscanceled(true);
+                            }
+
+                            if (isAffected) {
+                                
+                                
+
+                                stud.setStudentorderList(orderList);
+                                
+                                // Update the student
+                                utx.begin();
+                                em.merge(stud);
+                                utx.commit();
+                                
+                                boolean alreadyNotified = false;
+                                
+                                for(Student student : alreadyNotifiedStudents){
+                                    if(student.getStudentid().equals(stud.getStudentid()))
+                                        alreadyNotified = true;
+                                  
+                                }
+                                
+                                if(!alreadyNotified){
+                                    // If first time notified, add to notification list
+
+                                // Notify the student
+                                Notifier notifier = new Notifier(em, utx);
+                                String title = "Meal Discontinuation Refund";
+                                String body = "Hey there! The meal \"" + meal.getMealname() +"\" (" +meal.getMealid() + ") has been recently updated with new information, and we notified you since your order(s) have this meal. We did not cancel the meal; this is just to notify you. Please do check out the new details.";
+                                notifier.notify(title, body, stud);
+                                }
+                            }
+                        }
+                    }
 
                     //Next step's page
                     response.sendRedirect("ManageMealsServlet");
