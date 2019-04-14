@@ -4,6 +4,11 @@
     Author     : mast3
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="Model.Notificationstudent"%>
+<%@page import="Model.Student"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,68 +24,120 @@
         <title>My Notifications</title>
     </head>
     <body>
-          <%
+        <%
             session = request.getSession(false);
-            
-            String permission = (String) session.getAttribute("permission");
-            
-            
-            if (permission == null) {
+
+            String permission = "";
+
+            try {
+                permission = (String) session.getAttribute("permission");
+
+                if (permission == null) {
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+
+            } catch (NullPointerException ex) {
                 request.setAttribute("errorMsg", "Please login.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+            // Allow student only
+            if (!permission.equalsIgnoreCase("student")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                List<Notificationstudent> nsList = new ArrayList();
+                try {
+                    nsList = (List<Notificationstudent>) session.getAttribute("nsList");
+                } catch (Exception e) {
+                    // This will be triggered if the page is accessed directly, hence redirect to dashboard
+                    response.sendRedirect("studentDashboard.jsp");
                 }
-            else {
-                // Allow student only
-                if(!permission.equalsIgnoreCase("student")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
+
         %>
         <h1>My Notifications</h1>
-        <h5>Here you can view all the notifications you have received.</h5>
+        <h5>Here you can view all the notifications you have received. (Those that you have read & understood are green)</h5>
         <div class="notificationContainer">
 
+            <%                for (Notificationstudent ns : nsList) {
+                    String brief = ns.getNotificationid().getDescription().substring(0, 25) + "....";
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(ns.getNotificationid().getDateissued());
+                    String hour = "";
+                    
+                    if(cal.get(Calendar.HOUR) == 0)
+                        hour = "12";
+                    else
+                        hour= cal.get(Calendar.HOUR) + 1 + "";
+                    
+                    String marker = "";
+                    if (cal.get(Calendar.AM_PM) == cal.get(Calendar.PM)) {
+                        marker = "PM";
+                    } else {
+                        marker = "AM";
+                    }
+                    String displayTime = cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR) + " @ " + hour + " " + cal.get(Calendar.MINUTE) + marker;
 
-            <div class="notification" id="n1" data-notificationid="no1" >
-                <h5>Meal Discontinued</h5>
-                <p>Spaghetti Bolognese has been discontinued. You have been...</p>
+                    if (ns.getIsread()) {
+            %>
+            <div class="notification" id="n<%=ns.getNotificationid().getNotificationid()%>" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>" >
+                <h5 style="background-color: darkgreen;"><%=ns.getNotificationid().getTitle()%></h5>
+                <p style="background-color: lightgreen;"><%=brief%></p>
+                <p class="date" style="background-color: darkgreen">12/2/19</p>
+            </div>
+            <%
+            } else {
+            %>
+            <div class="notification" id="n<%=ns.getNotificationid().getNotificationid()%>" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>" >
+                <h5><%=ns.getNotificationid().getTitle()%></h5>
+                <p><%=brief%></p>
                 <p class="date">12/2/19</p>
             </div>
-            
-            <div class="notificationOverlay" id="no1">
-                <h3>Meal Discontinued</h3>
-                <p class="date">12/2/19</p>
-                <p>Spaghetti Bolognese has been discontinued. You have been refunded 3000 credits based on your current orders. We are deeply sorry for the inconvenience caused.</p>
-                <div class="close" data-notificationid="no1">x</div>
-                <a href=""><div class="readBt">I have read and understood this.</div></a>
+            <%
+                }
+            %>
+
+
+            <div class="notificationOverlay" id="no<%=ns.getNotificationid().getNotificationid()%>">
+                <h3><%=ns.getNotificationid().getTitle()%></h3>
+                <p class="date"><%=displayTime%></p>
+                <p><%=ns.getNotificationid().getDescription()%></p>
+                <div class="close" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>">x</div>
+                <a href="ReadNotification?nsId=<%=ns.getNotificationstudentid()%>"><div class="readBt">I have read and understood this.</div></a>
             </div>
-            <div><br/><br/><button class="nextButton" href="" type="submit" >Back</button></div>
+            <%
+                }
+            %>
+
+            <div><br/><br/><button class="nextButton" href="dashboardStudent.jsp" type="submit" >Back</button></div>
         </div>
         <div class="coverOverlay"></div>
         <%}%>
     </body>
-     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function(){
-            
-            <!--  The following code allows a "disabling" overlay -->
-            $(".notification").click(function(){
+        $(document).ready(function () {
+
+<!--  The following code allows a "disabling" overlay -->
+            $(".notification").click(function () {
                 var id = $(this).data("notificationid");
                 id = "#" + id;
-                $(id).css("display","block");
-                
-                $(".coverOverlay").css("display","block");
-                $(id).css("z-index","1");
+                $(id).css("display", "block");
+
+                $(".coverOverlay").css("display", "block");
+                $(id).css("z-index", "1");
             });
-            
-            $(".close").click(function(){
+
+            $(".close").click(function () {
                 var id = $(this).data("notificationid");
                 id = "#" + id;
-                $(id).css("display","none");
-                $(".coverOverlay").css("display","none");
-                $(id).css("z-index","0");
+                $(id).css("display", "none");
+                $(".coverOverlay").css("display", "none");
+                $(id).css("z-index", "0");
             });
         });
     </script>

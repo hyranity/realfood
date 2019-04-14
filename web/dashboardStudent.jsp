@@ -23,20 +23,32 @@
     <body>
         
         <%
-         session = request.getSession(false);
+          request.getSession(false);
 
             String permission = "";
-         
-            /* (if student attribute in session is null)*/
-            if( session.getAttribute("stud") == null){
-                // Set error message
-                request.setAttribute("errorMsg", "Oops! Please login.");
-                
-                // Redirect to login page
+
+            try {
+                permission = (String) session.getAttribute("permission");
+
+                if (permission == null) {
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+
+            } catch (NullPointerException ex) {
+                request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
             }
-            else{
-           
+
+            
+            // Allow student only
+            if (!permission.equalsIgnoreCase("student")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
            Student stud = (Student) session.getAttribute("stud");
            String fname = stud.getFirstname();
            int credits = stud.getCredits();    // Obtain student's credits amount
@@ -49,7 +61,7 @@
             <h6 class="credits"><%=credits%> credits</h6>
             <div class="buttonsContainer">
                 <a href="DisplayOrdersServlet"><div class="buttonDiv" id="order">my orders</div></a>
-                <a href="#"><div class="buttonDiv" id="notification">my notifications</div></a>
+                <a href="DisplayNotifications"><div class="buttonDiv" id="notification">my notifications</div></a>
                 <br/>
                 <a href="calendarStudent.jsp"><div class="buttonDiv" id="makeOrder">make an order</div></a>
                 <a href="studentProfile.jsp"><div class="buttonDiv" id="account">my account</div></a>

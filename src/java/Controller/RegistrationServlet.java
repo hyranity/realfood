@@ -228,7 +228,7 @@ public class RegistrationServlet extends HttpServlet {
 
                 //Generate ID
                 staffQuery = em.createQuery("SELECT s FROM Staff s", Staff.class);
-                int count = query.getResultList().size();
+                int count = staffQuery.getResultList().size();
 
                 //Transfer existing student details into the new account
                 staff.setStaffid(Auto.generateID("EMP", 8, count));    // Set staff ID

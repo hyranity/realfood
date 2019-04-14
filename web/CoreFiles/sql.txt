@@ -29,9 +29,9 @@ create table Student (
 
 create table Notification(
     notificationID VARCHAR(10) NOT NULL,
-    title VARCHAR(20) NOT NULL,
-    description VARCHAR(50) NOT NULL,
-    dateIssued DATE NOT NULL,
+    title VARCHAR(30) NOT NULL,
+    description VARCHAR(200) NOT NULL,
+    dateIssued TIMESTAMP NOT NULL,
 
     primary key (notificationID)
 );

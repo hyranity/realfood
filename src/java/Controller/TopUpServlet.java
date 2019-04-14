@@ -5,6 +5,7 @@
  */
 package Controller;
 
+import ExtendedClasses.Notifier;
 import Model.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -86,6 +87,12 @@ public class TopUpServlet extends HttpServlet {
             
             // Nullify the object after done
             session.setAttribute("studTopUp", null);
+            
+            //Notify the student
+            
+            Notifier notifier = new Notifier(em, utx);
+            notifier.notify("Top Up Successful!", "You have successfully topped up RM" + request.getParameter("cashAmt") + ", which resulted in an addition of " + creditAmt + " credits. You now have a total of " + stud.getCredits() + " credits. Thank you for your purchase!", stud);
+
             
             request.setAttribute("successMsg", "Success! Student " + stud.getStudentid() + "'s credits have been topped up.");
             request.getRequestDispatcher("topUp.jsp").forward(request, response);
