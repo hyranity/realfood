@@ -2,6 +2,9 @@
 
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Locale"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
+
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -26,8 +29,8 @@ and open the template in the editor.
     <body>
         <%
             session = request.getSession(false);
-
             String permission = "";
+            Student stud = new Student();
 
             try {
                 permission = (String) session.getAttribute("permission");

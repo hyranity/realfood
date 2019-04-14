@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,6 +18,7 @@
             session = request.getSession(false);
 
             String permission = "";
+            Student stud = new Student();
 
             try {
                 permission = (String) session.getAttribute("permission");
@@ -39,6 +42,7 @@
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             } else {
+                int credits = stud.getCredits();    // Obtain student's credits amount
         %>
         <div class="stepsContainer">
             <h1>steps</h1>

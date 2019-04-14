@@ -1,5 +1,7 @@
 <%@page import="util.Auto"%>
 <%@page import="Model.Student"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,6 +17,7 @@
     <body>
         <%
             session = request.getSession(false);
+            Student stud = new Student();
             
             String permission = (String) session.getAttribute("permission");
             // If user is not logged in, redirect to login page
@@ -24,6 +27,9 @@
                     return;
                 }
             else {
+                
+                int credits = stud.getCredits();    // Obtain student's credits amount
+                
                 // Allow manager only
                 if(!permission.equalsIgnoreCase("student")){
                      request.setAttribute("errorMsg", "You are not allowed to visit that page.");

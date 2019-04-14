@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,6 +24,7 @@
             session = request.getSession(false);
 
             String permission = "";
+            Student stud = new Student();
 
             try {
                 permission = (String) session.getAttribute("permission");
@@ -45,6 +48,7 @@
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             } else {
+                int credits = stud.getCredits();    // Obtain student's credits amount
         %>
         <div class="stepsContainer">
             <h1>Make an Order</h1>
@@ -78,9 +82,10 @@
                 <button class="nextButton">Next step</button>
                 <br/><br/><br/>
             </div>
-            <%}%>
+
         </form>
         <h6 class="credits">1000 credits</h6>
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="studentDisplayMeals.js" type="text/javascript"></script>

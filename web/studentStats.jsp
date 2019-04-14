@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,6 +15,7 @@
     <body>
          <%
             session = request.getSession(false);
+            Student stud = new Student();
             
             String permission = (String) session.getAttribute("permission");
             
@@ -23,6 +26,8 @@
                     return;
                 }
             else {
+                
+                int credits = stud.getCredits();    // Obtain student's credits amount
                 // Allow student only
                 if(!permission.equalsIgnoreCase("student")){
                      request.setAttribute("errorMsg", "You are not allowed to visit that page.");

@@ -5,6 +5,8 @@
 --%>
 
 <%@page import="Model.Studentorder"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -23,6 +25,7 @@
             session = request.getSession(false);
 
             String permission = "";
+            Student stud = new Student();
 
             try {
                 permission = (String) session.getAttribute("permission");
@@ -56,6 +59,7 @@
                 // If any error, means that the steps are not followed correctly
                 response.sendRedirect("DisplayOrdersServlet");
             }
+            int credits = stud.getCredits();    // Obtain student's credits amount
         %>
         <div class="stepsContainer">
             <h1>Update an Order</h1>
@@ -88,9 +92,10 @@
                 <button class="nextButton">Next step</button>
                 <br/><br/><br/>
             </div>
-            <%}%>
+
         </form>
-        <h6 class="credits">1000 credits</h6>
+        <h6 class="credits"><%=credits%> credits</h6>
+        <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="studentDisplayMeals.js" type="text/javascript"></script>

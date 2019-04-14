@@ -1,4 +1,6 @@
 <%@page import="Model.Studentorder"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,6 +19,7 @@
             session = request.getSession(false);
 
             String permission = "";
+            Student stud = new Student();
 
             try {
                 permission = (String) session.getAttribute("permission");
@@ -53,6 +56,7 @@
                 response.sendRedirect("DisplayOrdersServlet");
             }
             
+            int credits = stud.getCredits();    // Obtain student's credits amount
             int originalPrice = currentStudOrder.getTotalprice();
         %>
         <div class="stepsContainer">

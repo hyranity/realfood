@@ -5,6 +5,8 @@
 --%>
 
 <%@page import="Model.Student"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -22,6 +24,8 @@
         
         <%
          session = request.getSession(false);
+
+            String permission = "";
          
             // If user is not logged in, redirect to login page (if student attribute in session is null)
             if( session.getAttribute("stud") == null){
@@ -32,8 +36,10 @@
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
             else{
+           
            Student stud = (Student) session.getAttribute("stud");
            String fname = stud.getFirstname();
+           int credits = stud.getCredits();    // Obtain student's credits amount
         %>
         
         <div class="dashboardContainer">
