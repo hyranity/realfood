@@ -44,20 +44,20 @@
                     
                     <div class="sectionContainer" style="border-color: darkgoldenrod">
                         <p>You've consumed about</p>
-                        <h3 class="number" style="color: darkgoldenrod">12039</h3>
+                        <h3 class="number" style="color: darkgoldenrod">${calorieCount}</h3>
                         <p>calories</p>
                     </div>
                     
                     <div class="sectionContainer" style="border-color: darkred;">
                         <p>You've spent about</p>
-                        <h3 class="number" style="color: darkred;">18412</h3>
+                        <h3 class="number" style="color: darkred;">${creditsSpent}</h3>
                         <p>credits</p>
                     </div>
                     
                     <div class="sectionContainer" style="border-color: darkcyan;">
-                        <p>You've ordered</p>
-                        <h3 class="number" style="color: darkcyan;">13</h3>
-                        <p>meals</p>
+                        <p>You've redeemed</p>
+                        <h3 class="number" style="color: darkcyan;">${orderRedeemed}</h3>
+                        <p>orders</p>
                     </div>
                     
                 </div>

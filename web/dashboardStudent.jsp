@@ -65,6 +65,7 @@
                 <br/>
                 <a href="calendarStudent.jsp"><div class="buttonDiv" id="makeOrder">make an order</div></a>
                 <a href="studentProfile.jsp"><div class="buttonDiv" id="account">my account</div></a>
+                <a href="DisplayStats"><div class="buttonDiv" id="stats">My Statistics</div></a>
             </div>
             <a href="LogoutServlet"><div class="logout">logout</div></a>
         </div>
@@ -91,6 +92,11 @@
             });
             $("#account").hover(function () {
                 $("#subtitle").html("That is where you can view and edit your account details.");
+            }, function () {
+                $("#subtitle").html("Here's your dashboard.");
+            });
+            $("#stats").hover(function () {
+                $("#subtitle").html("That is where you can view some interesting facts about yourself (We know more about you than you).");
             }, function () {
                 $("#subtitle").html("Here's your dashboard.");
             });
