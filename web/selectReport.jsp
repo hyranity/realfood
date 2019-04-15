@@ -55,9 +55,11 @@
                         <option value="firstHalf">January - June</option>
                         <option value="secondHalf">July - December</option>
                     </select>
+                    
                     <div>
-                        <input style="display:none;" class="formInput" name="day" id="day" type="number" minlength="1" maxlength="2" placeholder="DAY"/>
+                        <input type="number" value="1" style="display:none;" class="formInput" name="day" id="day"  minlength="1" maxlength="2" placeholder="DAY" required/>
                     </div>
+                    
                     <select class="formInput" id="year" name="year" style="display:none;">
                         <option selected value=""> YEAR </option>
                         <option value="2010">2010</option>

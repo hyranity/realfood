@@ -49,7 +49,7 @@
                     
             <div class="topUpForm">
                 
-                    <input type="text" maxlength="10" placeholder="Student ID" name="studentId" id="studentid" required/>
+                    <input type="text" maxlength="10" placeholder="Student ID" name="studentId" id="studentid"/>
                     <br/>
                     <button type="submit" form="topUpForm" value="Submit">next</button>
                     <br/>

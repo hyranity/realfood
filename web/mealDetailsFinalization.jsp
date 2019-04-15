@@ -102,7 +102,7 @@
                 <br/>
             </div>
         </div>
-        <a href="displayStaff.jsp"><div class="back">Back</div></a>
+        <a href="dashboardCanteenStaff.jsp"><div class="back">Back</div></a>
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

@@ -112,13 +112,13 @@
                         <input type="text" value="Joined: <%=dateJoined%>" id="dateJoined"  style="background-color: darkgray;"  readonly/>
                     </div>
                     <div>
-                        <input type="password" placeholder="New Password" id="password" name="password"/>
+                        <input type="password" placeholder="New Password" id="password" minlength="6" maxlength="20" name="password"/>
                     </div>
                     <div>
-                        <input type="password"  placeholder="Confirmation Password" id="cPassword" name="cPassword" />
+                        <input type="password"  placeholder="Confirmation Password" id="cPassword"  minlength="6" maxlength="20" name="cPassword" />
                     </div>
                     <div>
-                        <input type="password"  placeholder="Manager Password" id="managerPassword" name="managerPassword" required/>
+                        <input type="password"  placeholder="Manager Password" id="managerPassword" minlength="6" maxlength="20" name="managerPassword" required/>
                     </div>
                     <br/>
                     <button type="submit" class="submitBtn">Submit changes</button>

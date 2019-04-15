@@ -52,9 +52,8 @@
         </form>
         <div class="successMsgAbsolute">${successMsg}</div>
         <div class="errorMsg">${errorMsg}</div>
-<div class="bodyContainer">
-        <table class="recordTable">
-            
+<div>
+        <table class="recordTable">   
             <tr>
                 <td>
                     <a href="calendarStudent.jsp"><div class="add">
@@ -62,6 +61,7 @@
                         </div></a>
                 </td>
                 ${queryResult}
+            </tr>
         </table> 
     </div>
         <!-- Display student's credits -->

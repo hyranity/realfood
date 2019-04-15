@@ -56,13 +56,13 @@
                     <div>   
                         <input type="number" value="" placeholder="Calories" id="calories" name="calories" oninput="validity.valid || (value = '');" min="0" step="1" maxlength="4" required/>
                     </div>
-                    <input type="submit" value="Yes" style="color: green; z-index: 1;" form="createForm">
+                    
                     <br/>
                     <a href="#" onclick="confirmadding()"><div class="adding">Create</div></a>
                     <div class="addingConfirmation" style="margin-left: 32%">
                         <h5>Creating food?</h5>
                         <p>The Food will be created. Do You Want To Proceed?</p>
-                        <input type="submit" value="Yes" style="color: green; z-index: 1;" form="createForm" >
+                        <input type="submit" value="Yes" style="color: green;cursor: pointer; z-index: 1; border:1px solid gold; border-radius: 10px; font-weight: bold; padding:4px; margin:10px;" form="createForm" >
                         <a href="#"><div class="addingCancel">No</div></a>
                     </div>
                 </form>
@@ -126,7 +126,7 @@
 
                             $(".adding").click(function confirmadding() {
                                 $(".addingConfirmation").css("display", "inline-block");
-                                $(".outsideContainer :input").prop("disabled", true);
+                                $(".outsideContainer :input").prop("disabled", false);
                             });
 
                             $(".addingCancel").click(function confirmadding() {

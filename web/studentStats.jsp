@@ -15,7 +15,7 @@
     <body>
          <%
             session = request.getSession(false);
-            Student stud = new Student();
+
             
             String permission = (String) session.getAttribute("permission");
             
@@ -26,7 +26,7 @@
                     return;
                 }
             else {
-                
+                Student stud = (Student) session.getAttribute("stud");
                 int credits = stud.getCredits();    // Obtain student's credits amount
                 // Allow student only
                 if(!permission.equalsIgnoreCase("student")){
@@ -61,7 +61,7 @@
                     </div>
                     
                 </div>
-                <div class="back" href="studentDashboard.jsp">Back<br/><br/></div>
+                        <div class="back"><a href="dashboardStudent.jsp">Back</a><br/><br/></div>
         </div>
         
             <!-- Display student's credits -->

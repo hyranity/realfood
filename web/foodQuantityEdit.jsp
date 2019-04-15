@@ -50,8 +50,8 @@
                 
                 <p id="totalCal">Total: ${caloriesSum} calories</p>
             </div>
-        <div class="nextButtonDiv">
-            
+            <div style="margin-top: 90px;">
+            <input class="nextButton" type="submit" value="Back"/>
             <input class="nextButton" form="mealForm" type="submit" value="Next Step">
         </div>
     </form>

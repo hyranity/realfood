@@ -49,7 +49,7 @@
                     <input type="hidden" value="student" name="userType"/>
                     
                     <div class="formGroup">
-                        <input type="text" class="formInput" id="userID" name="id" placeholder="Student ID (or existing Student ID)" maxlength="10" required/>
+                        <input type="text" class="formInput" id="userID" name="id" placeholder="Student ID (or existing Student ID)" minlength="5" maxlength="10" required/>
                     </div>
 
                     <div class="formGroup">
