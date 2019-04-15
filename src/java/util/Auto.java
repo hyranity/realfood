@@ -31,6 +31,41 @@ public class Auto {
         return date;
     }
     
+    // Get month as string, return int
+    public static int getMonthInt(String month) {
+        int monthNum = 0;
+
+        if (month.equalsIgnoreCase("january")) {
+            monthNum = 0;
+        } else if (month.equalsIgnoreCase("february")) {
+            monthNum = 1;
+        } else if (month.equalsIgnoreCase("march")) {
+            monthNum = 2;
+        } else if (month.equalsIgnoreCase("april")) {
+            monthNum = 3;
+        } else if (month.equalsIgnoreCase("may")) {
+            monthNum = 4;
+        } else if (month.equalsIgnoreCase("june")) {
+            monthNum = 5;
+        } else if (month.equalsIgnoreCase("july")) {
+            monthNum = 6;
+        } else if (month.equalsIgnoreCase("august")) {
+            monthNum = 7;
+        } else if (month.equalsIgnoreCase("september")) {
+            monthNum = 8;
+        } else if (month.equalsIgnoreCase("october")) {
+            monthNum = 9;
+        } else if (month.equalsIgnoreCase("november")) {
+            monthNum = 10;
+        } else if (month.equalsIgnoreCase("december")) {
+            monthNum = 11;
+        } else {
+            monthNum = -1;
+        }
+
+        return monthNum;
+    }
+    
     // Shortens the equalsIgnoreCase method
     public static boolean eqIgnore(String str1, String str2){
         if(str1.equalsIgnoreCase(str2))

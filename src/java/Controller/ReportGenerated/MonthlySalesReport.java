@@ -19,6 +19,8 @@ import javax.transaction.*;
 import Model.*;
 import java.util.List;
 import Controller.MealManagement.*;
+import java.util.Calendar;
+import util.Auto;
 
 /**
  *
@@ -44,6 +46,28 @@ public class MonthlySalesReport extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             try{
+                String month = "";
+                
+                // Create the calendars
+                Calendar firstDay = Calendar.getInstance();
+                Calendar lastDay = Calendar.getInstance();
+                       
+                try {
+                    month = request.getParameter("month");
+                } catch (Exception ex) {
+                    // Display error messages if any
+                    System.out.println("ERROR: " + ex.getMessage());
+                }
+                
+                //Get the chosen month and set the calendars
+                int monthNum = Auto.getMonthInt(month); // Convert month to int
+                firstDay.set(Calendar.MONTH, monthNum);  // Set the month of the "beginning day" calendar object
+                lastDay.set(Calendar.MONTH, monthNum); // Set the month of the "last day" calendar object
+                firstDay.set(Calendar.DAY_OF_MONTH, 1); // Set the beginning of chosen month to be first day
+                lastDay.set(Calendar.DAY_OF_MONTH, lastDay.getActualMaximum(Calendar.DAY_OF_MONTH));  // Set the end of chosen month to be the last day
+                
+                // The range of chosen month is now firstDay - lastDay
+                
                 
                 Query query = em.createQuery("SELECT m FROM Meal m", Meal.class);
                 List<Meal> mealList = query.getResultList();
@@ -64,6 +88,17 @@ public class MonthlySalesReport extends HttpServlet {
                 List<Meal> Amount = query.getResultList();
                 
                 String outputMonthly = "";
+                
+                List<Meal> mList = em.createQuery("SELECT m FROM Meal m").getResultList();
+                List<Studentorder> orderList = em.createQuery("SELECT o FROM Studentorder o WHERE o.datecreated BETWEEN :firstday AND :lastday").setParameter("firstday", Auto.calToDate(firstDay), TemporalType.DATE).setParameter("lastDay", Auto.calToDate(lastDay), TemporalType.DATE).getResultList();
+                for(Meal meal : mList){
+                    for(Ordermeal om : meal.getOrdermealList()){
+                        Calendar cal = Calendar.getInstance();
+                        cal = Auto.dateToCal(om.getOrderid().getDatecreated());
+                        
+                        
+                    }
+                }
   
                 for (int i = 1; i <= mealList.size(); i++) {
   
