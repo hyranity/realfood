@@ -57,7 +57,7 @@
             <h4 id="subtitle">Here's your dashboard.</h4>
             <div class="buttonsContainer">
                 <a href="DisplayStaffServlet"><div class="buttonDiv" id="staff">manage canteen staff</div></a>
-                <a href="#"><div class="buttonDiv" id="report">view reports</div></a>
+                <a href="selectReport.jsp"><div class="buttonDiv" id="report">view reports</div></a>
                 <a href="managerProfile.jsp"><div class="buttonDiv" id="account">my account</div></a>
             </div>
             <a href="LogoutServlet"><div class="logout">logout</div></a>
