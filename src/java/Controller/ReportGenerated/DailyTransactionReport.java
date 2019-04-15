@@ -85,13 +85,12 @@ public class DailyTransactionReport extends HttpServlet {
                 day = request.getParameter("day");
                 year = request.getParameter("year");
 
-                // Attempt to cause null error
                 int monthNum = Auto.getMonthInt(month); // Convert month to int
-                day.charAt(0);
-                year.charAt(0);
 
-                if (month == null || day == null || year == null) {
-                    response.sendRedirect("dashboardManager.jsp");
+
+                if (month == "" || day == "" || year == "") {
+                    request.setAttribute("errorMsg", "Oops! Please fill in all fields.");
+                request.getRequestDispatcher("selectReport.jsp").forward(request, response);
                 }
             } catch (Exception ex) {
                 // If error, means manager accessed this directly. Hence, redirect
@@ -130,7 +129,6 @@ public class DailyTransactionReport extends HttpServlet {
                 request.setAttribute("date", Auto.dateToString(Auto.calToDate(chosenDay)));
                 request.setAttribute("totalAmount", totalAmount);
                 request.setAttribute("outputMonthly", outputMonthly);
-
                 request.getRequestDispatcher("dailyTransactionReport.jsp").forward(request, response);
             } catch (Exception ex) {
                 ex.printStackTrace();

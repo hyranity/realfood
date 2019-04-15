@@ -79,7 +79,7 @@ public class SummaryReport extends HttpServlet {
             String selection = "";
             String outputSemiAnnual = "";
             String year = "";
-            
+
             int totalAmount = 0;
 
             // Create the calendars
@@ -89,13 +89,11 @@ public class SummaryReport extends HttpServlet {
             try {
                 selection = request.getParameter("selection");
                 year = request.getParameter("year");
-                
-                // Attempts to trigger exceptions
-                selection.charAt(0);
-                year.charAt(0);
 
-                if (selection == null || year == null) {
-                    response.sendRedirect("dashboardManager.jsp");
+
+                if (selection == "" || year == "") {
+                    request.setAttribute("errorMsg", "Oops! Please fill in all fields.");
+                    request.getRequestDispatcher("selectReport.jsp").forward(request, response);
                 }
             } catch (Exception ex) {
                 response.sendRedirect("dashboardManager.jsp");
@@ -107,88 +105,83 @@ public class SummaryReport extends HttpServlet {
             if (selection.equalsIgnoreCase("firstHalf")) {
                 title = "January to June " + Integer.parseInt(year);
                 monthNum = 0;
-            }
-            else if(selection.equalsIgnoreCase("secondHalf")){
+            } else if (selection.equalsIgnoreCase("secondHalf")) {
                 title = "July to December " + Integer.parseInt(year);
                 monthNum = 6;
-            }
-            else{
+            } else {
                 //Redirect, since error
                 response.sendRedirect("dashboardManager.jsp");
             }
-                
-                
-                int monthCount = 0;
-                for (int i = 0; i < 6; i++) {
-                    String outputMonthly = "";
-                    monthNum++;
-                    monthNum = i;
-                    
-                    //Get the chosen month and set the calendars
-                    firstDay.set(Calendar.MONTH, monthNum);  // Set the month of the "beginning day" calendar object
-                    firstDay.set(Calendar.YEAR, Integer.parseInt(year));
-                    lastDay.set(Calendar.MONTH, monthNum); // Set the month of the "last day" calendar object
-                    lastDay.set(Calendar.YEAR, Integer.parseInt(year));
-                    firstDay.set(Calendar.DAY_OF_MONTH, 1); // Set the beginning of chosen month to be first day
-                    lastDay.set(Calendar.DAY_OF_MONTH, lastDay.getActualMaximum(Calendar.DAY_OF_MONTH));  // Set the end of chosen month to be the last day
 
-                    // The range of chosen month is now firstDay - lastDay
-                    try {
-                        Connection conn = connectDB();
-                        PreparedStatement stmt = conn.prepareStatement("select m.MEALID, m.mealname, sum(om.quantity * m.price / 100) as cash, sum(om.QUANTITY) as quantity from meal m right join ordermeal om on om.MEALID = m.MEALID right join studentorder so on so.orderid = om.ORDERID where so.DATECREATED between ? and ? group by m.mealid, m.MEALNAME order by cash desc fetch first 3 rows only");
-                        stmt.setDate(1, SQLUtil.getSQLDate(Auto.calToDate(firstDay)));
-                        stmt.setDate(2, SQLUtil.getSQLDate(Auto.calToDate(lastDay)));
-                        ResultSet rs = stmt.executeQuery();
-                        
-                        
-                        int count = 0;
-                        int totalCash = 0;
-                        boolean isBeginning = true;
-                        boolean hasResults = false;
-                        while (rs.next()) {
-                            if (isBeginning) {
-                                // Add month header
-                                outputMonthly += "<tr>\n"
-                                        + "      <th scope=\"col\">" + firstDay.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) +"</th>\n"
-                                        + "      <th scope=\"col\"></th>\n"
-                                        + "      <th scope=\"col\"></th>\n"
-                                        + "      <th scope=\"col\"></th>\n"
-                                        + "      <th scope=\"col\"></th>\n"
-                                        + "    </tr>    ";
-                            }
-                            count++;
-                            outputMonthly += "<tr>"
-                                    + "<td></td>"
-                                    + "<td>" + rs.getString(1) + "</td>"
-                                    + "<td>" + rs.getString(2) + "</td>"
-                                    + "<td>" + rs.getString(4) + "</td>"
-                                    + "<td>" + rs.getString(3) + "</td>"
-                                    + "</tr>";
-                            totalAmount += rs.getInt(3);
-                            totalCash += rs.getInt(3);
-                            isBeginning = false;
-                            hasResults = true;
+            int monthCount = 0;
+            for (int i = 0; i < 6; i++) {
+                String outputMonthly = "";
+                monthNum++;
+                monthNum = i;
+
+                //Get the chosen month and set the calendars
+                firstDay.set(Calendar.MONTH, monthNum);  // Set the month of the "beginning day" calendar object
+                firstDay.set(Calendar.YEAR, Integer.parseInt(year));
+                lastDay.set(Calendar.MONTH, monthNum); // Set the month of the "last day" calendar object
+                lastDay.set(Calendar.YEAR, Integer.parseInt(year));
+                firstDay.set(Calendar.DAY_OF_MONTH, 1); // Set the beginning of chosen month to be first day
+                lastDay.set(Calendar.DAY_OF_MONTH, lastDay.getActualMaximum(Calendar.DAY_OF_MONTH));  // Set the end of chosen month to be the last day
+
+                // The range of chosen month is now firstDay - lastDay
+                try {
+                    Connection conn = connectDB();
+                    PreparedStatement stmt = conn.prepareStatement("select m.MEALID, m.mealname, sum(om.quantity * m.price / 100) as cash, sum(om.QUANTITY) as quantity from meal m right join ordermeal om on om.MEALID = m.MEALID right join studentorder so on so.orderid = om.ORDERID where so.DATECREATED between ? and ? group by m.mealid, m.MEALNAME order by cash desc fetch first 3 rows only");
+                    stmt.setDate(1, SQLUtil.getSQLDate(Auto.calToDate(firstDay)));
+                    stmt.setDate(2, SQLUtil.getSQLDate(Auto.calToDate(lastDay)));
+                    ResultSet rs = stmt.executeQuery();
+
+                    int count = 0;
+                    int totalCash = 0;
+                    boolean isBeginning = true;
+                    boolean hasResults = false;
+                    while (rs.next()) {
+                        if (isBeginning) {
+                            // Add month header
+                            outputMonthly += "<tr>\n"
+                                    + "      <th scope=\"col\">" + firstDay.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + "</th>\n"
+                                    + "      <th scope=\"col\"></th>\n"
+                                    + "      <th scope=\"col\"></th>\n"
+                                    + "      <th scope=\"col\"></th>\n"
+                                    + "      <th scope=\"col\"></th>\n"
+                                    + "    </tr>    ";
                         }
-                        
-                        if(hasResults){
-                            // Add month footer
-                         outputMonthly += "<tr>"
-                                    + "<td></td>"
-                                    + "<td></td>"
-                                    + "<td></td>"
-                                   + "<th>Subtotal</th>"
-                                    + "<th> RM " + totalCash + "</th>"
-                                    + "</tr>";
-                        }
-                        
-                         
-                         // Add to the overall query
-                         outputSemiAnnual += outputMonthly;
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                        count++;
+                        outputMonthly += "<tr>"
+                                + "<td></td>"
+                                + "<td>" + rs.getString(1) + "</td>"
+                                + "<td>" + rs.getString(2) + "</td>"
+                                + "<td>" + rs.getString(4) + "</td>"
+                                + "<td>" + rs.getString(3) + "</td>"
+                                + "</tr>";
+                        totalAmount += rs.getInt(3);
+                        totalCash += rs.getInt(3);
+                        isBeginning = false;
+                        hasResults = true;
                     }
+
+                    if (hasResults) {
+                        // Add month footer
+                        outputMonthly += "<tr>"
+                                + "<td></td>"
+                                + "<td></td>"
+                                + "<td></td>"
+                                + "<th>Subtotal</th>"
+                                + "<th> RM " + totalCash + "</th>"
+                                + "</tr>";
+                    }
+
+                    // Add to the overall query
+                    outputSemiAnnual += outputMonthly;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            
+            }
+
             request.setAttribute("selection", selection.toUpperCase());
             request.setAttribute("title", title);
             request.setAttribute("totalAmount", totalAmount);

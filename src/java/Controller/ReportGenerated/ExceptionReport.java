@@ -76,6 +76,7 @@ public class ExceptionReport extends HttpServlet {
             return;
         } else {
             String month = "";
+            String year = "";
 
             // Create the calendars
             Calendar firstDay = Calendar.getInstance();
@@ -83,10 +84,11 @@ public class ExceptionReport extends HttpServlet {
 
             try {
                 month = request.getParameter("month");
-                month.charAt(0);
+                year = request.getParameter("year");
                 
-                if(month == null){
-                    response.sendRedirect("dashboardManager.jsp");
+                if(month == "" || year == ""){
+                    request.setAttribute("errorMsg", "Oops! Please fill in all fields.");
+                request.getRequestDispatcher("selectReport.jsp").forward(request, response);
                 }
             } catch (Exception ex) {
                 // Display error messages if any
@@ -99,6 +101,8 @@ public class ExceptionReport extends HttpServlet {
             lastDay.set(Calendar.MONTH, monthNum); // Set the month of the "last day" calendar object
             firstDay.set(Calendar.DAY_OF_MONTH, 1); // Set the beginning of chosen month to be first day
             lastDay.set(Calendar.DAY_OF_MONTH, lastDay.getActualMaximum(Calendar.DAY_OF_MONTH));  // Set the end of chosen month to be the last day
+            firstDay.set(Calendar.YEAR, Integer.parseInt(year));
+            lastDay.set(Calendar.YEAR, Integer.parseInt(year));
 
             // The range of chosen month is now firstDay - lastDay
             try {
