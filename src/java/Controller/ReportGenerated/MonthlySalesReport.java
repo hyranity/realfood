@@ -19,8 +19,14 @@ import javax.transaction.*;
 import Model.*;
 import java.util.List;
 import Controller.MealManagement.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Calendar;
+import javax.servlet.http.HttpSession;
 import util.Auto;
+import util.SQLUtil;
+import static util.SQLUtil.connectDB;
 
 /**
  *
@@ -42,84 +48,86 @@ public class MonthlySalesReport extends HttpServlet {
     EntityManager em;
     @Resource
     UserTransaction utx;
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            try{
-                String month = "";
-                
-                // Create the calendars
-                Calendar firstDay = Calendar.getInstance();
-                Calendar lastDay = Calendar.getInstance();
-                       
-                try {
-                    month = request.getParameter("month");
-                } catch (Exception ex) {
-                    // Display error messages if any
-                    System.out.println("ERROR: " + ex.getMessage());
-                }
-                
-                //Get the chosen month and set the calendars
-                int monthNum = Auto.getMonthInt(month); // Convert month to int
-                firstDay.set(Calendar.MONTH, monthNum);  // Set the month of the "beginning day" calendar object
-                lastDay.set(Calendar.MONTH, monthNum); // Set the month of the "last day" calendar object
-                firstDay.set(Calendar.DAY_OF_MONTH, 1); // Set the beginning of chosen month to be first day
-                lastDay.set(Calendar.DAY_OF_MONTH, lastDay.getActualMaximum(Calendar.DAY_OF_MONTH));  // Set the end of chosen month to be the last day
-                
-                // The range of chosen month is now firstDay - lastDay
-                
-                
-                Query query = em.createQuery("SELECT m FROM Meal m", Meal.class);
-                List<Meal> mealList = query.getResultList();
-                
-                query = em.createQuery("SELECT m FROM Meal m WHERE m.mealid = :mealid", Meal.class);
-                List<Meal> MealDate = query.getResultList();
-                
-                query = em.createQuery("SELECT m FROM Meal m WHERE m.mealid = :mealid", Meal.class);
-                List<Meal> MealID = query.getResultList();
-                
-                query = em.createQuery("SELECT m FROM Meal m WHERE m.mealname = :mealname", Meal.class);
-                List<Meal> Product = query.getResultList();
-                
-                query = em.createQuery("SELECT m FROM Mealfood m WHERE m.quantity = :quantity", Mealfood.class);
-                List<Mealfood> quantity = query.getResultList();
-                
-                query = em.createQuery("SELECT m FROM Meal m WHERE m.price = :price", Meal.class);
-                List<Meal> Amount = query.getResultList();
-                
-                String outputMonthly = "";
-                
-                List<Meal> mList = em.createQuery("SELECT m FROM Meal m").getResultList();
-                List<Studentorder> orderList = em.createQuery("SELECT o FROM Studentorder o WHERE o.datecreated BETWEEN :firstday AND :lastday").setParameter("firstday", Auto.calToDate(firstDay), TemporalType.DATE).setParameter("lastDay", Auto.calToDate(lastDay), TemporalType.DATE).getResultList();
-                for(Meal meal : mList){
-                    for(Ordermeal om : meal.getOrdermealList()){
-                        Calendar cal = Calendar.getInstance();
-                        cal = Auto.dateToCal(om.getOrderid().getDatecreated());
-                        
-                        
-                    }
-                }
-  
-                for (int i = 1; i <= mealList.size(); i++) {
-  
-                Meal meal = mealList.get(i);
-    
-                 outputMonthly += "<tr>"
-                  + "<td>" + i + "</td>"
-                  + "<td>" + "<DATE>" + "</td>"
-                  + "<td>" + MealID + "</td>"
-                  + "<td>" + Product + "</td>"
-                  + "<td>" + quantity + "</td>"
-                  + "<td>" + Amount + "</td>"
-                  + "</tr>";
-                 
-            }
-            }
-            catch(Exception ex){
-                request.setAttribute("outputMonthly", ex);
-                request.getRequestDispatcher("monthlySalesReport.jsp");
-    }
 
+        HttpSession session = request.getSession(false);
+
+        String permission = "";
+        Student studentFromSession = new Student();
+
+        try {
+            permission = (String) session.getAttribute("permission");
+            studentFromSession = (Student) session.getAttribute("stud");
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // Allow student only
+        if (!permission.equalsIgnoreCase("manager")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+            String month = "";
+
+            // Create the calendars
+            Calendar firstDay = Calendar.getInstance();
+            Calendar lastDay = Calendar.getInstance();
+
+            try {
+                month = request.getParameter("month");
+                month.charAt(0);
+            } catch (Exception ex) {
+                // Display error messages if any
+                System.out.println("ERROR: " + ex.getMessage());
+            }
+
+            //Get the chosen month and set the calendars
+            int monthNum = Auto.getMonthInt(month); // Convert month to int
+            firstDay.set(Calendar.MONTH, monthNum);  // Set the month of the "beginning day" calendar object
+            lastDay.set(Calendar.MONTH, monthNum); // Set the month of the "last day" calendar object
+            firstDay.set(Calendar.DAY_OF_MONTH, 1); // Set the beginning of chosen month to be first day
+            lastDay.set(Calendar.DAY_OF_MONTH, lastDay.getActualMaximum(Calendar.DAY_OF_MONTH));  // Set the end of chosen month to be the last day
+
+            // The range of chosen month is now firstDay - lastDay
+            try {
+                Connection conn = connectDB();
+                PreparedStatement stmt = conn.prepareStatement("select m.MEALID, m.mealname, sum(om.quantity * m.price / 100) as cash, sum(om.QUANTITY) from ordermeal om, meal m, studentorder so where so.DATECREATED BETWEEN ? AND ? group by m.mealid, om.MEALID, m.mealname having m.mealid = om.mealid order by cash desc");
+                stmt.setDate(1, SQLUtil.getSQLDate(Auto.calToDate(firstDay)));
+                stmt.setDate(2, SQLUtil.getSQLDate(Auto.calToDate(lastDay)));
+                ResultSet rs = stmt.executeQuery();
+
+                String outputMonthly = "";
+                int count = 0;
+                int totalPrice = 0;
+                while (rs.next()) {
+                    count++;
+                    outputMonthly += "<tr>"
+                            + "<td>" + count + "</td>"
+                            + "<td>" + rs.getString(1) + "</td>"
+                            + "<td>" + rs.getString(2) + "</td>"
+                            + "<td>" + rs.getString(4) + "</td>"
+                            + "<td>" + rs.getString(3) + "</td>"
+                            + "</tr>";
+                    totalPrice += rs.getInt(3);
+                }
+                request.setAttribute("totalPrice", totalPrice);
+                request.setAttribute("outputMonthly", outputMonthly);
+                request.getRequestDispatcher("monthlySalesReport.jsp").forward(request, response);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

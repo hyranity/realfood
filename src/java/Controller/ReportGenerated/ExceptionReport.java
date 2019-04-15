@@ -19,6 +19,14 @@ import javax.transaction.*;
 import Model.*;
 import java.util.List;
 import Controller.MealManagement.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Calendar;
+import javax.servlet.http.HttpSession;
+import util.Auto;
+import util.SQLUtil;
+import static util.SQLUtil.connectDB;
 
 /**
  *
@@ -43,27 +51,82 @@ public class ExceptionReport extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            try{
-                Query query = em.createQuery("SELECT o FROM Ordermeal o WHERE o.ordermealid = :ordermealid", Ordermeal.class);
-                List<Ordermeal> mealID = query.getResultList();
-                
-                query = em.createQuery("SELECT o FROM Ordermeal o WHERE o.quantity = :quantity", Ordermeal.class);
-                List<Ordermeal> quantity = query.getResultList();
-                
-                query = em.createQuery("SELECT o FROM Ordermeal o WHERE o.iscanceled = :iscanceled", Ordermeal.class);
-                List<Ordermeal> cashRefund = query.getResultList();
-                
-                
-                String output = "";
-                
-                output += "<tr>" + "<td>" + mealID + "</td>" + "<td>" + quantity + "</td>" +
-                        "<td>" + cashRefund + "</td>" + "</tr>";
-                
+            HttpSession session = request.getSession(false);
+
+        String permission = "";
+        Student studentFromSession = new Student();
+
+        try {
+            permission = (String) session.getAttribute("permission");
+            studentFromSession = (Student) session.getAttribute("stud");
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
             }
-            catch(Exception ex){
-                request.setAttribute("output", ex);
-                request.getRequestDispatcher("exceptionReport.jsp");
+
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // Allow student only
+        if (!permission.equalsIgnoreCase("manager")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+            String month = "";
+
+            // Create the calendars
+            Calendar firstDay = Calendar.getInstance();
+            Calendar lastDay = Calendar.getInstance();
+
+            try {
+                month = request.getParameter("month");
+                month.charAt(0);
+            } catch (Exception ex) {
+                // Display error messages if any
+                System.out.println("ERROR: " + ex.getMessage());
             }
+
+            //Get the chosen month and set the calendars
+            int monthNum = Auto.getMonthInt(month); // Convert month to int
+            firstDay.set(Calendar.MONTH, monthNum);  // Set the month of the "beginning day" calendar object
+            lastDay.set(Calendar.MONTH, monthNum); // Set the month of the "last day" calendar object
+            firstDay.set(Calendar.DAY_OF_MONTH, 1); // Set the beginning of chosen month to be first day
+            lastDay.set(Calendar.DAY_OF_MONTH, lastDay.getActualMaximum(Calendar.DAY_OF_MONTH));  // Set the end of chosen month to be the last day
+
+            // The range of chosen month is now firstDay - lastDay
+            try {
+                Connection conn = connectDB();
+                PreparedStatement stmt = conn.prepareStatement("select m.MEALID, m.mealname, sum(om.quantity * m.price / 100) as cash, sum(om.QUANTITY) from ordermeal om, meal m, studentorder so where so.ORDERID = om.ORDERID and so.ISCANCELED = true and so.DATECANCELED BETWEEN ? AND ? group by m.mealid, om.MEALID, m.mealname having m.mealid = om.mealid  order by cash desc");
+                stmt.setDate(1, SQLUtil.getSQLDate(Auto.calToDate(firstDay)));
+                stmt.setDate(2, SQLUtil.getSQLDate(Auto.calToDate(lastDay)));
+                ResultSet rs = stmt.executeQuery();
+
+                String outputMonthly = "";
+                int count = 0;
+                int totalPrice = 0;
+                while (rs.next()) {
+                    count++;
+                    outputMonthly += "<tr>"
+                            + "<td>" + count + "</td>"
+                            + "<td>" + rs.getString(1) + "</td>"
+                            + "<td>" + rs.getString(2) + "</td>"
+                            + "<td>" + rs.getString(4) + "</td>"
+                            + "<td>" + rs.getString(3) + "</td>"
+                            + "</tr>";
+                    totalPrice += rs.getInt(3);
+                }
+                request.setAttribute("totalPrice", totalPrice);
+                request.setAttribute("outputMonthly", outputMonthly);
+                request.getRequestDispatcher("exceptionReport.jsp").forward(request, response);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

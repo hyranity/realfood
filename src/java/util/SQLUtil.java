@@ -27,6 +27,8 @@ public class SQLUtil {
 
         return recordCount;
     }
+    
+    
 
     // Deletes all records of a table
     public static int clearAll(String tableName) {

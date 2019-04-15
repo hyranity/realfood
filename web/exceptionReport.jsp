@@ -4,6 +4,7 @@
     Author     : Richard Khoo
 --%>
 
+<%@page import="util.Auto"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,29 +14,61 @@
 </head>
 
 <body>
+<%
+    session = request.getSession(false);
 
+        String permission = "";
+
+        try {
+            permission = (String) session.getAttribute("permission");
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        
+        // Allow student only
+        if (!permission.equalsIgnoreCase("manager")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+            
+        String todayDate = Auto.dateToString(Auto.getToday());
+    %>
 <table>
     <caption><a onclick="printThisPage()"><b>RealFood Canteen</b></a></caption>
     <caption class="address">Lot 1, Ground Floor, Pusat Dagangan Donggongon, Jalan Sapau, Pekan Donggongon, 89500 Penampang, Sabah Tel:088-718481</caption><br/>
     <caption class="reportType"><u>Exception Report For Order Cancellation for February</u></caption>
-    <caption class="timeGenerate"> Generated On: 31 February 2019</caption>
+    <caption class="timeGenerate"> Generated On: <%=todayDate%></caption>
     
   <thead>
     <tr>
+        <th scope="col">No.</th>
       <th scope="col">Meal ID</th>
+      <th scope="col">Meal Name</th>
       <th scope="col">Quantity</th>
-      <th scope="col">Cash Refunded  (RM)</th>
+      <th scope="col">Cash Refunded (RM)</th>
     </tr>    
   </thead>
   <tbody>
-      ${output}
+      ${outputMonthly}
   </tbody>
   
     <!-- Print Total Part-->
     <tr>
       <th scope="col">Total</th>
       <th scope="col"></th>
-      <th scope="col">RM121212</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col">RM ${totalPrice}</th>
     </tr>    
 </table>
     <div class="tableBox">
@@ -45,7 +78,7 @@
     <br/><label class="leftDate">Date:</label>
     </div>
     
-    
+    <%}%>
 </body>
 
 <script>
