@@ -40,8 +40,8 @@
         <div class="errorMsg">${errorMsg}</div>
         <div class="successMsg">${successMsg}</div>
         <!-- Search bar -->
-        <form class="searchForm">
-            <input type="text" id="myInput" name="query" onkeyup="myFunction()" placeholder="search..." class="searchBar"/>
+        <form class="searchForm" action="ManageMealsServlet">
+            <input type="text" id="myInput" name="search" onkeyup="myFunction()" placeholder="search..." class="searchBar"/>
         </form>
 
         <!-- Table -->

@@ -176,7 +176,7 @@
                 <br/>
             </div>
         </div>
-        <a href="displayMeals.jsp"><div class="back">Back</div></a><br/><br/>
+        <a href="ManageMealsServlet"><div class="back">Back</div></a><br/><br/>
         <div class="toggleConfirmation">
             <%
                 if (!isDiscontinued) {

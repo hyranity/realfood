@@ -78,7 +78,7 @@ public class DisplayMealsServlet extends HttpServlet {
             try {
 
                 // Get all meal
-                TypedQuery<Meal> query = em.createQuery("SELECT m FROM Meal m", Meal.class);
+                TypedQuery<Meal> query = em.createQuery("SELECT m FROM Meal m where m.isdiscontinued = false", Meal.class);
                 List<Meal> mealList = query.getResultList();
 
                 String queryResult = "";

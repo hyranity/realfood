@@ -88,7 +88,7 @@ public class DisplayFoodSelectionServletForEdit extends HttpServlet {
                 session.setAttribute("meal", meal);
                 
                 // Get all food
-                TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f", Food.class);
+                TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f where f.isdiscontinued = false", Food.class);
                 List<Food> foodList = query.getResultList();
                 
 

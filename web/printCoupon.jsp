@@ -4,6 +4,9 @@
     Author     : mast3
 --%>
 
+<%@page import="Model.Ordermeal"%>
+<%@page import="util.Auto"%>
+<%@page import="Model.Studentorder"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,50 +23,80 @@
     </head>
     <body>
         <%
-            session = request.getSession(false);
-            
-            String permission = (String) session.getAttribute("permission");
-            
-            
-            if (permission == null) {
+            request.getSession(false);
+
+            String permission = "";
+
+            try {
+                permission = (String) session.getAttribute("permission");
+
+                if (permission == null) {
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+
+            } catch (NullPointerException ex) {
                 request.setAttribute("errorMsg", "Please login.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+            
+            // Allow student only
+            if (!permission.equalsIgnoreCase("student")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                Studentorder so = new Studentorder();
+                
+               
+
+                try {
+                    so = (Studentorder) session.getAttribute("studentOrder");
+                } catch (Exception e) {
+                    // This will be triggered if the page is accessed directly, hence redirect to dashboard
+                    response.sendRedirect("studentDashboard.jsp");
                 }
-            else {
-                // Allow student only
-                if(!permission.equalsIgnoreCase("student")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
-                    return;
-                }
+                
+ String name = so.getStudentid().getFirstname() + " " + so.getStudentid().getLastname();
+                 String id = so.getStudentid().getFirstname();
+                   String chosenDate = Auto.dateToString(so.getChosendate());
+                   String couponCode = so.getCouponcode();
         %>
         <div class="couponContainer">
             <h1>RealFood Canteen</h1>
             <hr/>
-            <p><b>Student ID: </b>STU029493</p>
-            <p><b>Student Name: </b>Michael Caine</p>
-            <p><b>Redemption Date: </b>14 May, 2019</p>
+            <p><b>Student ID: </b><%=id%></p>
+            <p><b>Student Name: </b><%=name%></p>
+            <p><b>Redemption Date: </b><%=chosenDate%></p>
             <hr/>
             <h5>Coupon Code</h5>
             <br/>
-            <h3>aHs8xmJ</h3>
+            <h3><%=couponCode%></h3>
             <br/>
             <br/>
             <div class="orders">
                 <ul>
+                    <%
+                    for(Ordermeal om : so.getOrdermealList()){
+                        
+                    String mealName = om.getMealid().getMealname();
+                    int quantity = om.getQuantity();
+                    String mealTime = "";
+                    if(om.getMealid().getIslunch() && om.getMealid().getIsbreakfast())
+                        mealTime = "(All Day)";
+                    else if(om.getMealid().getIslunch())
+                        mealTime = "(Lunch)";
+                    else
+                        mealTime = "(Breakfast)";
+                   
+                    %>
                     <li>
-                        <p class="name">Spaghetti Bolognese</p><p class="quantity">x5</p><p class="mealTime">(Lunch)</p>
-                    </li>
-                    <li>
-                        <p class="name">Spaghetti Bolognese</p><p class="quantity">x5</p><p class="mealTime">(Lunch)</p>
-                    </li>
-                   <li>
-                        <p class="name">Spaghetti Bolognese</p><p class="quantity">x5</p><p class="mealTime">(Lunch)</p>
-                    </li>
-                  <li>
-                        <p class="name">Spaghetti Bolognese</p><p class="quantity">x5</p><p class="mealTime">(Lunch)</p>
-                    </li>                
+                        <p class="name"><%=mealName%></p><p class="quantity">x<%=quantity%></p><p class="mealTime"><%=mealTime%></p>
+                    </li>  
+                    <%}%>
                 </ul>
             </div>
             <br/>

@@ -88,9 +88,25 @@ public class ManageMealsServlet extends HttpServlet {
             }
 
             try {
+                
+                // Get search result
+                String search = "";
+                boolean hasSearch = true;
+                try {
+                    search = request.getParameter("search");
+                    
+                    if(search == null || search == "")
+                        hasSearch = false;
+                } catch (Exception ex) {
+                    hasSearch = false;
+                }
 
                 // Get all meal
-                TypedQuery<Meal> query = em.createQuery("SELECT m FROM Meal m", Meal.class);
+                TypedQuery<Meal> query = null;
+                if(!hasSearch)
+                    query = em.createQuery("SELECT m FROM Meal m", Meal.class);
+                else
+                    query = em.createQuery("SELECT m FROM Meal m WHERE m.mealid LIKE :search OR m.mealname LIKE lower(:search)", Meal.class).setParameter("search", "%" + search + "%");
                 List<Meal> mealList = query.getResultList();
 
                 String queryResult = "";
@@ -138,10 +154,14 @@ public class ManageMealsServlet extends HttpServlet {
                         mealTime = "All Day";
                         mealTimeClass = "both";
                     }
+                    
+                    String discontinuedStyle = "";
+                    if(meal.getIsdiscontinued())
+                        discontinuedStyle = "style=\"background-color: darkred\"";
 
                     queryResult += "<td>\n"
                             + "                            <input type=\"checkbox\" id=\""+ meal.getMealid() +"\"/>\n"
-                            + "                            <label class=\"meal\" for=\""+ meal.getMealid() +"\">\n"
+                            + "                            <label class=\"meal\" for=\""+ meal.getMealid() +"\" " + discontinuedStyle +">\n"
                             + "                                <h5>"+ meal.getMealname() +"</h5>\n"
                             + "                                <div style=\"position: relative;\">\n"
                             + "                                    <h6 class=\""+ mealTimeClass +"\">"+ mealTime +"</h6>\n"
@@ -155,7 +175,7 @@ public class ManageMealsServlet extends HttpServlet {
                             + "                                    <p class=\"component\">"+ components +"</p>\n"
                             + "                                </div>\n"
                             + "                                <p class=\"price\">"+ meal.getPrice() +" credits</p>\n"
-                            + "                                <a href=\"DisplayFoodSelectionServletForEdit?mealId="+ meal.getMealid() + "\"><div class=\"editMealButton\">Edit</div></a>\n"
+                            + "                                <a href=\"DisplayFoodSelectionServletForEdit?mealId="+ meal.getMealid() + "\"><div class=\"editMealButton\">Manage</div></a>\n"
                             + "                            </label>\n"
                             + "                        </td>";
 

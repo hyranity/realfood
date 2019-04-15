@@ -87,7 +87,7 @@
                  <%
                     if(!so.getIscanceled() && !so.getIsredeemed() && !expired ){
                     %>
-                    <a href=""><div class="couponPage">Print coupon code</div></a>
+                    <a href="printCoupon.jsp"><div class="couponPage">Print coupon code</div></a>
                     
                     <%
                     }
