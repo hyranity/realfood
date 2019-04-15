@@ -46,7 +46,7 @@ if(this.checked){
     submitButton.disabled = true;
 }
 
-}
+};
 
 /*under contruct*/
 /*var userID = document.getElementById("userID").value == "";

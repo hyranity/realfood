@@ -1,0 +1,223 @@
+/*--login start here--*/
+
+ body{
+   font-size: 100%;
+   background-color:#000000; 
+   font-family: montserrat, sans-serif;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  transition: 0.1s all;
+  -webkit-transition: 0.1s all;
+  -moz-transition: 0.1s all;
+  -o-transition: 0.1s all;
+}
+/*--element style--*/
+.containerBox h2 {
+    font-size: 30px;
+    color: gold;
+    text-align: center;
+    margin-top:24px;
+    font-weight: 700;
+
+}
+.reportGenerate {
+    width:27%;
+    background-color: #000000;
+    margin: 150px auto 0px;
+    border-radius: 5px;
+    padding:3em 2em;
+
+}
+.reportGenerate h1 {
+    text-align: center;
+    font-size: 28px;
+    color:gold;
+    font-weight: 700;
+}
+.reportGenerate p {
+    font-size: 16px;
+    color: gold;
+    line-height: 24px;
+    margin: 24px 0px;
+    text-align:center;
+}
+.reportGenerate input[type=password] {
+    font-size: 12px;
+    color: #000000;
+    padding: 20px 12px;
+    display: block;
+    width: 95%;
+    outline: none;
+    text-align:center;
+    border-radius:15px;
+    border:none;
+    background-color: gold;
+    margin-bottom: 10px;
+}
+.reportGenerate input[type=text] {
+    font-size: 12px;
+    color: #000000;
+    padding: 20px 12px;
+    display: block;
+    width: 95%;
+    outline: none;
+    text-align:center;
+    border-radius:15px;
+    border:none;
+    background-color: gold;
+    margin-bottom: 10px;
+}
+
+.reportGenerate input[type=submit] {
+    font-size: 16px;
+    color: #000000;
+    background-color:#ffffff;
+    width: 50%;
+    padding: 20px 0px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    border-radius: 50px;
+    display: block;
+    margin: 18px auto 0;
+}
+.reportGenerate input[type=submit]:hover{
+    background-color:#000000;  
+    transition: 0.1s all;
+    color: gold;
+    border: 3px solid;
+    border-color: gold;
+    font-weight: 700;
+}
+
+label{
+    color:#ffffff;
+    margin-left: 130px;
+    border1:2px soild;
+    border-color: gold;
+}
+
+/*--media quiries start--*/
+@media(max-width:1440px){
+	
+}
+@media(max-width:1366px){
+	
+}
+@media(max-width:1280px){
+    
+.containerBox h2 {
+    margin-top: 24px;	
+}
+
+.reportGenerate {
+    width: 30%;
+}
+}
+@media(max-width:1024px){
+.reportGenerate {
+    width: 37%;	
+}
+}
+@media(max-width:768px){
+.reportGenerate {
+    width: 49%;
+}	
+.containerBox h2 {
+    font-size: 2em;
+}
+.reportGenerate {
+    width: 60%;
+}
+.reportGenerate h1 {
+    font-size: 2em;
+}
+}
+@media(max-width:640px){
+	
+}
+@media(max-width:480px){
+.reportGenerate {
+    width: 80%;
+    padding: 3em 1.5em;
+}	
+}
+@media(max-width:320px){
+.containerBox h2 {
+    font-size: 1.5em;
+}
+.reportGenerate h1 {
+    font-size: 1.5em;
+}
+.reportGenerate {
+    width: 80%;
+    margin: 2em auto 0em;
+    padding: 1.5em 1.5em;
+}
+.reportGenerate p {
+    font-size: 0.9em;	
+}
+.reportGenerate input[type=submit] {
+    font-size:0.9em;
+    width: 75%;
+}
+.reportGenerate input[type=text] {
+    font-size: 0.9em;
+    padding: 0.8em 0.5em;
+}
+}
+
+input:checked + label{
+    color: green;
+    
+}
+
+input[type=checkbox]{
+    display: none;
+}
+
+label{
+    color: gold;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px;
+    border-radius: 13px;
+    padding: 10px;
+    font-size: 15px;
+    background-color: black;
+    
+}
+
+.formGroup {
+    overflow: hidden;  /*<!--Line Spacing between the input colum-->*/
+    margin-bottom: 20px; 
+}
+
+.formInput {
+    opacity:0.9;
+    overflow: hidden;  /*<!--Line Spacing between the input colum-->*/
+    margin-bottom: 20px; 
+    display: block;
+    width: 80%;   /*<!--For adjust the colum of input-->*/
+    font-family: Montserrat, sans-serif;
+    background-color: #FFD700;
+    border-style: solid;
+    border-color: gray;
+    border-width: 0px;
+    border-radius: 12px;
+    padding: 20px 23px;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left:40px;
+}
+
+a{
+    text-align: center;
+    color: #000000;
+    text-decoration: none;
+}

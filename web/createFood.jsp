@@ -59,10 +59,10 @@
                     <input type="submit" value="Yes" style="color: green; z-index: 1;" form="createForm">
                     <br/>
                     <a href="#" onclick="confirmadding()"><div class="adding">Create</div></a>
-                    <div class="addingConfirmation">
+                    <div class="addingConfirmation" style="margin-left: 32%">
                         <h5>Creating food?</h5>
                         <p>The Food will be created. Do You Want To Proceed?</p>
-                        
+                        <input type="submit" value="Yes" style="color: green; z-index: 1;" form="createForm" >
                         <a href="#"><div class="addingCancel">No</div></a>
                     </div>
                 </form>

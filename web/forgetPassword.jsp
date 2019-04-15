@@ -7,6 +7,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+        <title>Forgot Password</title>
         <link href="CSS/forgotPassword.css" rel="stylesheet">
     </head>
     <body>
