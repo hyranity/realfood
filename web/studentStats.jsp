@@ -55,7 +55,7 @@
                     </div>
                     
                     <div class="sectionContainer" style="border-color: darkcyan;">
-                        <p>You've redeemed</p>
+                        <p>You've made</p>
                         <h3 class="number" style="color: darkcyan;">${orderRedeemed}</h3>
                         <p>orders</p>
                     </div>

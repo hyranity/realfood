@@ -87,25 +87,23 @@ public class DisplayStats extends HttpServlet {
                
                System.out.println(firstDay.get(Calendar.DAY_OF_MONTH));
                
-               List<Studentorder> orderList = em.createQuery("SELECT so FROM Studentorder so WHERE so.chosendate BETWEEN :firstDay AND :today").setParameter("firstDay", Auto.calToDate(firstDay), TemporalType.DATE).setParameter("today", Auto.getToday(), TemporalType.DATE).getResultList();
+               List<Studentorder> orderList = em.createQuery("SELECT so FROM Studentorder so WHERE so.datecreated BETWEEN :firstDay AND :today").setParameter("firstDay", Auto.calToDate(firstDay), TemporalType.DATE).setParameter("today", Auto.getToday(), TemporalType.DATE).getResultList();
                
                int calorieCount = 0;
                int creditsSpent = 0;
-               int orderRedeemed = 0;
+               int orderCount = 0;
                for(Studentorder order : orderList){     // For every order
                    for(Ordermeal om : order.getOrdermealList()){        // And every meal in that order
                        calorieCount += om.getMealid().getTotalcalories();       // Add the calories
                    }
-                   
+                   orderCount++;
                    creditsSpent += order.getTotalprice();       // Add the price
-                   if(order.getIsredeemed())
-                       orderRedeemed++; // Add the number of orders redeemed already
                }
                
                 // Set the details ready, then forward
                 request.setAttribute("calorieCount", calorieCount);
                 request.setAttribute("creditsSpent", creditsSpent);
-                request.setAttribute("orderRedeemed", orderRedeemed);
+                request.setAttribute("orderRedeemed", orderCount);
                 request.getRequestDispatcher("studentStats.jsp").forward(request, response);
                 return;
             } catch (Exception ex) {

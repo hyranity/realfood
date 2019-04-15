@@ -85,7 +85,7 @@
                         </div>
                         
                         <div class="formButton" style="text-align: center">
-                            <input type="submit" name="submit" id="submit" class="submitButton" value="Sign up" style="text-align: center" disabled/>
+                            <input type="submit" name="submit" id="submit" class="submitButton" value="Sign up" style="text-align: center" />
                         </div>
                         
                     </form>

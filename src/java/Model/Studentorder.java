@@ -41,7 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Studentorder.findByIsredeemed", query = "SELECT s FROM Studentorder s WHERE s.isredeemed = :isredeemed")
     , @NamedQuery(name = "Studentorder.findByIscanceled", query = "SELECT s FROM Studentorder s WHERE s.iscanceled = :iscanceled")
     , @NamedQuery(name = "Studentorder.findByTotalprice", query = "SELECT s FROM Studentorder s WHERE s.totalprice = :totalprice")
-    , @NamedQuery(name = "Studentorder.findByDatecanceled", query = "SELECT s FROM Studentorder s WHERE s.datecanceled = :datecanceled")})
+    , @NamedQuery(name = "Studentorder.findByDatecanceled", query = "SELECT s FROM Studentorder s WHERE s.datecanceled = :datecanceled")
+    , @NamedQuery(name = "Studentorder.findByDatecreated", query = "SELECT s FROM Studentorder s WHERE s.datecreated = :datecreated")})
 public class Studentorder implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -76,6 +77,11 @@ public class Studentorder implements Serializable {
     @Column(name = "DATECANCELED")
     @Temporal(TemporalType.DATE)
     private Date datecanceled;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "DATECREATED")
+    @Temporal(TemporalType.DATE)
+    private Date datecreated;
     @JoinColumn(name = "STUDENTID", referencedColumnName = "STUDENTID")
     @ManyToOne(optional = false)
     private Student studentid;
@@ -89,13 +95,14 @@ public class Studentorder implements Serializable {
         this.orderid = orderid;
     }
 
-    public Studentorder(String orderid, Date chosendate, String couponcode, Boolean isredeemed, Boolean iscanceled, int totalprice) {
+    public Studentorder(String orderid, Date chosendate, String couponcode, Boolean isredeemed, Boolean iscanceled, int totalprice, Date datecreated) {
         this.orderid = orderid;
         this.chosendate = chosendate;
         this.couponcode = couponcode;
         this.isredeemed = isredeemed;
         this.iscanceled = iscanceled;
         this.totalprice = totalprice;
+        this.datecreated = datecreated;
     }
 
     public String getOrderid() {
@@ -152,6 +159,14 @@ public class Studentorder implements Serializable {
 
     public void setDatecanceled(Date datecanceled) {
         this.datecanceled = datecanceled;
+    }
+
+    public Date getDatecreated() {
+        return datecreated;
+    }
+
+    public void setDatecreated(Date datecreated) {
+        this.datecreated = datecreated;
     }
 
     public Student getStudentid() {

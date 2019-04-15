@@ -29,6 +29,7 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import util.Auto;
+import util.Email;
 import util.Hasher;
 
 /**
@@ -140,7 +141,7 @@ public class RegistrationServlet extends HttpServlet {
                 request.getRequestDispatcher("staffRegistration.jsp").forward(request, response);
                 return;
             } else if (userType.equalsIgnoreCase("student")) {
-                request.setAttribute("errorMsg", "Hey! You entered a staff's email. You can't use that.");
+                request.setAttribute("errorMsg", "Sorry, that email is already taken..");
                 request.getRequestDispatcher("studentRegistration.jsp").forward(request, response);
                 return;
             } else {
@@ -205,7 +206,11 @@ public class RegistrationServlet extends HttpServlet {
                     utx.begin();
                     em.persist(stud);
                     utx.commit();
-
+                    
+                    // Email the student
+                    Email notifyEmail = new Email(stud.getEmail(), "Welcome to RealFood!", "Hey " + stud.getFirstname() + ", welcome to RealFood Canteen! We hope that you'll have a good (and delicious) time with us! Here's 1000 credits to get you started.");
+                    notifyEmail.sendEmail();
+                    
                     //Login successful message
                     request.setAttribute("accountMsg", "Your registration is successful! You may login now.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -253,6 +258,10 @@ public class RegistrationServlet extends HttpServlet {
                 utx.begin();
                 em.persist(staff);
                 utx.commit();
+                
+                // Email the student
+                    Email notifyEmail = new Email(staff.getEmail(), "Welcome to RealFood!", "Hey " + staff.getFirstname() + ", you have been registered as a Canteen Staff. Welcome to RealFood Canteen! We hope that you'll have a good time working with us.");
+                    notifyEmail.sendEmail();
 
                 //Login successful message
                 request.setAttribute("accountMsg", "Staff registration is successful! The staff may login now.");

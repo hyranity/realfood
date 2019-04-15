@@ -194,6 +194,7 @@ public class ProcessPaymentServlet extends HttpServlet {
                         
                     // Set all the necessary fields
                     studOrder.setChosendate(chosenDates.get(i));       // Store the date into the list of student orders
+                    studOrder.setDatecreated(Auto.getToday()); // Created today
                     studOrder.setStudentid(student); // Also set student ID
                     studOrder.setIscanceled(false);
                     studOrder.setCouponcode(couponCode);
