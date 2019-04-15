@@ -78,7 +78,7 @@
                     if(cal.get(Calendar.HOUR) == 0)
                         hour = "12";
                     else
-                        hour= cal.get(Calendar.HOUR) + 1 + "";
+                        hour= cal.get(Calendar.HOUR) + "";
                     
                     String marker = "";
                     if (cal.get(Calendar.AM_PM) == cal.get(Calendar.PM)) {
@@ -90,10 +90,16 @@
 
                     if (ns.getIsread()) {
             %>
-            <div class="notification" id="n<%=ns.getNotificationid().getNotificationid()%>" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>" >
+            <div class="notification" style="background-color: lightgreen;" id="n<%=ns.getNotificationid().getNotificationid()%>" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>" >
                 <h5 style="background-color: darkgreen;"><%=ns.getNotificationid().getTitle()%></h5>
-                <p style="background-color: lightgreen;"><%=brief%></p>
+                <p style="background-color: lightgreen; border-color: lightgreen;"><%=brief%></p>
                 <p class="date" style="background-color: darkgreen">12/2/19</p>
+            </div>
+                <div class="notificationOverlay" id="no<%=ns.getNotificationid().getNotificationid()%>" style="background-color: darkgreen; color: white;">
+                <h3><%=ns.getNotificationid().getTitle()%></h3>
+                <p class="date"><%=displayTime%></p>
+                <p class="description"><%=ns.getNotificationid().getDescription()%></p>
+                <div class="close" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>">x</div>
             </div>
             <%
             } else {
@@ -103,18 +109,19 @@
                 <p><%=brief%></p>
                 <p class="date">12/2/19</p>
             </div>
+                <div class="notificationOverlay" id="no<%=ns.getNotificationid().getNotificationid()%>">
+                <h3><%=ns.getNotificationid().getTitle()%></h3>
+                <p class="date"><%=displayTime%></p>
+                <p class="description"><%=ns.getNotificationid().getDescription()%></p>
+                <div class="close" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>">x</div>
+                <a href="ReadNotification?nsId=<%=ns.getNotificationstudentid()%>"><div class="readBt">I have read and understood this.</div></a>
+            </div>
             <%
                 }
             %>
 
 
-            <div class="notificationOverlay" id="no<%=ns.getNotificationid().getNotificationid()%>">
-                <h3><%=ns.getNotificationid().getTitle()%></h3>
-                <p class="date"><%=displayTime%></p>
-                <p><%=ns.getNotificationid().getDescription()%></p>
-                <div class="close" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>">x</div>
-                <a href="ReadNotification?nsId=<%=ns.getNotificationstudentid()%>"><div class="readBt">I have read and understood this.</div></a>
-            </div>
+            
             <%
                 }
             %>

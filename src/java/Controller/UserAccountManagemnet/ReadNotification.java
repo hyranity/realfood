@@ -88,7 +88,7 @@ public class ReadNotification extends HttpServlet {
             
             try {
                utx.begin();
-               Notificationstudent ns = em.find(Notificationstudent.class, nsId);
+               Notificationstudent ns = em.find(Notificationstudent.class, Integer.parseInt(nsId));
                
                // Update it to isRead = true
                ns.setIsread(true);

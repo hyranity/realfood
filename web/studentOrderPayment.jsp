@@ -24,7 +24,7 @@
             session = request.getSession(false);
             
             String permission = "";
-
+            Student stud  = new Student();
             try {
                 permission = (String) session.getAttribute("permission");
                 stud = (Student) session.getAttribute("stud");
@@ -62,8 +62,7 @@
                     request.getRequestDispatcher("calendarStudent.jsp").forward(request, response);
                     System.out.println("Couldn't get data from session for studentOrderPayment.jsp: " + e.getMessage());
                 }
-                
-                Student stud = (Student) session.getAttribute("stud");
+                 
                 int credits = stud.getCredits();    // Obtain student's credits amount
                 int totalPrice = studOrder.getTotalprice();
                 int grandTotal = totalPrice * chosenDates.size();

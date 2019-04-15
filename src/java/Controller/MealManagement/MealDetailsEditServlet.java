@@ -317,8 +317,9 @@ public class MealDetailsEditServlet extends HttpServlet {
                     }
 
                     //Next step's page
-                    response.sendRedirect("ManageMealsServlet");
-                    return;
+                    request.setAttribute("successMsg", "Meal has been updated successfully.");
+                request.getRequestDispatcher("ManageMealsServlet").forward(request, response);
+                return;
                 }
 
             } catch (ConstraintViolationException e) {

@@ -164,9 +164,16 @@ public class ManageMealsServlet extends HttpServlet {
                         fourCount = 0;
                     }
                 }
+                
+                try {
+                    request.setAttribute("successMsg", request.getAttribute("successMsg"));
+                } catch (Exception ex) {
+                    // No error if no message is shown
+                }
 
                 // Send the formatted list to JSP
                 request.setAttribute("queryResult", queryResult);
+                
                 request.getRequestDispatcher("manageMeals.jsp").forward(request, response);
                 return;
 

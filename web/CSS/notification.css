@@ -107,3 +107,9 @@ h1{
     left: 0;
     display: none;
 }
+
+.description{
+    padding-left: 150px;
+    padding-right: 150px;
+    padding-top: 0px;
+}

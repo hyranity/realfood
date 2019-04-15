@@ -171,7 +171,7 @@
                         <%}%>
                         <label for="lunch"><div id="lunchDiv">Lunch</div></label>
                     </div>
-                    <button type="submit" class="submitBtn">Add meal</button>
+                    <button type="submit" class="submitBtn">Update meal</button>
                 </form>
                 <br/>
             </div>

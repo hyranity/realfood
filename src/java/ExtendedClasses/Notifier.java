@@ -37,7 +37,7 @@ public class Notifier {
 
         notification.setDateissued(Auto.getToday());
         //Generate ID
-        TypedQuery<Notifier> query = em.createQuery("SELECT s FROM Staff s", Notifier.class);
+        TypedQuery<Notifier> query = em.createQuery("SELECT n FROM Notification n", Notifier.class);
         int count = query.getResultList().size();
 
         try {
