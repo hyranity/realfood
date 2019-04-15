@@ -91,7 +91,7 @@
             <div class="mainContainer">
 
                 <form action="ProcessManagerEdit" class="form">
-                    <a href="#" onclick="confirmtoggleOverlay()"> <div class="toggleOverlay" id="reset">Reset Account</div></a>
+                    <a href="#" onclick="confirmtoggleOverlay()"> <div class="toggleOverlay" id="reset">Resign as Manager</div></a>
                     <div>
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="staffid" readonly/>
                     </div>
@@ -128,9 +128,9 @@
         </div>
         <a href="dashboardManager.jsp"><div class="back">Back</div></a>
         < <div class="toggleConfirmation">
-            <h5>Reset account?</h5>
-            <p>All account details and credentials will be restored to default. You will be logged out instantly. (You cannot undo this)</p>
-            <a href="AdminResetServlet"><div class="overlayConfirm">Yes</div></a>
+            <h5>RESIGN account?</h5>
+            <p>You will be unable to access your account, and a new manager account will be made instead. (You cannot undo this)</p>
+            <a href="DismissManager"><div class="overlayConfirm">Yes</div></a>
             <a href="#"><div class="overlayCancel">No</div></a>
         </div>
         <div class="coverOverlay"></div>

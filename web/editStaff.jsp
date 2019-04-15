@@ -92,7 +92,9 @@
             <div class="mainContainer">
 
                 <form action="CanteenStaffAccountEditByManager" class="form">
-                    <%                        if (staff.getIshired()) {
+                    <%                       
+                        if(!staff.getStaffrole().equalsIgnoreCase("manager"))
+                        if (staff.getIshired()) {
                     %>
                     <a href="#" onclick="confirmtoggleOverlay()"> <div class="toggleOverlay" id="dismiss">Dismiss</div></a>
                     <%

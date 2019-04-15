@@ -75,6 +75,7 @@ public class DisplayStaffServlet extends HttpServlet {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             } else  {
+               Staff manager = (Staff) session.getAttribute("staff");
 
                 List<Staff> staffList = new ArrayList();
                 String queryResults = ""; //This is used to print the data in the JSP
@@ -84,7 +85,7 @@ public class DisplayStaffServlet extends HttpServlet {
                 String id = "";
                 String fname = "";
                 String lname = "";
-                String badge = "<span class=\"badge badge-primary\">Canteen Staff</span>";
+                String badge = "";
                 String breaks = "<br/><br/>";
                 String status = "";
                 
@@ -92,7 +93,7 @@ public class DisplayStaffServlet extends HttpServlet {
 
                 try {
                     utx.begin();
-                    TypedQuery<Staff> query = em.createQuery("SELECT s FROM Staff s WHERE s.staffrole = :role", Staff.class).setParameter("role", "canteenStaff");
+                    TypedQuery<Staff> query = em.createQuery("SELECT s FROM Staff s WHERE s.staffid != :staffId", Staff.class).setParameter("staffId", manager.getStaffid());
                     staffList = query.getResultList();
                     utx.commit();
                 } catch (Exception e) {
@@ -104,6 +105,11 @@ public class DisplayStaffServlet extends HttpServlet {
                         status = "<p class=\"status\" style=\"color: green; font-weight: bold;\">Hired</p>";
                     else
                         status = "<p class=\"status\" style=\"color: red; font-weight: bold;\">Dismissed</p>";
+                    
+                    if(canteenStaff.getStaffrole().equalsIgnoreCase("manager"))
+                        badge = "<span class=\"badge badge-danger\">Manager</span>";
+                    else
+                        badge = "<span class=\"badge badge-primary\">Canteen Staff</span>";
 
                     id = "<h6>" + canteenStaff.getStaffid() + "</h6>";
                     fname = "<p>" + canteenStaff.getFirstname() + "</p>";

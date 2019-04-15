@@ -47,7 +47,7 @@
 <table>
     <caption><a onclick="printThisPage()"><b>RealFood Canteen</b></a></caption>
     <caption class="address">Lot 1, Ground Floor, Pusat Dagangan Donggongon, Jalan Sapau, Pekan Donggongon, 89500 Penampang, Sabah Tel:088-718481</caption><br/>
-    <caption class="reportType"><u>Sales Report Month January</u></caption>
+    <caption class="reportType"><u>Monthly Sales Report For ${month}</u></caption>
     <caption class="timeGenerate"> Generated On: <%=todayDate%></caption>
     
     

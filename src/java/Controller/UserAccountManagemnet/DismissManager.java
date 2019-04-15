@@ -3,13 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package Controller.UserAccountManagemnet;
 
+import Controller.MealManagement.*;
+import Model.Food;
+import Model.Meal;
+import Model.Mealfood;
 import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
@@ -17,16 +23,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
-import util.*;
+import javax.validation.ConstraintViolationException;
+import util.Auto;
 
 /**
  *
- * IMPORTANT: This is to be run when admin account is to be set to default
- * settings (eg. when manager is changed)
+ * @author mast3
  */
-@WebServlet(name = "AdminResetServlet", urlPatterns = {"/AdminResetServlet"})
-public class AdminResetServlet extends HttpServlet {
+@WebServlet(name = "DismissManager", urlPatterns = {"/DismissManager"})
+public class DismissManager extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -45,20 +52,62 @@ public class AdminResetServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession(false);
+
+        String permission = "";
+        String mealId = "";
         try {
-            utx.begin();
-            AdminReset ar = new AdminReset(em, utx);
+            permission = (String) session.getAttribute("permission");
 
-            em.merge(ar.createAdminAccount());
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
 
-            utx.commit();
-
-            request.setAttribute("successMsg", "Manager account is restored successfully. Use the default credentials to login.");
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
-        } catch (Exception ex) {
-            System.out.println("Unable to resolve admin account: " + ex.getMessage());
-            ex.printStackTrace();
+        }
+
+        // Allow manager only
+        if (!permission.equals("manager")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+
+            try {
+
+                // Obtain manager's own staff object from database
+                Staff staff = (Staff) session.getAttribute("staff");
+
+           // Dismiss manager
+                staff.setIshired(false);
+                staff.setDatedismissed(Auto.getToday());
+
+                utx.begin();
+
+                // Update it
+                em.merge(staff);
+                utx.commit();
+
+                //Update the staff in session
+                session.setAttribute("staff", staff);
+
+                request.getRequestDispatcher("CompleteManagerResignation").forward(request, response);
+                return;
+
+            } catch (ConstraintViolationException e) {
+                System.out.println(e.getConstraintViolations());
+            } catch (Exception ex) {
+                System.out.println("ERROR: Could not dismiss manager: " + ex.getMessage());
+                request.setAttribute("errorMsg", "Oops! Manager resignation did not succeed for some reason.");
+                request.getRequestDispatcher("managerProfile.jsp").forward(request, response);
+                ex.printStackTrace();
+                return;
+            }
         }
     }
 

@@ -5,14 +5,9 @@
  */
 package Controller.UserAccountManagemnet;
 
-import Controller.MealManagement.*;
-import Model.Food;
-import Model.Meal;
-import Model.Mealfood;
 import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -26,14 +21,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
 import javax.validation.ConstraintViolationException;
-import util.Auto;
+import util.*;
 
 /**
  *
- * @author mast3
+ * IMPORTANT: This is to be run when admin account is to be set to default
+ * settings (eg. when manager is changed)
  */
-@WebServlet(name = "ToggleStaffDismissal", urlPatterns = {"/ToggleStaffDismissal"})
-public class ToggleStaffDismissal extends HttpServlet {
+@WebServlet(name = "CompleteManagerResignation", urlPatterns = {"/CompleteManagerResignation"})
+public class CompleteManagerResignation extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -53,18 +49,16 @@ public class ToggleStaffDismissal extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(false);
-        
         String permission = "";
         try {
             permission = (String) session.getAttribute("permission");
-            
-            
+
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-            
+
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -77,61 +71,62 @@ public class ToggleStaffDismissal extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
+            try {
 
-            try{
-      
-                // Obtain staff object from database
-                Staff staff = (Staff) session.getAttribute("staffForEdit");
-                // If the staff is currently not hired
-                if (!staff.getIshired()) {
-                    // Toggle it
-                    staff.setIshired(true);
-                    staff.setDatedismissed(null);
-                    request.setAttribute("successMsg", "Staff has been re-hired.");
-                } else {
-                    // If the staff is currently hired
-                    // Toggle it
-                   staff.setIshired(false);
-                   staff.setDatedismissed(Auto.getToday());
-                   request.setAttribute("successMsg", "Staff has been dismissed.");
+                AdminReset ar = new AdminReset(em, utx);
+                Staff manager = new Staff();
+                boolean exists = false;
+
+                // Obtain any hired manager account
+                try {
+                    TypedQuery<Staff> query = em.createQuery("SELECT s FROM Staff s WHERE s.staffrole = :role and s.ishired = true", Staff.class).setParameter("role", "manager");
+                    manager = query.getSingleResult();
+
+                    if (manager.getIshired()) {
+                        request.setAttribute("successMsg", "You cannot create a new manager account if there's already an active one.");
+                        request.getRequestDispatcher("login.jsp").forward(request, response);
+                        return;
+                    }
+
+                } catch (NoResultException e) {
+                    // If null, this error is okay because it means there's no existing manager (admin) account. Program will proceed to create the account.
+                    System.out.println("ERROR: Unable to get admin account: " + e.getMessage());
+
                 }
-                
-             
                 utx.begin();
-               
-                // Update it
-                em.merge(staff);
+                    em.persist(ar.createAdminAccount());
                 utx.commit();
-                
-                //Update the staff in session
-                session.setAttribute("staffForEdit", staff);
-                
-                
-                request.getRequestDispatcher("editStaff.jsp").forward(request, response);
-                return;
-                
-            } catch (ConstraintViolationException e) {
-                System.out.println(e.getConstraintViolations());
-            } catch (Exception ex) {
-                request.setAttribute("errorMsg", "Oops! Staff dismissal did not succeed for some reason.");
-                request.getRequestDispatcher("editStaff.jsp").forward(request, response);
-                ex.printStackTrace();
-                return;
-            }
-        }
-    }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+                //clear staff in session
+                session.setAttribute("staffForEdit", null);
+                session.setAttribute("staff", null);
+
+                request.setAttribute("successMsg", "Manager resignation complete.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+                
+                } catch (ConstraintViolationException ex) {
+                System.out.println(ex.getConstraintViolations());
+            }
+            
+        catch (Exception ex) {
+                System.out.println("Unable to resolve admin account: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+    }
+}
+
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+/**
+ * Handles the HTTP <code>GET</code> method.
+ *
+ * @param request servlet request
+ * @param response servlet response
+ * @throws ServletException if a servlet-specific error occurs
+ * @throws IOException if an I/O error occurs
+ */
+@Override
+        protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -145,7 +140,7 @@ public class ToggleStaffDismissal extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -156,7 +151,7 @@ public class ToggleStaffDismissal extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+        public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

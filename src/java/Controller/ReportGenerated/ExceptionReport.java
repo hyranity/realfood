@@ -54,11 +54,9 @@ public class ExceptionReport extends HttpServlet {
             HttpSession session = request.getSession(false);
 
         String permission = "";
-        Student studentFromSession = new Student();
 
         try {
             permission = (String) session.getAttribute("permission");
-            studentFromSession = (Student) session.getAttribute("stud");
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -86,9 +84,13 @@ public class ExceptionReport extends HttpServlet {
             try {
                 month = request.getParameter("month");
                 month.charAt(0);
+                
+                if(month == null){
+                    response.sendRedirect("dashboardManager.jsp");
+                }
             } catch (Exception ex) {
                 // Display error messages if any
-                System.out.println("ERROR: " + ex.getMessage());
+                response.sendRedirect("dashboardManager.jsp");
             }
 
             //Get the chosen month and set the calendars
@@ -101,14 +103,14 @@ public class ExceptionReport extends HttpServlet {
             // The range of chosen month is now firstDay - lastDay
             try {
                 Connection conn = connectDB();
-                PreparedStatement stmt = conn.prepareStatement("select m.MEALID, m.mealname, sum(om.quantity * m.price / 100) as cash, sum(om.QUANTITY) from ordermeal om, meal m, studentorder so where so.ORDERID = om.ORDERID and so.ISCANCELED = true and so.DATECANCELED BETWEEN ? AND ? group by m.mealid, om.MEALID, m.mealname having m.mealid = om.mealid  order by cash desc");
+                PreparedStatement stmt = conn.prepareStatement("select m.MEALID, m.mealname, sum(om.quantity * m.price / 100) as cash, sum(om.QUANTITY) as quantity from meal m right join ordermeal om on om.MEALID = m.MEALID right join studentorder so on so.orderid = om.ORDERID where so.DATECANCELED between ? and ? and so.iscanceled =  true group by m.mealid, m.MEALNAME order by cash desc");
                 stmt.setDate(1, SQLUtil.getSQLDate(Auto.calToDate(firstDay)));
                 stmt.setDate(2, SQLUtil.getSQLDate(Auto.calToDate(lastDay)));
                 ResultSet rs = stmt.executeQuery();
 
                 String outputMonthly = "";
                 int count = 0;
-                int totalPrice = 0;
+                int totalAmount = 0;
                 while (rs.next()) {
                     count++;
                     outputMonthly += "<tr>"
@@ -118,9 +120,11 @@ public class ExceptionReport extends HttpServlet {
                             + "<td>" + rs.getString(4) + "</td>"
                             + "<td>" + rs.getString(3) + "</td>"
                             + "</tr>";
-                    totalPrice += rs.getInt(3);
+                    totalAmount += rs.getInt(3);
                 }
-                request.setAttribute("totalPrice", totalPrice);
+                
+                request.setAttribute("month", month.toUpperCase());
+                request.setAttribute("totalAmount", totalAmount);
                 request.setAttribute("outputMonthly", outputMonthly);
                 request.getRequestDispatcher("exceptionReport.jsp").forward(request, response);
             } catch (Exception ex) {

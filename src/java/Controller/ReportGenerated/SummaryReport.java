@@ -19,6 +19,15 @@ import javax.transaction.*;
 import Model.*;
 import java.util.List;
 import Controller.MealManagement.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Calendar;
+import java.util.Locale;
+import javax.servlet.http.HttpSession;
+import util.Auto;
+import util.SQLUtil;
+import static util.SQLUtil.connectDB;
 
 /**
  *
@@ -40,28 +49,152 @@ public class SummaryReport extends HttpServlet {
     EntityManager em;
     @Resource
     UserTransaction utx;
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            try{
-                Query query = em.createQuery("SELECT m FROM Mealfood m", Mealfood.class);
-                List<Mealfood> month = query.getResultList();
-                
-                query = em.createQuery("SELECT m FROM Mealfood m WHERE m.mealfoodid = :mealfoodid", Mealfood.class);
-                List<Mealfood> mealID = query.getResultList();
-                
-                query = em.createQuery("SELECT m FROM Meal m WHERE m.price = :price", Meal.class);
-                List<Meal> amount = query.getResultList();
-                
-                String outputSummary = "";
-                
-                outputSummary += "<tr>" + "<td>" + month + "</td>" + "<td>" + mealID + "</td>" +
-                        "<td>" + amount + "</td>" + "</tr>";
+        HttpSession session = request.getSession(false);
+
+        String permission = "";
+
+        try {
+            permission = (String) session.getAttribute("permission");
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
             }
-            catch(Exception ex){
-                request.setAttribute("outputSummary", ex);
-                request.getRequestDispatcher("summaryReport.jsp");
+
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // Allow student only
+        if (!permission.equalsIgnoreCase("manager")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+            String selection = "";
+            String outputSemiAnnual = "";
+            String year = "";
+            
+            int totalAmount = 0;
+
+            // Create the calendars
+            Calendar firstDay = Calendar.getInstance();
+            Calendar lastDay = Calendar.getInstance();
+
+            try {
+                selection = request.getParameter("selection");
+                year = request.getParameter("year");
+                
+                // Attempts to trigger exceptions
+                selection.charAt(0);
+                year.charAt(0);
+
+                if (selection == null || year == null) {
+                    response.sendRedirect("dashboardManager.jsp");
+                }
+            } catch (Exception ex) {
+                response.sendRedirect("dashboardManager.jsp");
             }
+
+            String title = "";
+            int monthNum = 0;
+            // If first half, show first six months
+            if (selection.equalsIgnoreCase("firstHalf")) {
+                title = "January to June " + Integer.parseInt(year);
+                monthNum = 0;
+            }
+            else if(selection.equalsIgnoreCase("secondHalf")){
+                title = "July to December " + Integer.parseInt(year);
+                monthNum = 6;
+            }
+            else{
+                //Redirect, since error
+                response.sendRedirect("dashboardManager.jsp");
+            }
+                
+                
+                int monthCount = 0;
+                for (int i = 0; i < 6; i++) {
+                    String outputMonthly = "";
+                    monthNum++;
+                    monthNum = i;
+                    
+                    //Get the chosen month and set the calendars
+                    firstDay.set(Calendar.MONTH, monthNum);  // Set the month of the "beginning day" calendar object
+                    firstDay.set(Calendar.YEAR, Integer.parseInt(year));
+                    lastDay.set(Calendar.MONTH, monthNum); // Set the month of the "last day" calendar object
+                    lastDay.set(Calendar.YEAR, Integer.parseInt(year));
+                    firstDay.set(Calendar.DAY_OF_MONTH, 1); // Set the beginning of chosen month to be first day
+                    lastDay.set(Calendar.DAY_OF_MONTH, lastDay.getActualMaximum(Calendar.DAY_OF_MONTH));  // Set the end of chosen month to be the last day
+
+                    // The range of chosen month is now firstDay - lastDay
+                    try {
+                        Connection conn = connectDB();
+                        PreparedStatement stmt = conn.prepareStatement("select m.MEALID, m.mealname, sum(om.quantity * m.price / 100) as cash, sum(om.QUANTITY) as quantity from meal m right join ordermeal om on om.MEALID = m.MEALID right join studentorder so on so.orderid = om.ORDERID where so.DATECREATED between ? and ? group by m.mealid, m.MEALNAME order by cash desc fetch first 3 rows only");
+                        stmt.setDate(1, SQLUtil.getSQLDate(Auto.calToDate(firstDay)));
+                        stmt.setDate(2, SQLUtil.getSQLDate(Auto.calToDate(lastDay)));
+                        ResultSet rs = stmt.executeQuery();
+                        
+                        
+                        int count = 0;
+                        int totalCash = 0;
+                        boolean isBeginning = true;
+                        boolean hasResults = false;
+                        while (rs.next()) {
+                            if (isBeginning) {
+                                // Add month header
+                                outputMonthly += "<tr>\n"
+                                        + "      <th scope=\"col\">" + firstDay.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) +"</th>\n"
+                                        + "      <th scope=\"col\"></th>\n"
+                                        + "      <th scope=\"col\"></th>\n"
+                                        + "      <th scope=\"col\"></th>\n"
+                                        + "      <th scope=\"col\"></th>\n"
+                                        + "    </tr>    ";
+                            }
+                            count++;
+                            outputMonthly += "<tr>"
+                                    + "<td></td>"
+                                    + "<td>" + rs.getString(1) + "</td>"
+                                    + "<td>" + rs.getString(2) + "</td>"
+                                    + "<td>" + rs.getString(4) + "</td>"
+                                    + "<td>" + rs.getString(3) + "</td>"
+                                    + "</tr>";
+                            totalAmount += rs.getInt(3);
+                            totalCash += rs.getInt(3);
+                            isBeginning = false;
+                            hasResults = true;
+                        }
+                        
+                        if(hasResults){
+                            // Add month footer
+                         outputMonthly += "<tr>"
+                                    + "<td></td>"
+                                    + "<td></td>"
+                                    + "<td></td>"
+                                   + "<th>Subtotal</th>"
+                                    + "<th> RM " + totalCash + "</th>"
+                                    + "</tr>";
+                        }
+                        
+                         
+                         // Add to the overall query
+                         outputSemiAnnual += outputMonthly;
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            
+            request.setAttribute("selection", selection.toUpperCase());
+            request.setAttribute("title", title);
+            request.setAttribute("totalAmount", totalAmount);
+            request.setAttribute("outputOverall", outputSemiAnnual);
+            request.getRequestDispatcher("summaryReport.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

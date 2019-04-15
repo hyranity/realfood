@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -148,7 +148,7 @@ public class LoginServlet extends HttpServlet {
                         session.setAttribute("isManager", true);
                         
                         // Redirects manager to his dashboard
-                        if (id.indexOf("EMPMAN") != -1 && staff.getStaffrole().equalsIgnoreCase("manager")) {
+                        if (id.indexOf("EMPM") != -1 && staff.getStaffrole().equalsIgnoreCase("manager")) {
                             session.setAttribute("permission", "manager"); // Set permissions level
                             request.getRequestDispatcher("dashboardManager.jsp").forward(request, response);
                         } else {

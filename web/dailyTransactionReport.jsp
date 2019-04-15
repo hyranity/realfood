@@ -4,6 +4,7 @@
     Author     : Richard Khoo
 --%>
 
+<%@page import="util.Auto"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,100 +14,50 @@
 </head>
 
 <body>
+<%
+    session = request.getSession(false);
 
+        String permission = "";
+
+        try {
+            permission = (String) session.getAttribute("permission");
+            if (permission == null) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+        } catch (NullPointerException ex) {
+            request.setAttribute("errorMsg", "Please login.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        
+        // Allow student only
+        if (!permission.equalsIgnoreCase("manager")) {
+            request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        } else {
+            
+        String todayDate = Auto.dateToString(Auto.getToday());
+    %>
 <table>
     <caption><a onclick="printThisPage()"><b>RealFood Canteen</b></a></caption>
     <caption class="address">Lot 1, Ground Floor, Pusat Dagangan Donggongon, Jalan Sapau, Pekan Donggongon, 89500 Penampang, Sabah Tel:088-718481</caption><br/>
-    <caption class="reportType"><u>Daily Transaction Report For 14 January 2019</u></caption>
-    <caption class="timeGenerate"> Generated On: 31 January 2019</caption>
+    <caption class="reportType"><u>Daily Transaction Report For ${date}</u></caption>
+    <caption class="timeGenerate"> Generated On: <%=todayDate%></caption>
     
-  <thead>
-    <tr>
-      <th scope="col">No</th>
-      <th scope="col">Staff ID</th>
-      <th scope="col">Student ID</th>
-      <th scope="col">Total Price (RM)</th>
-    </tr>    
+ <thead>
+      <th scope="col">No.</th>
+      <th scope="col">Meal ID</th>
+      <th scope="col">Meal Name</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Amount (RM)</th>
   </thead>
   <tbody>
-    <tr>
-      <td data-label="No">1</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">2</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">3</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">4</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">5</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">6</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">7</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">8</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">9</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">10</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">11</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">12</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
-    <tr>
-      <td data-label="No">13</td>
-      <td data-label="Staff ID">20.00</td>
-      <td data-label="Student ID">STU0087</td>
-      <td data-label="Total Price (RM)">20.00</td>
-    </tr>
+      ${outputMonthly}
   </tbody>
   
     <!-- Print Total Part-->
@@ -114,7 +65,8 @@
       <th scope="col">Total</th>
       <th scope="col"></th>
       <th scope="col"></th>
-      <th scope="col">RM121212</th>
+      <th scope="col"></th>
+      <th scope="col">RM ${totalPrice}</th>
     </tr>    
 </table>
     <div class="tableBox">
@@ -124,6 +76,7 @@
     <br/><label class="leftDate">Date:</label>
     </div>
     
+    <%}%>
 </body>
 
 <script>
