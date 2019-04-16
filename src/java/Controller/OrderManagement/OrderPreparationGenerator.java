@@ -97,18 +97,18 @@ public class OrderPreparationGenerator extends HttpServlet {
                 month = request.getParameter("month");
                 day = request.getParameter("day");
                 year = request.getParameter("year");
+                
+               
 
-                int monthNum = Auto.getMonthInt(month); // Convert month to int
-
-                if (month == "" || day == "" || year == "") {
+                if (month == "" || day == "" || year == "" || month == null || day == null || year == null) {
                     request.setAttribute("errorMsg", "Oops! Please fill in all fields.");
-                    request.getRequestDispatcher("dashboardStaff.jsp").forward(request, response);
+                    request.getRequestDispatcher("dashboardCanteenStaff.jsp").forward(request, response);
                 }
             } catch (Exception ex) {
                 // If error, means manager accessed this directly. Hence, redirect
-                response.sendRedirect("dashboardStaff.jsp");
+                response.sendRedirect("dashboardCanteenStaff.jsp");
             }
-
+            
             //Get the chosen month and set the calendars
             int monthNum = Auto.getMonthInt(month); // Convert month to int
             chosenDay.set(Calendar.MONTH, monthNum);

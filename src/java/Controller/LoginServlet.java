@@ -70,7 +70,7 @@ public class LoginServlet extends HttpServlet {
         Staff staff = new Staff();
 
         try {
-            utx.begin();
+            
 
             if (prefix.equalsIgnoreCase("STU")) {                                  // STUDENT  LOGIN ==========================
                 // If prefix = STU, look from student table
@@ -110,7 +110,7 @@ public class LoginServlet extends HttpServlet {
                             HttpSession session = request.getSession(true);
                             session.setAttribute("stud", stud);
                             session.setAttribute("permission", "student"); // Set permissions level
-                            request.getRequestDispatcher("dashboardStudent.jsp").forward(request, response);
+                            request.getRequestDispatcher("LoadStudentDashboard").forward(request, response);
 
                         } else {
                             // Password is not the same; perform error messages
@@ -169,7 +169,7 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("errorMsg", "Oops! That ID is incorrect. Make sure you've entered it correctly.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
             }
-        } catch (NotSupportedException | SystemException ex) {
+        } catch (Exception ex) {
             System.out.println("ERROR: Unable to retrieve record: " + ex.getMessage());
         }
 

@@ -70,7 +70,7 @@ public class OrderCancellationServlet extends HttpServlet {
             return;
         }
 
-        // Allow staff only
+        // Allow student only
         if (!permission.equalsIgnoreCase("student")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -121,7 +121,7 @@ public class OrderCancellationServlet extends HttpServlet {
                 session.setAttribute("stud", stud);
 
                 request.setAttribute("successMsg", "Your order has been canceled.");
-                request.getRequestDispatcher("ViewOrderServlet" + orderId).forward(request, response);
+                request.getRequestDispatcher("ViewOrderServlet?" + orderId).forward(request, response);
                 return;
 
             } catch (ConstraintViolationException e) {

@@ -3,38 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.OrderManagement;
+package Controller.UserAccountManagemnet;
 
-import Controller.MealManagement.*;
-import Model.Meal;
-import Model.Mealfood;
-import Model.Studentorder;
+import Model.*;
+
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import javax.persistence.*;
+import javax.annotation.*;
 import javax.servlet.http.HttpSession;
-import javax.transaction.UserTransaction;
+import javax.transaction.*;
+import util.Hasher;
 
 /**
  *
- * @author mast3
+ * @author Richard Khoo
  */
-
-@WebServlet(name = "ViewOrderServlet", urlPatterns = {"/ViewOrderServlet"})
-public class ViewOrderServlet extends HttpServlet {
-    @PersistenceContext
-    EntityManager em;
-    @Resource
-    UserTransaction utx;
+@WebServlet(name = "LoadStudentDashboard", urlPatterns = {"/LoadStudentDashboard"})
+public class LoadStudentDashboard extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,23 +37,27 @@ public class ViewOrderServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @PersistenceContext
+    EntityManager em;
+    @Resource
+    UserTransaction utx;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-         HttpSession session = request.getSession(false);
-        
+        HttpSession session = request.getSession(false);
+
         String permission = "";
-        String previousUrl = "";
-        
+        Student stud = new Student();
+
         try {
             permission = (String) session.getAttribute("permission");
-            
+            stud = (Student) session.getAttribute("stud");
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-            
+
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -75,33 +71,20 @@ public class ViewOrderServlet extends HttpServlet {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         } else {
-            
-            Studentorder so = new Studentorder();
-            String orderId = "";
-            
-            try {
-                orderId = request.getParameter("orderId");
-                so = em.find(Studentorder.class, orderId);
-            } catch (Exception e) {
-                // If exception is thrown, just redirect student to dashboard
-                response.sendRedirect("LoadStudentDashboard");
+           
+            try{
+                // Update the student in session
+                utx.begin();
+                stud = em.find(Student.class, stud.getStudentid());
+                em.merge(stud);
+                utx.commit();
+                response.sendRedirect("dashboardStudent.jsp");
                 return;
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-
-            try {
-
-                // Set studentOrder to session so it can be displayed
-               session.setAttribute("studentOrder", so);
-                
-                request.getRequestDispatcher("viewOrder.jsp").forward(request, response);
-                return;
-
-            } catch (Exception e) {
-                System.out.println("Could not obtain order list: " + e.getMessage());
-                e.printStackTrace();
-            }
-
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

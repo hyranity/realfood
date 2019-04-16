@@ -75,12 +75,12 @@ public class SelectMealEditServlet extends HttpServlet {
         try {
             previousUrl = request.getHeader("referer");
             if (previousUrl.equalsIgnoreCase("studentDisplayMeals.jsp")) {
-                response.sendRedirect("dashboardStudent.jsp");
+                response.sendRedirect("LoadStudentDashboard");
                 return;
             }
         } catch (Exception ex) {
             request.setAttribute("errorMsg", "Oops! Please don't access that page directly.");
-            request.getRequestDispatcher("dashboardStudent.jsp").forward(request, response);
+            request.getRequestDispatcher("LoadStudentDashboard").forward(request, response);
             return;
         }
         

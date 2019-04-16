@@ -50,7 +50,7 @@
                     </select>
 
                     <!--Summary Report-->
-                    <select class="formInput" name="selection" id="semichoice" style="display: none;">
+                    <select class="formInput" name="select2" id="semichoice" style="display: none;">
                         <option value=""> SEMIANNUAL SELECTION </option>
                         <option value="firstHalf">January - June</option>
                         <option value="secondHalf">July - December</option>

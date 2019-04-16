@@ -4,6 +4,7 @@
     Author     : Richard Khoo
 --%>
 
+<%@page import="java.util.Calendar"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <link href="CSS/selectReport.css" rel="stylesheet">
 <link href="CSS/commonStyles.css" rel="stylesheet">
@@ -15,25 +16,52 @@
         <title>Select Report</title>
     </head>
     <body style="text-align: center;">
+        <%
+            session = request.getSession(false);
+
+            String permission = "";
+            try {
+                permission = (String) session.getAttribute("permission");
+
+                if (permission == null) {
+                    request.setAttribute("errorMsg", "Please login.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    return;
+                }
+
+            } catch (NullPointerException ex) {
+                request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+            // Allow staff only
+            if (!permission.equalsIgnoreCase("canteenStaff")) {
+                request.setAttribute("errorMsg", "You are not allowed to visit that page.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                
+                
+            Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+        %>
+
         <!--element start here-->
         <div class="containerBox">
             <!--<h2>Report</h2>-->
             <div class="reportGenerate" style="text-align: center; display: inline-block;">
-                <h1>Generate Report</h1>
-                <p> Select What Report You Want To Generate !</p>
+                <h1>Order Preparation Information</h1>
+                <p>Enter date.</p>
                 <div class="errorMsg">${errorMsg}</div>
-                
-                <form action="#" id="formForm">
-                    <select class="formInput" name="select1" id="reportType">
-                        <option selected value="">REPORT TYPE</option>
-                        <option value="1" id="daily">Daily Transaction Report</option>
-                        <option value="2" id="exception">Exception Report</option>
-                        <option value="3" id="monthly">Monthly Sales Report</option>
-                        <option value="4" id="semiannual">Summary Report</option>
-                    </select>
 
-                    <!--Daily Transaction Report / Exception Report / Monthly Report-->
-                    <select class="formInput" name="month" id="monthchoice" style="display: none;">
+                <form action="OrderPreparationGenerator" id="formForm">
+
+                    <div>
+                        <input type="number" class="formInput" name="day" id="day"  minlength="1" maxlength="2" placeholder="DAY" required/>
+                    </div>
+
+                    <select class="formInput" name="month" id="monthchoice" required>
                         <option selected value="">MONTH</option>
                         <option value="january">January</option>
                         <option value="February">February</option>
@@ -49,41 +77,29 @@
                         <option value="December">December</option>
                     </select>
 
-                    <!--Summary Report-->
-                    <select class="formInput" name="selection" id="semichoice" style="display: none;">
-                        <option value=""> SEMIANNUAL SELECTION </option>
-                        <option value="firstHalf">January - June</option>
-                        <option value="secondHalf">July - December</option>
-                    </select>
-                    
-                    <div>
-                        <input type="number" value="1" style="display:none;" class="formInput" name="day" id="day"  minlength="1" maxlength="2" placeholder="DAY" required/>
-                    </div>
-                    
-                    <select class="formInput" id="year" name="year" style="display:none;">
+
+                    <select class="formInput" id="year" name="year" required>
                         <option selected value=""> YEAR </option>
-                        <option value="2010">2010</option>
-                        <option value="2011">2011</option>
-                        <option value="2012">2012</option>
-                        <option value="2013">2013</option>
-                        <option value="2014">2014</option>
-                        <option value="2015">2015</option>
-                        <option value="2016">2016</option>
-                        <option value="2017">2017</option>
-                        <option value="2018">2018</option>
-                        <option value="2019">2019</option>
-
+                        <%
+                        for (int i = 0; i < 10; i++) {
+                                
+                        %>
+                        <option value="<%=year%>"><%=year%></option>
+                        <%
+                        year++;
+                        }
+                        %>
                     </select>
 
-                    <a href="dashboardManager.jsp"><div class="nextButton" action="dashboardManager.jsp" type="submit" >Back</div></a>
-                    <button class="nextButton" type="submit" target="_blank" value="Generate Report"/>Generate Report</button>
+                    <a href="dashboardCanteenStaff.jsp"><div class="nextButton" >Back</div></a>
+                    <button class="nextButton" type="submit" target="_blank" value="Generate Order Preparation Info"/>Get Order Preparation Info</button>
 
                 </form>
 
             </div>
         </div>
         <!--element end here-->
-
+        <%}%>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>

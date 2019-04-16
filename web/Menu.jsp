@@ -56,26 +56,18 @@
                     nullResults = true;
                 
                 if(nullResultsStr == "" || nullResultsStr == null)
-                    response.sendRedirect("calendarStudent.jsp");
+                    response.sendRedirect("LoadStudentDashboard");
                 
                 
         %>
-        <div class="stepsContainer">
-            <h1>Make an Order</h1>
-            <div class="steps">
-                <div>1. Select a date</div>
-                <div class="currentStep">2. Choose meals.</div>
-                <div>3. Edit particulars</div>
-                <div>4. Payment</div>
-            </div>
-        </div>
        
-        
+       
+        <h1 class="title">Meals Menu.</h1>
         <%
         if(!nullResults){
         %>
- <h1 class="title">Choose meals.</h1>
-        <h5 id="subtitle">Click on the meals you would like to have.</h5>
+ 
+        <h5 id="subtitle">Here's a summary of our meals.</h5>
         <div class="errorMsg">${errorMsg}</div>
         <!-- Search bar -->
         <form class="searchForm">
@@ -91,21 +83,18 @@
                 </table>
 
             </div>
-            <div>
-                <a class="nextButton" form="mealOrder" href="calendarStudent.jsp">Back</a>
-                <button class="nextButton">Next step</button>
-                <br/><br/><br/>
-            </div>
-
+                <br/><br/>
         </form>
                 <%
                 } else{ 
                 %>
                 <h1 style="color: white; font-size: 40px; margin-top: 300px;">It seems like there's no meal available yet. Stay tuned!</h1>
-                <a class="nextButton" form="mealOrder" href="calendarStudent.jsp">Back</a>
+                
                 <%}%>
+                <a class="nextButton" href="LoadStudentDashboard">Back</a>
+                
              <!-- Display student's credits -->
-            <h6 class="credits"><%=credits%> credits</h6>
+        <h6 class="credits"><%=credits%> credits</h6>
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

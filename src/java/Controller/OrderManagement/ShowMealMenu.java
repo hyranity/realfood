@@ -28,8 +28,8 @@ import javax.transaction.UserTransaction;
  * @author mast3
  */
 
-@WebServlet(name = "DisplayMealsServlet", urlPatterns = {"/DisplayMealsServlet"})
-public class DisplayMealsServlet extends HttpServlet {
+@WebServlet(name = "ShowMealMenu", urlPatterns = {"/ShowMealMenu"})
+public class ShowMealMenu extends HttpServlet {
     @PersistenceContext
     EntityManager em;
     @Resource
@@ -50,7 +50,6 @@ public class DisplayMealsServlet extends HttpServlet {
          HttpSession session = request.getSession(false);
         
         String permission = "";
-        String previousUrl = "";
         
         try {
             permission = (String) session.getAttribute("permission");
@@ -98,7 +97,7 @@ public class DisplayMealsServlet extends HttpServlet {
                         
                         // If the current iteration is more than the first one, put comma.
                         if(j>0)
-                            components += " ,";
+                            components += ", ";
                         
                         components += mf.getFoodid().getFoodname();
                     }
@@ -128,7 +127,6 @@ public class DisplayMealsServlet extends HttpServlet {
                     }
 
                     queryResult += "<td>\n"
-                            + "                            <input type=\"checkbox\" id=\""+ meal.getMealid() +"\" name=\"mealChoice\" value=\""+ meal.getMealid() +"\"/>\n"
                             + "                            <label class=\"meal\" for=\""+ meal.getMealid() +"\">\n"
                             + "                                <h5>"+ meal.getMealname() +"</h5>\n"
                             + "                                <div style=\"position: relative;\">\n"
@@ -158,7 +156,7 @@ public class DisplayMealsServlet extends HttpServlet {
              
                 // Send the formatted list to JSP
                 request.setAttribute("queryResult", queryResult);
-                request.getRequestDispatcher("studentDisplayMeals.jsp?nullResults=" + nullResults).forward(request, response);
+                request.getRequestDispatcher("Menu.jsp?nullResults=" + nullResults).forward(request, response);
                 return;
 
             } catch (Exception e) {

@@ -66,7 +66,7 @@
     </div>
         <!-- Display student's credits -->
             <h6 class="credits"><%=credits%> credits</h6>
-        <div><a class="nextButton" href="dashboardStudent.jsp"  >Back</a></div>
+        <div><a class="nextButton" href="LoadStudentDashboard"  >Back</a></div>
         <%}%>     
 </body>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

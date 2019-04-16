@@ -105,7 +105,7 @@
                 </form>
             </div>
         </div>
-                    <a style="display: block; margin-bottom: 20px;" href="dashboardStudent.jsp"><div class="back">Back</div></a>
+                    <a style="display: block; margin-bottom: 20px;" href="LoadStudentDashboard"><div class="back">Back</div></a>
              <!-- Display student's credits -->
             <h6 class="credits"><%=credits%> credits</h6>
     </div>
