@@ -43,10 +43,6 @@
         <h1>Manage Food</h1><br><br>
         <h4 id="subtitle">Here you can manage order preparation. View their details.</h4>
 
-        <!-- Search bar -->
-        <form class="searchForm">
-            <input type="text" name="query" placeholder="search..." class="searchBar"/>
-        </form>
 <div class="bodyContainer">
         <table class="recordTable">
             <tr>

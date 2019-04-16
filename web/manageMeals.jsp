@@ -39,10 +39,6 @@
         <h5 id="subtitle">Here you can add or edit meals. To view meals' specific info, you will need to press "edit" first.</h5>
         <div class="errorMsg">${errorMsg}</div>
         <div class="successMsg">${successMsg}</div>
-        <!-- Search bar -->
-        <form class="searchForm" action="ManageMealsServlet">
-            <input type="text" id="myInput" name="search" onkeyup="myFunction()" placeholder="search..." class="searchBar"/>
-        </form>
 
         <!-- Table -->
         

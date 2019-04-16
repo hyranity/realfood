@@ -34,12 +34,7 @@
 
         <h2>Select Food Components</h2>
         <h6 id="subtitle">Select the food that compromises your meal.</h6>
-        
-        <!-- Search bar -->
-        <form class="searchForm">
-            <input type="text" name="query" placeholder="search..." class="searchBar"/>
-            
-        </form>
+
         <br/>   
         <div class="errorMsg">${errorMsg}</div>
         <br/>
