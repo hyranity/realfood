@@ -55,13 +55,16 @@
         <form class="searchForm">
             <input type="text" name="query" placeholder="search..." class="searchBar"/>
         </form>
+        <br/>   
+        <div class="errorMsg">${errorMsg}</div>
+        <br/>
         <div class="bodyContainer">
             <form action="SelectFoodServletForEdit" method="post">
                 <table class="recordTable">
                     ${queryResult}
                 </table>
                 <div>
-                    <button class="nextButton">Back</button>
+                    <a class="backBt" href="ManageMealsServlet">Back</a>
                     <input type="submit" value="Next step" class="nextButton">
                 </div>
             </form>

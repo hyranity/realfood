@@ -106,7 +106,7 @@ public class DailyTransactionReport extends HttpServlet {
             // The range of chosen month is now firstDay - lastDay
             try {
                 Connection conn = connectDB();
-                PreparedStatement stmt = conn.prepareStatement("select m.MEALID, m.mealname, sum(om.quantity * m.price / 100) as cash, sum(om.QUANTITY) as quantity from meal m right join ordermeal om on om.MEALID = m.MEALID right join studentorder so on so.orderid = om.ORDERID where so.DATECREATED = ? group by m.mealid, m.MEALNAME order by cash desc");
+                PreparedStatement stmt = conn.prepareStatement("select m.MEALID, m.mealname, sum(om.quantity * m.price / 100) as cash, sum(om.QUANTITY) as quantity from meal m right join ordermeal om on om.MEALID = m.MEALID right join studentorder so on so.orderid = om.ORDERID where so.DATEREDEEMED = ? and so.isRedeemed = true group by m.mealid, m.MEALNAME order by cash desc");
 
                 stmt.setDate(1, SQLUtil.getSQLDate(Auto.calToDate(chosenDay)));
                 ResultSet rs = stmt.executeQuery();

@@ -93,10 +93,6 @@ public class SelectFoodServletForEdit extends HttpServlet {
 
         try {
             previousUrl = request.getHeader("referer");
-            if (previousUrl.equalsIgnoreCase("foodSelectionForMeal.jsp")) {
-                response.sendRedirect("dashboardCanteenStaff");
-                return;
-            }
         } catch (Exception ex) {
             request.setAttribute("errorMsg", "Oops! Please don't access that page directly.");
             request.getRequestDispatcher("dashboardCanteenStaff.jsp").forward(request, response);
@@ -104,15 +100,26 @@ public class SelectFoodServletForEdit extends HttpServlet {
         }
         // END OF URL ACCESS CHECKING =====================================
         
-        // Get array of food IDs from form
+         // Get array of food IDs from form
         String[] componentId = request.getParameterValues("componentId");
+        
+        String[] compFromSession = (String[]) session.getAttribute("componentId");
+        
+       String load = request.getParameter("load");
+        
+        if(compFromSession != null && componentId == null && load != null)
+            componentId = compFromSession;
+        
 
         // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
         //Hence, redirect to first page.
         if (componentId == null) {
-            response.sendRedirect("foodSelectionForMeal.jsp");
+            request.setAttribute("errorMsg", "Oops! Please select at least 1 food.");
+            request.getRequestDispatcher("DisplayFoodSelectionServletForEdit?mealId="+meal.getMealid()).forward(request, response);
             return;
         }
+        
+        session.setAttribute("componentId", componentId);
 
         //Values
         List<Mealfood> mealFoodList = meal.getMealfoodList(); 
@@ -182,6 +189,7 @@ public class SelectFoodServletForEdit extends HttpServlet {
             }
 
             //Next step's page
+            request.setAttribute("mealId", meal.getMealid());
             request.setAttribute("queryResultQuantity", queryResultQuantity);
             request.setAttribute("caloriesSum", caloriesSum);
             request.getRequestDispatcher("foodQuantityEdit.jsp").forward(request, response);

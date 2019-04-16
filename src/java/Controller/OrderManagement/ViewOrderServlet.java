@@ -84,7 +84,7 @@ public class ViewOrderServlet extends HttpServlet {
                 so = em.find(Studentorder.class, orderId);
             } catch (Exception e) {
                 // If exception is thrown, just redirect student to dashboard
-                response.sendRedirect("dashboardStudent.jsp");
+                response.sendRedirect("LoadStudentDashboard");
                 return;
             }
 

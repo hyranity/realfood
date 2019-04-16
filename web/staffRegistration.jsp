@@ -63,11 +63,11 @@
                         </div>
                         
                         <div class="formGroup">
-                            <input type="password" class="formInput" name="password" id="password" placeholder="Password" maxlength="20" required/>
+                            <input type="password" class="formInput" name="password" id="password" placeholder="Password" minlength="6"  maxlength="20" required/>
                         </div>
                         
                         <div class="formGroup">
-                            <input type="password" class="formInput" name="re_password" id="confirmationPassword" placeholder="Repeat your password" maxlength="20" required/>
+                            <input type="password" class="formInput" name="re_password" id="confirmationPassword" placeholder="Repeat your password" minlength="6"  maxlength="20" required/>
                         </div>
                         
                         <!---->

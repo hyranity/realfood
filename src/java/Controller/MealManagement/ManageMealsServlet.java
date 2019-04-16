@@ -160,7 +160,6 @@ public class ManageMealsServlet extends HttpServlet {
                         discontinuedStyle = "style=\"background-color: darkred\"";
 
                     queryResult += "<td>\n"
-                            + "                            <input type=\"checkbox\" id=\""+ meal.getMealid() +"\"/>\n"
                             + "                            <label class=\"meal\" for=\""+ meal.getMealid() +"\" " + discontinuedStyle +">\n"
                             + "                                <h5>"+ meal.getMealname() +"</h5>\n"
                             + "                                <div style=\"position: relative;\">\n"

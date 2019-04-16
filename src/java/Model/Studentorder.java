@@ -42,7 +42,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Studentorder.findByIscanceled", query = "SELECT s FROM Studentorder s WHERE s.iscanceled = :iscanceled")
     , @NamedQuery(name = "Studentorder.findByTotalprice", query = "SELECT s FROM Studentorder s WHERE s.totalprice = :totalprice")
     , @NamedQuery(name = "Studentorder.findByDatecanceled", query = "SELECT s FROM Studentorder s WHERE s.datecanceled = :datecanceled")
-    , @NamedQuery(name = "Studentorder.findByDatecreated", query = "SELECT s FROM Studentorder s WHERE s.datecreated = :datecreated")})
+    , @NamedQuery(name = "Studentorder.findByDatecreated", query = "SELECT s FROM Studentorder s WHERE s.datecreated = :datecreated")
+    , @NamedQuery(name = "Studentorder.findByDateredeemed", query = "SELECT s FROM Studentorder s WHERE s.dateredeemed = :dateredeemed")})
 public class Studentorder implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -82,6 +83,9 @@ public class Studentorder implements Serializable {
     @Column(name = "DATECREATED")
     @Temporal(TemporalType.DATE)
     private Date datecreated;
+    @Column(name = "DATEREDEEMED")
+    @Temporal(TemporalType.DATE)
+    private Date dateredeemed;
     @JoinColumn(name = "STUDENTID", referencedColumnName = "STUDENTID")
     @ManyToOne(optional = false)
     private Student studentid;
@@ -167,6 +171,14 @@ public class Studentorder implements Serializable {
 
     public void setDatecreated(Date datecreated) {
         this.datecreated = datecreated;
+    }
+
+    public Date getDateredeemed() {
+        return dateredeemed;
+    }
+
+    public void setDateredeemed(Date dateredeemed) {
+        this.dateredeemed = dateredeemed;
     }
 
     public Student getStudentid() {

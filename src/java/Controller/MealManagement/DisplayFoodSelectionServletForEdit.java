@@ -82,6 +82,12 @@ public class DisplayFoodSelectionServletForEdit extends HttpServlet {
         else{
             try {
                 
+                  try {
+                    request.setAttribute("errorMsg", request.getAttribute("errorMsg"));
+                } catch (Exception ex) {
+                    // No error if no message is shown
+                }
+                
                 Meal meal = em.find(Meal.class, mealId);
                  
                 // Put the meal into the session. This will be used on later steps.

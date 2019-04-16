@@ -34,18 +34,22 @@
 
         <h2>Select Food Components</h2>
         <h6 id="subtitle">Select the food that compromises your meal.</h6>
-
+        
         <!-- Search bar -->
         <form class="searchForm">
             <input type="text" name="query" placeholder="search..." class="searchBar"/>
+            
         </form>
+        <br/>   
+        <div class="errorMsg">${errorMsg}</div>
+        <br/>
         <div class="bodyContainer">
             <form action="SelectFoodServlet" method="post">
                 <table class="recordTable">
                     ${queryResult}
                 </table>
                 <div>
-                    <button class="nextButton">Back</button>
+                    <a class="nextButton" href="ManageMealsServlet">Back</a>
                     <input type="submit" value="Next step" class="nextButton">
                 </div>
             </form>

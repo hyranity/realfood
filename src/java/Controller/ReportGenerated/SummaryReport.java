@@ -91,7 +91,7 @@ public class SummaryReport extends HttpServlet {
                 year = request.getParameter("year");
 
 
-                if (selection == "" || year == "") {
+                if (selection == "" || year == "" || selection == null || year == null) {
                     request.setAttribute("errorMsg", "Oops! Please fill in all fields.");
                     request.getRequestDispatcher("selectReport.jsp").forward(request, response);
                 }

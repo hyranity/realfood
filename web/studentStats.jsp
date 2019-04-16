@@ -61,7 +61,7 @@
                     </div>
                     
                 </div>
-                        <div class="back"><a href="dashboardStudent.jsp">Back</a><br/><br/></div>
+                        <div class="back"><a href="LoadStudentDashboard">Back</a><br/><br/></div>
         </div>
         
             <!-- Display student's credits -->

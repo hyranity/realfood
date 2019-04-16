@@ -176,7 +176,7 @@
                 <br/>
             </div>
         </div>
-        <a href="ManageMealsServlet"><div class="back">Back</div></a><br/><br/>
+        <a class="backBt" href="SelectFoodServletForEdit?load=true">Back</a><br/><br/>
         <div class="toggleConfirmation">
             <%
                 if (!isDiscontinued) {

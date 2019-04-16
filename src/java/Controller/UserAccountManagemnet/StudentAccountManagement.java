@@ -79,12 +79,12 @@ public class StudentAccountManagement extends HttpServlet {
                 currentPassword = request.getParameter("currentPassword");
             } catch (Exception ex) {
                 // Means user entered this servlet incorrectly, hence redirect
-                response.sendRedirect("dashboardStudent.jsp");
+                response.sendRedirect("LoadStudentDashboard");
             }
 
             if (email == null || password == null || cPassword == null || currentPassword == null) {
                 //Means user entered this servlet wrongly, hence redirect
-                response.sendRedirect("dashboardStudent.jsp");
+                response.sendRedirect("LoadStudentDashboard");
             }
 
             boolean emailUpdated = false;

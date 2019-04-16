@@ -50,14 +50,14 @@
                     </select>
 
                     <!--Summary Report-->
-                    <select class="formInput" name="selection" id="semichoice" style="display: none;">
+                    <select class="formInput" name="select2" id="semichoice" style="display: none;">
                         <option value=""> SEMIANNUAL SELECTION </option>
                         <option value="firstHalf">January - June</option>
                         <option value="secondHalf">July - December</option>
                     </select>
                     
                     <div>
-                        <input type="number" value="1" style="display:none;" class="formInput" name="day" id="day"  pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="DAY" required/>
+                        <input type="number" value="1" style="display:none;" class="formInput" name="day" id="day"  minlength="1" maxlength="2" placeholder="DAY" required/>
                     </div>
                     
                     <select class="formInput" id="year" name="year" style="display:none;">
@@ -76,7 +76,7 @@
                     </select>
 
                     <a href="dashboardManager.jsp"><div class="nextButton" action="dashboardManager.jsp" type="submit" >Back</div></a>
-                    <button class="nextButton" type="submit" value="Generate Report"/>Generate Report</button>
+                    <button class="nextButton" type="submit" target="_blank" value="Generate Report"/>Generate Report</button>
 
                 </form>
 

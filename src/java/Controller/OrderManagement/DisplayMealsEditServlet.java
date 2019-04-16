@@ -173,10 +173,15 @@ public class DisplayMealsEditServlet extends HttpServlet {
                         fourCount = 0;
                     }
                 }
+                
+                 // If null results, don't show on JSP
+                boolean nullResults = false;
+                if(mealList.size()==0)
+                    nullResults = true;
 
                 // Send the formatted list to JSP
                 request.setAttribute("queryResult", queryResult);
-                request.getRequestDispatcher("studentDisplayMealsEdit.jsp").forward(request, response);
+                request.getRequestDispatcher("studentDisplayMealsEdit.jsp?nullResults=" + nullResults).forward(request, response);
                 return;
 
             } catch (Exception e) {
