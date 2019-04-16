@@ -111,6 +111,12 @@ public class DisplayFoodSelectionServlet extends HttpServlet {
                     return;
                 }
                 
+                 try {
+                    request.setAttribute("errorMsg", request.getAttribute("errorMsg"));
+                } catch (Exception ex) {
+                    // No error if no message is shown
+                }
+                
                 // Send the formatted list to JSP
                 request.setAttribute("queryResult", queryResult);
                 request.getRequestDispatcher("foodSelectionForMeal.jsp").forward(request, response);

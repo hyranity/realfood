@@ -40,6 +40,8 @@
                     // Display error messages if any
                     System.out.println("ERROR: " + ex.getMessage());
                 }
+                
+            String[] componentId = (String[]) session.getAttribute("componentId");
         %>
         <!-- Steps -->
         <div class="stepsContainer">
@@ -102,7 +104,7 @@
                 <br/>
             </div>
         </div>
-        <a href="dashboardCanteenStaff.jsp"><div class="back">Back</div></a>
+       <a class="backBt" href="SelectFoodServlet?load=true">Back</a>
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

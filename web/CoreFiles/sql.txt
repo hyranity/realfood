@@ -56,6 +56,7 @@ create table StudentOrder (
     totalPrice INTEGER NOT NULL,
     dateCanceled DATE,
     dateCreated DATE NOT NULL,
+    dateRedeemed DATE,
 
     primary key (orderID)
 );
@@ -108,6 +109,7 @@ create table OrderMeal (
     quantity INTEGER NOT NULL,
     isCanceled boolean NOT NULL,
     isRedeemed boolean NOT NULL,
+    dateRedeemed DATE,
     
     primary key (orderMealID)
 );

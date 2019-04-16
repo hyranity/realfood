@@ -100,6 +100,7 @@ public class ProcessRedemption extends HttpServlet {
                         // If meal ID match
                         if(om.getOrdermealid().equals(Integer.parseInt(chosenMeals[i]))){
                            om.setIsredeemed(true);
+                           om.setDateredeemed(Auto.getToday());
                             System.out.println(om.getMealid() + " is redeemed.");
                         }
                         
@@ -109,8 +110,10 @@ public class ProcessRedemption extends HttpServlet {
                 }
                 
                 // If no unredeemed left, then redeem the whole order
-                if(!hasAnyUnredeemed)
+                if(!hasAnyUnredeemed){
                     so.setIsredeemed(true);
+                    so.setDateredeemed(Auto.getToday());
+                }
                 
                 utx.begin();
                 em.merge(so);

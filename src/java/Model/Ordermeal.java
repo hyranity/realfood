@@ -6,6 +6,7 @@
 package Model;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -32,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Ordermeal.findByOrdermealid", query = "SELECT o FROM Ordermeal o WHERE o.ordermealid = :ordermealid")
     , @NamedQuery(name = "Ordermeal.findByQuantity", query = "SELECT o FROM Ordermeal o WHERE o.quantity = :quantity")
     , @NamedQuery(name = "Ordermeal.findByIscanceled", query = "SELECT o FROM Ordermeal o WHERE o.iscanceled = :iscanceled")
-    , @NamedQuery(name = "Ordermeal.findByIsredeemed", query = "SELECT o FROM Ordermeal o WHERE o.isredeemed = :isredeemed")})
+    , @NamedQuery(name = "Ordermeal.findByIsredeemed", query = "SELECT o FROM Ordermeal o WHERE o.isredeemed = :isredeemed")
+    , @NamedQuery(name = "Ordermeal.findByDateredeemed", query = "SELECT o FROM Ordermeal o WHERE o.dateredeemed = :dateredeemed")})
 public class Ordermeal implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,6 +57,9 @@ public class Ordermeal implements Serializable {
     @NotNull
     @Column(name = "ISREDEEMED")
     private Boolean isredeemed;
+    @Column(name = "DATEREDEEMED")
+    @Temporal(TemporalType.DATE)
+    private Date dateredeemed;
     @JoinColumn(name = "MEALID", referencedColumnName = "MEALID")
     @ManyToOne(optional = false)
     private Meal mealid;
@@ -104,6 +111,14 @@ public class Ordermeal implements Serializable {
 
     public void setIsredeemed(Boolean isredeemed) {
         this.isredeemed = isredeemed;
+    }
+
+    public Date getDateredeemed() {
+        return dateredeemed;
+    }
+
+    public void setDateredeemed(Date dateredeemed) {
+        this.dateredeemed = dateredeemed;
     }
 
     public Meal getMealid() {

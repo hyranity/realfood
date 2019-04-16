@@ -51,7 +51,7 @@
                 <p id="totalCal">Total: ${caloriesSum} calories</p>
             </div>
             <div style="margin-top: 90px;">
-            <input class="nextButton" type="submit" value="Back"/>
+            <a class="backBt" href="DisplayFoodSelectionServletForEdit?mealId=${mealId}">Back</a>
             <input class="nextButton" form="mealForm" type="submit" value="Next Step">
         </div>
     </form>
