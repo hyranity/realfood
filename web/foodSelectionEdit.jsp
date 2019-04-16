@@ -51,10 +51,6 @@
         <h2>Modify Food Components</h2>
         <h6 id="subtitle">You can deselect existing components or select new ones.</h6>
 
-        <!-- Search bar -->
-        <form class="searchForm">
-            <input type="text" name="query" placeholder="search..." class="searchBar"/>
-        </form>
         <br/>   
         <div class="errorMsg">${errorMsg}</div>
         <br/>

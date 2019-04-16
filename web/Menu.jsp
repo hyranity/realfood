@@ -69,10 +69,6 @@
  
         <h5 id="subtitle">Here's a summary of our meals.</h5>
         <div class="errorMsg">${errorMsg}</div>
-        <!-- Search bar -->
-        <form class="searchForm">
-            <input type="text" name="query" placeholder="search..." class="searchBar"/>
-        </form>
 
         <!-- Table -->
         <form action="SelectMealServlet" method="post" id="mealOrder">

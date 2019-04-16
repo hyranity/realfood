@@ -95,10 +95,6 @@
         <h5 id="subtitle">Click on the meals you would like to have.</h5>
         <div class="errorMsg">${errorMsg}</div>
 
-        <!-- Search bar -->
-        <form class="searchForm">
-            <input type="text" name="query" placeholder="search..." class="searchBar"/>
-        </form>
 
         <!-- Table -->
         <form action="SelectMealEditServlet" method="post" id="mealOrder">

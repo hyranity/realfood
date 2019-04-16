@@ -46,10 +46,6 @@
         <h1>My Orders</h1><br><br>
         <h4 id="subtitle">Here you can manage orders. Viewing orders also allow you to print the coupon code.</h4>
 
-        <!-- Search bar -->
-        <form class="searchForm">
-            <input type="text" name="query" placeholder="search..." class="searchBar"/>
-        </form>
         <div class="successMsgAbsolute">${successMsg}</div>
         <div class="errorMsg">${errorMsg}</div>
 <div>

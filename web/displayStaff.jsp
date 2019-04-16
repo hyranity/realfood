@@ -42,10 +42,6 @@
         <h1>Manage Staff</h1><br><br>
         <h4 id="subtitle">Here you can manage staff. Edit staff to view their details.</h4>
 
-        <form class="searchForm">
-            <input type="text" name="query" placeholder="search..." class="searchBar"/>
-        </form>
-
         <!-- Container of the results -->
         <div class="bodyContainer">
             <a href="staffRegistration.jsp"> <div class="add" >

@@ -103,10 +103,10 @@
                         <input type="text" value="<%=gender%>" placeholder="Gender" id="gender"  name="gender" required/>
                     </div>
                     <div>
-                        <input type="text" value="<%=email%>" placeholder="Email" id="email" name="email" required/>
+                        <input type="email" value="<%=email%>" placeholder="Email" id="email" name="email" required/>
                     </div>
                     <div>
-                        <input type="text" value="<%=myKad%>" placeholder="MyKAD" id="myKAD" name="myKAD" required/>
+                        <input value="<%=myKad%>" placeholder="MyKad" title="Your My Kad Format Invalid!! Please Follow as xxxxxxxxxxxx" required pattern="[0-9]{6}[0-9]{2}[0-9]{4}" id="myKAD" name="myKAD" required/>
                     </div>
                     <div>
                         <input type="text" value="Joined: <%=dateJoined%>" id="dateJoined"  style="background-color: darkgray;"  readonly/>
@@ -126,8 +126,8 @@
                 <br/>
             </div>
         </div>
-        <a href="dashboardManager.jsp"><div class="back">Back</div></a>
-        < <div class="toggleConfirmation">
+                    <a href="dashboardManager.jsp"><div class="back" style="margin-bottom: 30px;">Back</div></a>
+         <div class="toggleConfirmation">
             <h5>RESIGN account?</h5>
             <p>You will be unable to access your account, and a new manager account will be made instead. (You cannot undo this)</p>
             <a href="DismissManager"><div class="overlayConfirm">Yes</div></a>

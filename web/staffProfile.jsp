@@ -70,7 +70,7 @@
                     </div>
                     <div>
                         <label>MyKad Number</label><br/>
-                        <input type="text" value="<%=myKad%>" style="background-color: darkgray;" id="myKAD" readonly />
+                        <input title="xxxx-xx-xxxx" required pattern="[0-9]{6}-[0-9]{2}-[0-9]{4}" value="<%=myKad%>" style="background-color: darkgray;" id="myKAD" readonly />
                     </div>
                     <div>
                         <label>Old Password</label><br/>
