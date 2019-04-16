@@ -21,20 +21,34 @@
     <body>
         <%
             session = request.getSession(false);
-            
+
             String permission = (String) session.getAttribute("permission");
-            
-            
+
             if (permission == null) {
                 request.setAttribute("errorMsg", "Please login.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            } else {
+                // Allow student only
+                if (!permission.equalsIgnoreCase("canteenStaff")) {
+                    request.setAttribute("errorMsg", "You are not allowed to visit that page.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                     return;
                 }
-            else {
-                // Allow student only
-                if(!permission.equalsIgnoreCase("canteenStaff")){
-                     request.setAttribute("errorMsg", "You are not allowed to visit that page.");
-                    request.getRequestDispatcher("login.jsp").forward(request, response);
+
+                String nullResultsStr = request.getParameter("nullResults");
+                boolean nullResults = false;
+                try {
+                    if (nullResultsStr.equalsIgnoreCase("true")) {
+                        nullResults = true;
+                    }
+                } catch (Exception ex) {
+                    response.sendRedirect("ManageMealsServlet");
+                    return;
+                }
+
+                if (nullResultsStr == "" || nullResultsStr == null) {
+                    response.sendRedirect("ManageMealsServlet");
                     return;
                 }
         %>
@@ -55,6 +69,10 @@
         <div class="errorMsg">${errorMsg}</div>
         <br/>
         <div class="bodyContainer">
+
+            <%
+                if (!nullResults) {
+            %>
             <form action="SelectFoodServletForEdit" method="post">
                 <table class="recordTable">
                     ${queryResult}
@@ -64,6 +82,11 @@
                     <input type="submit" value="Next step" class="nextButton">
                 </div>
             </form>
+            <%
+            } else {
+            %>
+            <h1 style="color: white; font-size: 30px; margin-top: 200px;">There's no food available. Please ensure that you've not discontinued all food.</h1>
+            <%}%>
         </div>
         <%}%>
     </body>
