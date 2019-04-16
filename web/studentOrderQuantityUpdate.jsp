@@ -85,7 +85,7 @@
             <h6 class="credits">${totalPrice} credits</h6>
 
             <div class="nextButtonDiv">
-                <button class="nextButton">Back</button>
+                <a class="backBt" href="DisplayMealsEditServlet">Back</a>
                 <input class="nextButton" form="mealQuantityForm" type="submit" value="Next Step">
                 <br/>
             </div>

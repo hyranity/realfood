@@ -1,3 +1,5 @@
+<%@page import="org.joda.time.Days"%>
+<%@page import="util.Auto"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.util.Calendar"%>
@@ -67,11 +69,11 @@
                 
                 boolean isBlockedFromCanceling = false;
                 boolean expired = false;
-                if( today.get(Calendar.DATE) == cal.get(Calendar.DATE)){
+                if(Auto.daysBetween(cal, today)==0){
                     isBlockedFromCanceling = true;
                 }
                 
-                if(today.get(Calendar.DATE) > cal.get(Calendar.DATE))
+if(Auto.daysBetween(today, cal)<0)
                     expired = true;
                
         %>

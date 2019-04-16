@@ -265,7 +265,7 @@ and open the template in the editor.
 
                 </form>
                 <br/>
-                <a class="nextButton" href="LoadStudentDashboard" type="submit" >Back</a>&nbsp;
+                <a class="nextButton" href="DisplayOrdersServlet" type="submit" >Back</a>&nbsp;
                 <input class="nextButton" type="submit" form="calendarForm">
             </div>
             <div class="setting">Set the first day as: 

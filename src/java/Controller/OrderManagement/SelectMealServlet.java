@@ -91,12 +91,12 @@ public class SelectMealServlet extends HttpServlet {
         String[] mealChoice = request.getParameterValues("mealChoice");
         
         
-        String[] compFromSession = (String[]) session.getAttribute("mealChoice");
+        String[] mealFromSession = (String[]) session.getAttribute("mealChoice");
         
         String load = request.getParameter("load");
         
-        if(compFromSession != null && mealChoice == null &&load != null)
-            mealChoice = compFromSession;
+        if(mealFromSession != null && mealChoice == null &&load != null)
+            mealChoice = mealFromSession;
 
         // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
         //Hence, redirect to first page.

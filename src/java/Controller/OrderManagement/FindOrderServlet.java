@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
+import util.Auto;
 
 /**
  *
@@ -121,7 +122,7 @@ public class FindOrderServlet extends HttpServlet {
                 cal.setTime(so.getChosendate());
                 Calendar today = Calendar.getInstance();
                 
-                 if(today.get(Calendar.DATE) > cal.get(Calendar.DATE)){
+                 if(Auto.daysBetween(today, cal)<0){
                     request.setAttribute("errorMsg", "This order has already expired.");
                 request.getRequestDispatcher("redeemOrder.jsp").forward(request, response);
                 return;
