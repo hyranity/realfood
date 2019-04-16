@@ -103,66 +103,6 @@
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#select2').append('<option value="1" selected="selected"> --Select-- </option>');
-            var options = $("#select1").data('options').filter('[value=' + id + ']');
-            $('#select2').html(options);
-        });
-
-        // Code thanks to https://stackoverflow.com/questions/1953063/detect-when-a-specific-option-is-selected-with-jquery
-        $("#reportType").change(function () {
-            var id = $(this).find("option:selected").attr("id");
-
-            switch (id) {
-                case "daily":
-                    $("#monthchoice").css("display", "block");
-                    $("#semichoice").css("display", "none");
-                    $("#day").css("display", "block");
-                    $("#year").css("display", "block");
-                    $("#formForm").attr("action", "DailyTransactionReport");
-                    break;
-                case "monthly":
-                    $("#monthchoice").css("display", "block");
-                    $("#semichoice").css("display", "none");
-                    $("#day").css("display", "none");
-                    $("#year").css("display", "block");
-                    $("#formForm").attr("action", "MonthlySalesReport");
-                    break;
-                case "exception":
-                    $("#monthchoice").css("display", "block");
-                    $("#semichoice").css("display", "none");
-                    $("#day").css("display", "none");
-                    $("#year").css("display", "block");
-                    $("#formForm").attr("action", "ExceptionReport");
-                    break;
-                case "semiannual":
-                    $("#monthchoice").css("display", "none");
-                    $("#semichoice").css("display", "block");
-                    $("#day").css("display", "none");
-                    $("#year").css("display", "block");
-                    $("#formForm").attr("action", "SummaryReport");
-                    break;
-                default:
-                    $("#monthchoice").css("display", "none");
-                    $("#semichoice").css("display", "none");
-                    $("#day").css("display", "none");
-                    $("#year").css("display", "none");
-                    $("#formForm").attr("action", "#");
-                    break;
-            }
-        });
-
-        $("#select1").change(function () {
-            if ($(this).data('options') === undefined) {
-                /*Taking an array of all options-2 and kind of embedding it on the select1*/
-                $(this).data('options', $('#select2 option').clone());
-            }
-            var id = $(this).val();
-            var options = $(this).data('options').filter('[value=' + id + ']');
-            $('#select2').html(options);
-
-
-
-        });
+       
     </script>
 </html>
