@@ -78,10 +78,10 @@
                 <div class="errorMsg">${errorMsg}</div>
                 <form action="MealFinalizationServlet" class="form" id="finalMealForm">
                     <div>
-                        <input type="text" id="mealName" max="20" value="" placeholder="Name" name="mealName"/>
+                        <input type="text" id="mealName" maxlength="20" value="" placeholder="Name" name="mealName"/>
                     </div>
                     <div>
-                        <input type="text" value="" id="description" placeholder="Description" name="description"/>
+                        <input type="text" value="" id="description" placeholder="Description" name="description"  maxlength="35"/>
                     </div>
                     <div>
                         <input type="number" value="" id="price" placeholder="Price" name="price"/>
