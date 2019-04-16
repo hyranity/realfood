@@ -1,6 +1,6 @@
 <%-- 
-    Document   : ReportGenerated
-    Created on : Apr 10, 2019, 7:31:05 PM
+    Document   : exceptionReport
+    Created on : Apr 11, 2019, 12:49:37 AM
     Author     : Richard Khoo
 --%>
 
@@ -9,8 +9,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Daily Transaction Report</title>
+    <title>Order Preparation Info</title>
     <link href="CSS/reportGenerated.css" rel="stylesheet">
+    <link href="CSS/orderPrep.css" rel="stylesheet">
 </head>
 
 <body>
@@ -34,8 +35,8 @@
         }
 
         
-        // Allow manager only
-        if (!permission.equalsIgnoreCase("manager")) {
+        // Allow canteenStaff only
+        if (!permission.equalsIgnoreCase("canteenStaff")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
@@ -43,38 +44,33 @@
             
         String todayDate = Auto.dateToString(Auto.getToday());
     %>
-<table>
-    <caption><a onclick="printThisPage()"><b>RealFood Canteen</b></a></caption>
-    <caption class="address">Lot 1, Ground Floor, Pusat Dagangan Donggongon, Jalan Sapau, Pekan Donggongon, 89500 Penampang, Sabah Tel:088-718481</caption><br/>
-    <caption class="reportType"><u>Daily Transaction Report For ${date}</u></caption>
-    <caption class="timeGenerate"> Generated On: <%=todayDate%></caption>
+<h1>Order Preparation</h1>  
     
- <thead>
-      <th scope="col">No.</th>
-      <th scope="col">Meal ID</th>
-      <th scope="col">Meal Name</th>
-      <th scope="col">Quantity</th>
-      <th scope="col">Amount (RM)</th>
+    <table>
+    
+  <thead>
+    <tr style="border-bottom: 1px solid white;">
+        <th scope="col" style="color: gold">Meal Name</th>
+        <th scope="col" style="color: gold">Meal Quantity</th>
+      <th scope="col">Food Name</th>
+      <th scope="col">Food Per Meal</th>
+      <th scope="col">Total Food</th>
+      
+    </tr>    
   </thead>
   <tbody>
-      ${outputMonthly}
+      ${queryResult}
   </tbody>
   
     <!-- Print Total Part-->
-    <tr>
+    <tr style="border-top: 1px solid white;">
       <th scope="col">Total</th>
+      <th scope="col">${totalMeal}</th>
       <th scope="col"></th>
       <th scope="col"></th>
-      <th scope="col"></th>
-      <th scope="col">RM ${totalPrice}</th>
+      <th scope="col">${totalFood}</th>
     </tr>    
 </table>
-    <div class="tableBox">
-    <br/><label class="leftVerified">Verified by:</label><br/>
-    <br/><label class="leftLine">_________________________</label><br/>
-    <br/><label class="leftName">Name:</label>
-    <br/><label class="leftDate">Date:</label>
-    </div>
     
     <%}%>
 </body>

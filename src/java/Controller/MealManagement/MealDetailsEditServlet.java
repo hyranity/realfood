@@ -308,7 +308,7 @@ public class MealDetailsEditServlet extends HttpServlet {
 
                                 // Notify the student
                                 Notifier notifier = new Notifier(em, utx);
-                                String title = "Meal Discontinuation Refund";
+                                String title = "Meal Update Notification";
                                 String body = "Hey there! The meal \"" + meal.getMealname() +"\" (" +meal.getMealid() + ") has been recently updated with new information, and we notified you since your order(s) have this meal. We did not cancel the meal; this is just to notify you. Please do check out the new details.";
                                 notifier.notify(title, body, stud);
                                 }

@@ -54,7 +54,7 @@
                 <form method="POST" action="LoginServlet">
                     <input name="id" id="id" type="text" placeholder="ID" minlength="5" onchange="updateHeading()" required>
                     <br>
-                    <input name="password" type="password" minlength="6" maxlength="20" placeholder="password" required>
+                    <input name="password" type="password" placeholder="password" required>
                     <button type="submit">let's go</button>
 
                     <p class="passwordForgot">I forgot my password. <a href="#" id="forgotPasswordTrigger" onclick="">HELP</a></p>

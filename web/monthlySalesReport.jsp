@@ -34,7 +34,7 @@
         }
 
         
-        // Allow student only
+        // Allow manager only
         if (!permission.equalsIgnoreCase("manager")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);

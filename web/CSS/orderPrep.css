@@ -1,0 +1,23 @@
+body{
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+table{
+    background-color: black;
+    border-collapse: collapse;
+}
+
+table th, td{
+    border-right: 1px solid white;
+    border-left: 1px solid white;
+    background-color: black;
+   
+    
+    
+}
+
+table tr{
+    border: none;
+}

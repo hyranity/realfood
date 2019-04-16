@@ -76,9 +76,10 @@ public class DisplayOrdersServlet extends HttpServlet {
             return;
         } else {
             
+            
             try{
                 
-                // Get all food
+                // Get all orders
                 TypedQuery<Studentorder> query = em.createQuery("SELECT so FROM Studentorder so where so.studentid = :studentId order by so.orderid desc", Studentorder.class).setParameter("studentId", stud);
                 List<Studentorder> soList = query.getResultList();
                 String queryResult = "";

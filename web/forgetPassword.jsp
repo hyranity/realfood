@@ -19,6 +19,7 @@
             try {
                 token = (String) session.getAttribute("token");
                 inputToken = request.getParameter("inputToken");
+                token.charAt(0);
                 if (inputToken == null) {
                     request.setAttribute("errorMsg", "No password reset is in progress.");
                     request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -42,11 +43,11 @@
             <!--<h2>Reset Password Form</h2>-->
             <div class="forgetPassword">
                 <h1>Reset Password</h1>
-                <p> Please Enter New Password To Reset Your Password.</p>
+                <p> Please Enter New Password To Reset Your Password.</p>   
                 <form action="ProcessPasswordReset">
                     <input type="password" name="password" id="password" value="" placeholder="New Password" onfocus="this.value = '';" onblur="if (this.value == '') {
                                 this.value = 'Email address';
-                            }" required>
+                            } "  minlength="6" maxlength="20" required>
                     <input type="password" value="" id="confirmationPassword" placeholder="Confirmation Password" onfocus="this.value = '';" onblur="if (this.value == '') {
                                 this.value = 'Email address';
                             }" required>
