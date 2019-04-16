@@ -61,7 +61,7 @@
             <h6 class="credits"><%=credits%> credits</h6>
             <div class="buttonsContainer">
                 <a href="DisplayOrdersServlet"><div class="buttonDiv" id="order">my orders</div></a>
-                <a href="DisplayNotifications"><div class="buttonDiv" id="notification">my notifications</div></a>
+                <a href="DisplayNotifications"><div class="buttonDiv" id="notification">my notifications <span class="badge badge-info">${notificationCount}</span></div></a>
                 <a href="ShowMealMenu"><div class="buttonDiv" id="notification">Meal Menu</div></a>
                 <br/>
                 <a href="calendarStudent.jsp"><div class="buttonDiv" id="makeOrder">make an order</div></a>

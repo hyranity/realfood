@@ -97,9 +97,9 @@ public class Student implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date datejoined;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentid")
-    private List<Studentorder> studentorderList;
+    private List<Notification> notificationList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentid")
-    private List<Notificationstudent> notificationstudentList;
+    private List<Studentorder> studentorderList;
 
     public Student() {
     }
@@ -202,21 +202,21 @@ public class Student implements Serializable {
     }
 
     @XmlTransient
+    public List<Notification> getNotificationList() {
+        return notificationList;
+    }
+
+    public void setNotificationList(List<Notification> notificationList) {
+        this.notificationList = notificationList;
+    }
+
+    @XmlTransient
     public List<Studentorder> getStudentorderList() {
         return studentorderList;
     }
 
     public void setStudentorderList(List<Studentorder> studentorderList) {
         this.studentorderList = studentorderList;
-    }
-
-    @XmlTransient
-    public List<Notificationstudent> getNotificationstudentList() {
-        return notificationstudentList;
-    }
-
-    public void setNotificationstudentList(List<Notificationstudent> notificationstudentList) {
-        this.notificationstudentList = notificationstudentList;
     }
 
     @Override

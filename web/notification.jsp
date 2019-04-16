@@ -7,7 +7,6 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Calendar"%>
-<%@page import="Model.Notificationstudent"%>
 <%@page import="Model.Student"%>
 <%@page import="Model.*"%>
 <%@page import="java.util.*"%>
@@ -56,9 +55,9 @@
                 
                 Student stud = (Student) session.getAttribute("stud");
                 int credits = stud.getCredits();    // Obtain student's credits amount
-                List<Notificationstudent> nsList = new ArrayList();
+                List<Notification> nList = new ArrayList();
                 try {
-                    nsList = (List<Notificationstudent>) session.getAttribute("nsList");
+                    nList = (List<Notification>) session.getAttribute("nsList");
                 } catch (Exception e) {
                     // This will be triggered if the page is accessed directly, hence redirect to dashboard
                     response.sendRedirect("studentDashboard.jsp");
@@ -69,10 +68,10 @@
         <h5>Here you can view all the notifications you have received. (Those that you have read & understood are green)</h5>
         <div class="notificationContainer">
 
-            <%                for (Notificationstudent ns : nsList) {
-                    String brief = ns.getNotificationid().getDescription().substring(0, 25) + "....";
+            <%                for (Notification ns : nList) {
+                    String brief = ns.getDescription().substring(0, 25) + "....";
                     Calendar cal = Calendar.getInstance();
-                    cal.setTime(ns.getNotificationid().getDateissued());
+                    cal.setTime(ns.getDateissued());
                     String hour = "";
                     
                     if(cal.get(Calendar.HOUR) == 0)
@@ -90,32 +89,32 @@
 
                     if (ns.getIsread()) {
             %>
-            <div class="notification" style="background-color: lightgreen;" id="n<%=ns.getNotificationid().getNotificationid()%>" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>" >
-                <h5 style="background-color: darkgreen;"><%=ns.getNotificationid().getTitle()%></h5>
+            <div class="notification" style="background-color: lightgreen;" id="n<%=ns.getNotificationid()%>" data-notificationid="no<%=ns.getNotificationid()%>" >
+                <h5 style="background-color: darkgreen;"><%=ns.getTitle()%></h5>
                 <p style="background-color: lightgreen; border-color: lightgreen;"><%=brief%></p>
                 <p class="date" style="background-color: darkgreen">12/2/19</p>
             </div>
-                <div class="notificationOverlay" id="no<%=ns.getNotificationid().getNotificationid()%>" style="background-color: darkgreen; color: white;">
-                <h3><%=ns.getNotificationid().getTitle()%></h3>
+                <div class="notificationOverlay" id="no<%=ns.getNotificationid()%>" style="background-color: darkgreen; color: white;">
+                <h3><%=ns.getTitle()%></h3>
                 <p class="date"><%=displayTime%></p>
-                <p class="description"><%=ns.getNotificationid().getDescription()%></p>
-                <div class="close" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>">x</div>
-            </div>
+                <p class="description"><%=ns.getDescription()%></p>
+                <div class="close" data-notificationid="no<%=ns.getNotificationid()%>">x</div>
+                </div><br/>
             <%
             } else {
             %>
-            <div class="notification" id="n<%=ns.getNotificationid().getNotificationid()%>" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>" >
-                <h5><%=ns.getNotificationid().getTitle()%></h5>
+            <div class="notification" id="n<%=ns.getNotificationid()%>" data-notificationid="no<%=ns.getNotificationid()%>" >
+                <h5><%=ns.getTitle()%></h5>
                 <p><%=brief%></p>
                 <p class="date">12/2/19</p>
             </div>
-                <div class="notificationOverlay" id="no<%=ns.getNotificationid().getNotificationid()%>">
-                <h3><%=ns.getNotificationid().getTitle()%></h3>
+                <div class="notificationOverlay" id="no<%=ns.getNotificationid()%>">
+                <h3><%=ns.getTitle()%></h3>
                 <p class="date"><%=displayTime%></p>
-                <p class="description"><%=ns.getNotificationid().getDescription()%></p>
-                <div class="close" data-notificationid="no<%=ns.getNotificationid().getNotificationid()%>">x</div>
-                <a href="ReadNotification?nsId=<%=ns.getNotificationstudentid()%>"><div class="readBt">I have read and understood this.</div></a>
-            </div>
+                <p class="description"><%=ns.getDescription()%></p>
+                <div class="close" data-notificationid="no<%=ns.getNotificationid()%>">x</div>
+                <a href="ReadNotification?nsId=<%=ns.getNotificationid()%>"><div class="readBt">I have read and understood this.</div></a>
+            </div><br/>
             <%
                 }
             %>

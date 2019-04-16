@@ -5,7 +5,7 @@
  */
 package Controller.MealManagement;
 
-import ExtendedClasses.Notifier;
+import util.Notifier;
 import Model.Food;
 import Model.Meal;
 import Model.Mealfood;
@@ -84,6 +84,7 @@ public class MealDiscontinuationServlet extends HttpServlet {
 
             try {
                 mealId = request.getParameter("mealId");
+                int count = 1;
 
                 // Obtain meal object from database
                 Meal meal = em.find(Meal.class, mealId);
@@ -114,27 +115,27 @@ public class MealDiscontinuationServlet extends HttpServlet {
                     }
 
                     if (hasRelatedOrders) {
+                        List<Student> affectedStudents = new ArrayList();
                         for (Studentorder so : orderList) {
                             boolean isCanceled = false;
                             boolean stillHasUncanceled = false;
                             boolean isAffected = false;
 
                             //Refund them
-                            Student stud = so.getStudentid();
+                            Student stud = em.find(Student.class, so.getStudentid().getStudentid());
 
                             // Get total price
                             int totalPrice = 0;
                             for (Ordermeal om : so.getOrdermealList()) {
-                                System.out.println(om.getMealid().getMealid() + " AND " + meal.getMealid());
+                                System.out.println(om.getOrdermealid());
                                 // Only if the associative entity has the meal, then cancel
                                 if (om.getMealid().getMealid().equals(meal.getMealid())) {
-                                    System.out.println("MATCH FOUND FOR ORDERMEAL " + om.getOrdermealid());
                                     if (!om.getIscanceled() && !om.getIsredeemed()) {
-                                        System.out.println("Neither canceled nor redeemed");
                                         totalPrice = totalPrice + (om.getQuantity() * om.getMealid().getPrice());
                                         om.setIscanceled(true);
                                         isCanceled = true;
                                         isAffected = true; // This student is affected by the discontinuation
+                                        System.out.println(om.getOrdermealid() + " - Student is affected by discontinuation!");
                                     }
                                 }
 
@@ -142,10 +143,14 @@ public class MealDiscontinuationServlet extends HttpServlet {
                                     stillHasUncanceled = true;
                                 }
                             }
-
+                            
                             if (isAffected) {
                                 if (isCanceled) {
                                     stud.setCredits(stud.getCredits() + totalPrice);
+                                    System.out.println(" Refunding student with " + totalPrice);
+                                    utx.begin();
+                                em.merge(stud);
+                                utx.commit();
                                 }
 
                                 // Cancel the entire order if the only meal ordered is canceled
@@ -154,17 +159,17 @@ public class MealDiscontinuationServlet extends HttpServlet {
                                 }
 
                                 stud.setStudentorderList(orderList);
-                                System.out.println(stud.getCredits());
-                                // Update the student
-                                utx.begin();
-                                em.merge(stud);
-                                utx.commit();
-                                System.out.println("Creating notification for: " + so.getOrderid());
+
+                                affectedStudents.add(stud);
+                                System.out.println("Looping " + count);
                                 // Notify the student
                                 Notifier notifier = new Notifier(em, utx);
                                 String title = "Meal Discontinuation Refund";
                                 String body = "Hey there! We are sorry to announce that we have discontinued the meal \"" + meal.getMealname() + "\", and hence your orders will no longer have this meal. Your order ( " + so.getOrderid() + ") has been affected. You have been fully refunded with " + totalPrice + " credits. Thank you for your understanding.";
                                 notifier.notify(title, body, stud);
+                                System.out.println("NOTIFIED ONCE!");
+                                count++;
+                                
                             }
                         }
                     }

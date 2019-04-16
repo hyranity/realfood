@@ -88,12 +88,12 @@ public class ReadNotification extends HttpServlet {
             
             try {
                utx.begin();
-               Notificationstudent ns = em.find(Notificationstudent.class, Integer.parseInt(nsId));
+               Notification n = em.find(Notification.class, nsId);
                
                // Update it to isRead = true
-               ns.setIsread(true);
+               n.setIsread(true);
                
-               em.merge(ns);
+               em.merge(n);
                utx.commit();
                
                // Redirect back
@@ -101,6 +101,7 @@ public class ReadNotification extends HttpServlet {
             } catch (Exception ex) {
                 // Display error messages if any
                 System.out.println("ERROR: " + ex.getMessage());
+                ex.printStackTrace();
             }
 
                 

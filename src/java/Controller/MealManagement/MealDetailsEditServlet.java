@@ -5,7 +5,7 @@
  */
 package Controller.MealManagement;
 
-import ExtendedClasses.Notifier;
+import util.Notifier;
 import Model.Food;
 import Model.Meal;
 import Model.Mealfood;

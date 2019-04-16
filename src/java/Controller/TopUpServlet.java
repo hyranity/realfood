@@ -5,7 +5,7 @@
  */
 package Controller;
 
-import ExtendedClasses.Notifier;
+import util.Notifier;
 import Model.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -103,6 +103,7 @@ public class TopUpServlet extends HttpServlet {
             request.getRequestDispatcher("topUp.jsp").forward(request, response);
             return;
         } catch (Exception e) {
+            e.printStackTrace();
             request.setAttribute("errorMsg", "Oops! Something went wrong. Ensure that you've keyed in everything correctly.");
             request.getRequestDispatcher("topUp.jsp").forward(request, response);
             return;
