@@ -100,12 +100,17 @@ public class ManageFoodServlet extends HttpServlet {
                         queryResult += "<tr>";
                         fourCount++;
                     }
+                    
+                      String status = "";
+                   if(food.getIsdiscontinued())
+                        status = " <p style=\"color: darkred; font-weight: bold;\">DISCONTINUED</p>";
 
                     queryResult += "<td>\n"
                             + "                    <div class=\"record\">\n"
                             + "                        <h6>" + food.getFoodid() +"</h6>\n"
                             + "                        <p>" + food.getFoodname() +"</p>\n"
-                            + "                        <p>" + food.getCalories() +" calories</p>\n"
+                            + "                        <p>" + food.getCalories() +" calories</p>\n<br/>"
+                            + status
                             + "                        <a href=\"EditFoodServlet?foodId=" + food.getFoodid() +"\"><div class=\"editButton\">Edit</div></a>\n"
                             + "                    </div>\n"
                             + "                </td>";

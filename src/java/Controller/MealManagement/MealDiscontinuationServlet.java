@@ -181,29 +181,7 @@ public class MealDiscontinuationServlet extends HttpServlet {
                 em.merge(meal);
                 utx.commit();
 
-                utx.begin();
-                // Get related list of Mealorder objects
-                TypedQuery<Mealfood> query = em.createQuery("SELECT mf FROM Mealfood mf where mf.mealid = :mealId", Mealfood.class).setParameter("mealId", meal);
-                List<Mealfood> mealFoodList = query.getResultList();
-
-                for (Mealfood mf : mealFoodList) {
-                    // If the mealFood is currently discontinued
-                    if (mf.getIsdiscontinued()) {
-                        // Toggle it
-                        mf.setIsdiscontinued(false);
-                    } else {
-                        // If the mealFood is currently not discontinued
-                        // Toggle it
-                        mf.setIsdiscontinued(true);
-                    }
-
-                    //Update the objects
-                    em.merge(mf);
-                }
-
-                // Update it
-                em.merge(meal);
-                utx.commit();
+              
 
                 //Update the meal in session
                 session.setAttribute("meal", meal);

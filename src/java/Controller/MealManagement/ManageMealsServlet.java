@@ -103,17 +103,20 @@ public class ManageMealsServlet extends HttpServlet {
                 for (int i = 0; i < mealList.size(); i++) {
                     components = "";
                     Meal meal = mealList.get(i);
-                    
+        
                     // Create the food components string
-                    for(int j=0; j< meal.getMealfoodList().size(); j++){
+                    int count = 0;
+                    for (int j = 0; j < meal.getMealfoodList().size(); j++) {
                         Mealfood mf = meal.getMealfoodList().get(j);
-                        
-                        // If the current iteration is more than the first one, put comma.
-                        if(j>0)
-                            components += ", ";
-                        
-                        if(!mf.getIsdiscontinued())
-                        components += mf.getFoodid().getFoodname();
+
+                        if (!mf.getIsdiscontinued()) {
+                            if (count > 0) {
+                                components += ", ";  // If the current iteration is more than the first one, put comma.
+                            }
+                            components += mf.getFoodid().getFoodname();
+                            count++;
+                            System.out.println(mf.getFoodid().getFoodname() + " , which discontinued = " + mf.getFoodid().getIsdiscontinued());
+                        }
                     }
 
                     // Formatting when to show on new row
