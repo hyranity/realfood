@@ -20,15 +20,8 @@
 
     </head>
     
-    <header>
-        <div>
-            <ul>
-                <a href="login.jsp"  class="right"">Login</a>
-                <a href="staffRegistration.jsp"  class="right" style="background-color: #ffffff; color: #000000;">Register</a>
-                <a href="studentRegistration.jsp"  class="right"">Student</a>
-                <a href="home.jsp"  class="right">Home</a>
-            </ul>
-        </div>
+<header>
+
 </header>
     
     <body>
@@ -73,25 +66,24 @@
                         <!---->
                         
                         <div class="formGroup">
-                            <input type="text" class="formInput" name="myKad" id="myKAD" placeholder="MyKAD" maxlength="12" required/>
+                            <input title="Please Follow as xxxxxxxxxxxx" required pattern="[0-9]{6}[0-9]{2}[0-9]{4}" class="formInput" name="myKad" id="myKAD" placeholder="MyKAD" required/>
                         </div>
                     
                         <!---->
                         
                         <div class="formGroup" >
                             <input type="checkbox" onclick="myFunction()" id="showPass" /><label style="text-align: center;" for="showPass" id="showPassLabel">Click here to show password</label><br>
-                            <input type="checkbox" id="acceptTerm"/><label class="termService" for="acceptTerm">Click here to Agree To Our <a style="color: white;">Terms & Conditions</a> </label>
+                            
                         </div>
                         
-                        <div class="formButton" style="text-align: center">
-                            <input type="submit" name="submit" id="submit" class="submitButton" value="Sign up" style="text-align: center" />
+                        <div class="formButton" style="text-align: center;">
+                            <input type="submit" name="submit" id="submit" class="submitButton" value="Sign up" style="text-align: center; cursor: pointer;" /><br/>
+                            <a href="dashboardManager.jsp"><div class="submitButton" style="margin-top: 16px; margin-left: 134px;">Return To DashBoard</div></a>
+                            
                         </div>
                         
                     </form>
                     
-                    <p class="loginhere" style="color: gold;">
-                        Already Have An Account? <a href="#" class="clickHere">Login here</a>
-                    </p>
                 </div>
             </div>
     <!-- JS -->

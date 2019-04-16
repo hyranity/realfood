@@ -88,7 +88,7 @@ form input:focus{
 
 .formInput {
     opacity:0.9;
-    width: 70%;   /*<!--For adjust the colum of input-->*/
+    width: 80%;   /*<!--For adjust the colum of input-->*/
     font-family: Montserrat, sans-serif;
     background-color: #FFD700;
     border-style: solid;
