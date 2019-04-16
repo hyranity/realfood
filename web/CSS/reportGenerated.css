@@ -154,3 +154,9 @@ table th {
       font-weight: 500;
   }
 
+@media print{
+   .noprint{
+       display:none;
+       
+   }
+}

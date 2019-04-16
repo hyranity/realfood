@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="CSS/commonStyles.css">
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Login</title>
     </head>
     <header>
         <div>

@@ -141,8 +141,8 @@
                 <br/>
             </div>
         </div>
-        <a href="DisplayStaffServlet"><div class="back">Back</div></a>
-        < <div class="toggleConfirmation">
+        <a href="DisplayStaffServlet"><div class="submitBtn">Back</div></a>
+         <div class="toggleConfirmation">
             <%
                 if (isHired) {
             %>

@@ -45,7 +45,7 @@
     %>
 
 <table>
-    <caption><a onclick="printThisPage()"><b>RealFood Canteen</b></a></caption>
+    <caption><b>RealFood Canteen</b></caption><div class="noprint"><button onclick="goBack()">Back</button> <button onclick="printThisPage()">Print this page</button></div>
     <caption class="address">Lot 1, Ground Floor, Pusat Dagangan Donggongon, Jalan Sapau, Pekan Donggongon, 89500 Penampang, Sabah Tel:088-718481</caption><br/>
     <caption class="reportType"><u>Monthly Sales Report For ${month}</u></caption>
     <caption class="timeGenerate"> Generated On: <%=todayDate%></caption>
@@ -82,6 +82,10 @@
 <script>
 function printThisPage() {
   window.print();
+}
+
+function goBack() {
+  window.history.back();
 }
 </script>
 
