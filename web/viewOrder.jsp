@@ -6,6 +6,8 @@
 <%@page import="Model.Meal"%>
 <%@page import="Model.Ordermeal"%>
 <%@page import="Model.Studentorder"%>
+<%@page import="Model.*"%>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -47,6 +49,8 @@
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             } else {
+                Student stud = (Student) session.getAttribute("stud");
+                int credits = stud.getCredits();    // Obtain student's credits amount
                 Studentorder so = new Studentorder();
 
                 try {
@@ -209,7 +213,8 @@ if(Auto.daysBetween(today, cal)<0)
             <a href="#"><div class="overlayCancel">No</div></a>
         </div>
         <%}%>
-        <h6 class="credits">1000 credits</h6>
+        <!-- Display student's credits -->
+        <h6 class="credits"><%=credits%> credits</h6>
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

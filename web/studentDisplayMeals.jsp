@@ -88,7 +88,7 @@
 
             </div>
             <div>
-                <a class="nextButton" href="calendarStudent.jsp">Back</a>
+                <a class="backBt" href="calendarStudent.jsp">Back</a>
                 <button class="nextButton">Next step</button>
                 <br/><br/><br/>
             </div>

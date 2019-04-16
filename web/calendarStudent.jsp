@@ -16,7 +16,7 @@ and open the template in the editor.
 <%@page import="java.util.GregorianCalendar"%>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Choose A Date</title>
         <link href="CSS/calendar.css" rel="stylesheet">
         <link href="CSS/student.css" rel="stylesheet">
         <link href="CSS/commonStyles.css" rel="stylesheet">
@@ -56,7 +56,7 @@ and open the template in the editor.
             Student stud = (Student) session.getAttribute("stud");
             int credits = stud.getCredits();    // Obtain student's credits amount
         %>
-
+        
         <%
             //The following is to set the first day (Sunday or Monday)
             boolean firstDayIsSunday = true;
@@ -265,7 +265,7 @@ and open the template in the editor.
 
                 </form>
                 <br/>
-                <a class="nextButton" href="DisplayOrdersServlet" type="submit" >Back</a>&nbsp;
+                <a class="backBt" href="DisplayOrdersServlet" type="submit" >Back</a>&nbsp;
                 <input class="nextButton" type="submit" form="calendarForm">
             </div>
             <div class="setting">Set the first day as: 

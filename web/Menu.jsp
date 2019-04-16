@@ -87,7 +87,7 @@
                 <h1 style="color: white; font-size: 40px; margin-top: 300px;">It seems like there's no meal available yet. Stay tuned!</h1>
                 
                 <%}%>
-                <a class="nextButton" href="LoadStudentDashboard">Back</a>
+                <a class="backBt" href="LoadStudentDashboard">Back</a>
                 
              <!-- Display student's credits -->
         <h6 class="credits"><%=credits%> credits</h6>

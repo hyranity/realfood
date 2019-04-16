@@ -126,7 +126,7 @@
                 }
             %>
 
-            <div><br/><br/><a class="nextButton" href="LoadStudentDashboard" type="submit" >Back</a></div>
+            <div><br/><br/><a class="backBt" href="LoadStudentDashboard" type="submit" >Back</a></div>
         </div>
         <div class="coverOverlay"></div>
         <!-- Display student's credits -->
