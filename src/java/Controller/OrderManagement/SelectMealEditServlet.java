@@ -94,10 +94,16 @@ public class SelectMealEditServlet extends HttpServlet {
                 response.sendRedirect("DisplayOrdersServlet");
             }
 
-        // Get array of food IDs from form
+       // Get array of food IDs from form
         String[] mealChoice = request.getParameterValues("mealChoice");
         
         
+        String[] compFromSession = (String[]) session.getAttribute("mealChoice");
+        
+        String load = request.getParameter("load");
+        
+        if(compFromSession != null && mealChoice == null &&load != null)
+            mealChoice = compFromSession;
 
         // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
         //Hence, redirect to first page.

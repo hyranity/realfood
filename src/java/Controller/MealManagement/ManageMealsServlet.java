@@ -89,24 +89,8 @@ public class ManageMealsServlet extends HttpServlet {
 
             try {
                 
-                // Get search result
-                String search = "";
-                boolean hasSearch = true;
-                try {
-                    search = request.getParameter("search");
-                    
-                    if(search == null || search == "")
-                        hasSearch = false;
-                } catch (Exception ex) {
-                    hasSearch = false;
-                }
-
                 // Get all meal
-                TypedQuery<Meal> query = null;
-                if(!hasSearch)
-                    query = em.createQuery("SELECT m FROM Meal m", Meal.class);
-                else
-                    query = em.createQuery("SELECT m FROM Meal m WHERE m.mealid LIKE :search OR m.mealname LIKE lower(:search)", Meal.class).setParameter("search", "%" + search + "%");
+                TypedQuery<Meal> query =  em.createQuery("SELECT m FROM Meal m", Meal.class);
                 List<Meal> mealList = query.getResultList();
 
                 String queryResult = "";
