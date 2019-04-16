@@ -56,7 +56,8 @@
             ${queryResults}
             <br/>
         </div>
-        <a href="dashboardManager.jsp"><div class="nextButton" action="dashboardManager.jsp" type="submit" >Back</div></a>
+            <br/>
+        <a href="dashboardManager.jsp" class="nextButton">Back</a>
         <%}%>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
