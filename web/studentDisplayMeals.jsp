@@ -77,10 +77,6 @@
  <h1 class="title">Choose meals.</h1>
         <h5 id="subtitle">Click on the meals you would like to have.</h5>
         <div class="errorMsg">${errorMsg}</div>
-        <!-- Search bar -->
-        <form class="searchForm">
-            <input type="text" name="query" placeholder="search..." class="searchBar"/>
-        </form>
 
         <!-- Table -->
         <form action="SelectMealServlet" method="post" id="mealOrder">
@@ -92,7 +88,7 @@
 
             </div>
             <div>
-                <a class="nextButton" form="mealOrder" href="calendarStudent.jsp">Back</a>
+                <a class="nextButton" href="calendarStudent.jsp">Back</a>
                 <button class="nextButton">Next step</button>
                 <br/><br/><br/>
             </div>

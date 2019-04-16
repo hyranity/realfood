@@ -98,11 +98,10 @@ public class OrderPreparationGenerator extends HttpServlet {
                 day = request.getParameter("day");
                 year = request.getParameter("year");
                 
-               
 
                 if (month == "" || day == "" || year == "" || month == null || day == null || year == null) {
                     request.setAttribute("errorMsg", "Oops! Please fill in all fields.");
-                    request.getRequestDispatcher("dashboardCanteenStaff.jsp").forward(request, response);
+                    request.getRequestDispatcher("selectOrderPrepDate.jsp").forward(request, response);
                 }
             } catch (Exception ex) {
                 // If error, means manager accessed this directly. Hence, redirect
@@ -111,9 +110,18 @@ public class OrderPreparationGenerator extends HttpServlet {
             
             //Get the chosen month and set the calendars
             int monthNum = Auto.getMonthInt(month); // Convert month to int
+             chosenDay.set(Calendar.YEAR, Integer.parseInt(year));
             chosenDay.set(Calendar.MONTH, monthNum);
+             
+            if(chosenDay.getActualMaximum(Calendar.DAY_OF_MONTH) < Integer.parseInt(day)){
+                request.setAttribute("errorMsg", "The day is out of range.");
+                    request.getRequestDispatcher("selectOrderPrepDate.jsp").forward(request, response);
+            }
+
             chosenDay.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
-            chosenDay.set(Calendar.YEAR, Integer.parseInt(year));
+           
+            
+                
             String queryResult = "";
             // Get all orders
             try {

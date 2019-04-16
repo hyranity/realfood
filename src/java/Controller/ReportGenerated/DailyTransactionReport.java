@@ -99,9 +99,16 @@ public class DailyTransactionReport extends HttpServlet {
 
             //Get the chosen month and set the calendars
             int monthNum = Auto.getMonthInt(month); // Convert month to int
-            chosenDay.set(Calendar.MONTH, monthNum);
-            chosenDay.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
             chosenDay.set(Calendar.YEAR, Integer.parseInt(year));
+            chosenDay.set(Calendar.MONTH, monthNum);
+            
+            
+            if(chosenDay.getActualMaximum(Calendar.DAY_OF_MONTH) < Integer.parseInt(day)){
+                request.setAttribute("errorMsg", "The day is out of range.");
+                    request.getRequestDispatcher("selectReport.jsp").forward(request, response);
+            }
+            chosenDay.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
+            
 
             // The range of chosen month is now firstDay - lastDay
             try {

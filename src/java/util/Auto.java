@@ -13,17 +13,33 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 
 
 public class Auto {
     
     public static void main(String[] args){
-        try {
-            System.out.println(generateID("MFsdsd", 12, 10));
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, -5);
+        Calendar today = Auto.dateToCal(Auto.getToday());
+        System.out.println(daysBetween(today, cal));
     }
+    
+    public static LocalDate getLocalDate(Calendar cal){
+        TimeZone tz = cal.getTimeZone();
+        DateTimeZone jodaTz = DateTimeZone.forID(tz.getID());
+        DateTime dateTime = new DateTime (cal.getTimeInMillis(), jodaTz);
+        
+        return dateTime.toLocalDate();
+    }
+    
+    public static int daysBetween(Calendar cal1, Calendar cal2){
+        return Days.daysBetween(getLocalDate(cal1), getLocalDate(cal2)).getDays();
+    }
+    
     
     // Returns today's date as Date object
     public static Date getToday(){

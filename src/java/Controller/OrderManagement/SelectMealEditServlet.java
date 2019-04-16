@@ -94,23 +94,31 @@ public class SelectMealEditServlet extends HttpServlet {
                 response.sendRedirect("DisplayOrdersServlet");
             }
 
-        // Get array of food IDs from form
+       // Get array of meal IDs from form
         String[] mealChoice = request.getParameterValues("mealChoice");
         
         
+        String[] mealFromSession = (String[]) session.getAttribute("mealChoice");
+        
+        String load = request.getParameter("load");
+        
+        if(mealFromSession != null && mealChoice == null && load != null)
+            mealChoice = mealFromSession;
 
         // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
         //Hence, redirect to first page.
         if (mealChoice == null) {
             request.setAttribute("errorMsg", "Please select at least one meal.");
-            request.getRequestDispatcher("DisplayMealsServlet").forward(request, response);
+            request.getRequestDispatcher("DisplayMealsEditServlet").forward(request, response);
             return;
         }
+        
+        session.setAttribute("mealChoice", mealChoice);
 
         //Values
         List<Ordermeal> newOrderMealList = new ArrayList(); // List of associative entities. Each meal component belongs to 1
         
-        //STEP 1 - SELECT MEAL COMPONENTS (FOOD)
+
         try {
 
             utx.begin();
@@ -185,7 +193,6 @@ public class SelectMealEditServlet extends HttpServlet {
             request.getRequestDispatcher("studentOrderQuantityUpdate.jsp").forward(request, response);
             
 
-            // END OF STEP 1
         } catch (Exception ex) {
             System.out.println("ERROR: Could not add meal into mealList: " + ex.getMessage());
             ex.printStackTrace();

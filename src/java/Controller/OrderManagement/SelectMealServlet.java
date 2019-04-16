@@ -87,10 +87,16 @@ public class SelectMealServlet extends HttpServlet {
             return;
         }
 
-        // Get array of food IDs from form
+        // Get array of meal IDs from form
         String[] mealChoice = request.getParameterValues("mealChoice");
         
         
+        String[] mealFromSession = (String[]) session.getAttribute("mealChoice");
+        
+        String load = request.getParameter("load");
+        
+        if(mealFromSession != null && mealChoice == null &&load != null)
+            mealChoice = mealFromSession;
 
         // If the parameter's values are null, then it means the user typed in this servlet's URL instead of following the steps. 
         //Hence, redirect to first page.
@@ -99,6 +105,8 @@ public class SelectMealServlet extends HttpServlet {
             request.getRequestDispatcher("DisplayMealsServlet").forward(request, response);
             return;
         }
+        
+          session.setAttribute("mealChoice", mealChoice);
 
         //Values
         List<Ordermeal> orderMealList = new ArrayList(); // List of associative entities. Each meal component belongs to 1

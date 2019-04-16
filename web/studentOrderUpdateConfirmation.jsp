@@ -149,9 +149,7 @@ session.setAttribute("isARefund", isARefund);
         <div class="container">
             <form action="">
 
-                <div style="display: inline-block; text-align: center; border-radius: 50px;">
-                    <button class="nextButton" href="" type="submit" >Back</button>
-                </div>
+                <a class="backBt" href="SelectMealEditServlet?load=true">Back</a>
 
                 <div style="display: inline-block; text-align: center; border-radius: 50px;">
 

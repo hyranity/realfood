@@ -146,9 +146,7 @@ SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
         <div class="container">
             <form action="">
 
-                <div style="display: inline-block; text-align: center; border-radius: 50px;">
-                    <button class="nextButton" href="" type="submit" >Back</button>
-                </div>
+                    <a class="backBt" href="SelectMealServlet?load=true">Back</a>
 
                 <div style="display: inline-block; text-align: center; border-radius: 50px;">
 

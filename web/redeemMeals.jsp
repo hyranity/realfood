@@ -1,3 +1,4 @@
+<%@page import="util.Auto"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.Locale"%>
 <%@page import="java.util.Calendar"%>
@@ -69,14 +70,14 @@
                 
                 Calendar today = Calendar.getInstance();
                 
-                boolean isBlockedFromCanceling = false;
                 boolean expired = false;
-                if( today.get(Calendar.DATE) == cal.get(Calendar.DATE)){
-                    isBlockedFromCanceling = true;
-                }
+                boolean stillEarly = false;
                 
-                if(today.get(Calendar.DATE) > cal.get(Calendar.DATE))
+                if(Auto.daysBetween(today, cal)<0)
                     expired = true;
+                
+              if(Auto.daysBetween(today, cal)>0)
+                    stillEarly = true;
                
         %>
         <div class="outsideContainer" style="text-align: center;">
@@ -163,7 +164,17 @@
                     <p class="couponCode" id="couponCode"><%=couponCode%></p>
                     <br/>
                     <br/>
+                    <%
+                    if(stillEarly){
+                    %>
+                    <input type="submit" value="Redeem date not today" style="background-color: dimgray; color: white;" class="redeemBt" disabled>
+                     <%
+                    } else{
+                    %>
                     <input type="submit" value="Redeem selected meals" class="redeemBt">
+                    <%
+                    } 
+                    %>
                     </form>
                 </div>
 

@@ -110,7 +110,7 @@
 
             </div>
             <div>
-                <input class="nextButton" form="mealOrder">Back</button>
+                <a class="nextButton" href="DisplayOrdersServlet" >Back</a>
                 <button class="nextButton">Next step</button>
                 <br/><br/><br/>
             </div>
