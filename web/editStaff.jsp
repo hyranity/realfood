@@ -121,7 +121,7 @@
                     </div>
                     <div>
                         <label>Mykad Number</label><br/>
-                        <input type="text" value="<%=myKad%>" placeholder="MyKAD" id="myKAD" name="myKAD" required/>
+                        <input value="<%=myKad%>" placeholder="MyKad" title="Your My Kad Format Invalid!! Please Follow as xxxxxxxxxxxx" required pattern="[0-9]{6}[0-9]{2}[0-9]{4}" id="myKAD" name="myKAD" required/>
                     </div>
                     <div>
                         <label>Date Joined</label><br/>

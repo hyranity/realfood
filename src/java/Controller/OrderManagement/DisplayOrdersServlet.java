@@ -109,7 +109,7 @@ public class DisplayOrdersServlet extends HttpServlet {
                             + "                    <div class=\"record\">\n"
                             + "                        <h6>" + soList.get(i).getOrderid() + "</h6>\n"
                             + "                        <p>" + chosenDate + "</p>\n"
-                            + "                        <p>" + mealCount + "</p>\n"
+                            + "                        <p><b>" + mealCount + "</b></p>\n"
                             + "                        <p>" + soList.get(i).getTotalprice() + " credits</p>\n"
                             + cancelStatus
                             + "                        <a href=\"ViewOrderServlet?orderId=" + soList.get(i).getOrderid() + "\"><div class=\"editButton\">Manage</div></a>\n"

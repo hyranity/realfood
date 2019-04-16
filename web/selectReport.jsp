@@ -75,7 +75,7 @@
 
                     </select>
 
-                    <a href="dashboardManager.jsp"><div class="nextButton" action="dashboardManager.jsp" type="submit" >Back</div></a>
+                    <a href="dashboardManager.jsp"><div class="backBt" action="dashboardManager.jsp" type="submit" >Back</div></a>
                     <button class="nextButton" type="submit" value="Generate Report"/>Generate Report</button>
 
                 </form>
