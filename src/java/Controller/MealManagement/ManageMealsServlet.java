@@ -97,7 +97,7 @@ public class ManageMealsServlet extends HttpServlet {
                 String mealTime = "";
                 String mealTimeClass = "";
                 String components ="";
-                int fourCount = 1;
+                int fourCount = 2;
 
                 // Format it for display
                 for (int i = 0; i < mealList.size(); i++) {
@@ -162,10 +162,11 @@ public class ManageMealsServlet extends HttpServlet {
                             + "                            </label>\n"
                             + "                        </td>";
 
-                    if (fourCount == 4) {
+                   if (fourCount == 4) {
                         queryResult += "</tr>";
                         fourCount = 0;
                     }
+                     fourCount++;
                 }
                 
                 try {

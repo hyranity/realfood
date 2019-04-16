@@ -87,7 +87,7 @@ public class DisplayStats extends HttpServlet {
                
                System.out.println(firstDay.get(Calendar.DAY_OF_MONTH));
                
-               List<Studentorder> orderList = em.createQuery("SELECT so FROM Studentorder so WHERE so.datecreated BETWEEN :firstDay AND :today").setParameter("firstDay", Auto.calToDate(firstDay), TemporalType.DATE).setParameter("today", Auto.getToday(), TemporalType.DATE).getResultList();
+               List<Studentorder> orderList = em.createQuery("SELECT so FROM Studentorder so WHERE so.datecreated BETWEEN :firstDay AND :today AND so.studentid = :studentId").setParameter("firstDay", Auto.calToDate(firstDay), TemporalType.DATE).setParameter("today", Auto.getToday(), TemporalType.DATE).setParameter("studentId", stud).getResultList();
                
                int calorieCount = 0;
                int creditsSpent = 0;
