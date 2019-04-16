@@ -106,7 +106,7 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
                 // Get the latest student details
                 student = em.find(Student.class, student.getStudentid());
 
-                int price = currentStudOrder.getTotalprice() - studOrder.getTotalprice();
+                int price = studOrder.getTotalprice() - currentStudOrder.getTotalprice();
 
                 // Charge the student (or Refund the student if its negative, since x - -y = x + y)
                 student.setCredits(student.getCredits() - price);
@@ -119,6 +119,8 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
 
                 // Initiate the element
                 Studentorder so = studOrder;
+                
+                
 
                 // COUPON CODE REGENERATION
                 String couponCode = "";
@@ -163,6 +165,11 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
                 if (!codeExists) {
                     studOrder.setCouponcode(couponCode);
                 }
+                utx.begin();
+                // Delete all the relationships with the current order
+                Query deleteQuery = em.createQuery("DELETE FROM Ordermeal om WHERE om.orderid = :orderId").setParameter("orderId", studOrder);
+                    deleteQuery.executeUpdate();
+                    System.out.println("Ordermeal relationships deleted.");
 
                 // Set all the necessary fields
                 studOrder.setChosendate(currentStudOrder.getChosendate());
@@ -178,11 +185,8 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
                 for (Ordermeal om : studOrder.getOrdermealList()) {
                     om.setOrderid(studOrder);
                 }
-                utx.begin();
-                // Delete all the relationships with the current order
-                    Query deleteQuery = em.createQuery("DELETE FROM Ordermeal om WHERE om.orderid = :orderId").setParameter("orderId", studOrder);
-                    deleteQuery.executeUpdate();
-                    System.out.println("Ordermeal relationships deleted.");
+                
+                    
 
                 // Update  database
                 
@@ -195,7 +199,7 @@ public class ProcessOrderUpdateServlet extends HttpServlet {
 
                 //Redirect to my orders page
                 request.setAttribute("successMsg", "You have successfully updated your order.");
-                request.getRequestDispatcher("viewOrder.jsp" + studOrder.getOrderid()).forward(request, response);
+                request.getRequestDispatcher("ViewOrderServlet?orderId=" + studOrder.getOrderid()).forward(request, response);
                 return;
 
             } catch (ConstraintViolationException ex) {

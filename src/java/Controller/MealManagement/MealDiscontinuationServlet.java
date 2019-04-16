@@ -159,7 +159,7 @@ public class MealDiscontinuationServlet extends HttpServlet {
                                 utx.begin();
                                 em.merge(stud);
                                 utx.commit();
-
+                                System.out.println("Creating notification for: " + so.getOrderid());
                                 // Notify the student
                                 Notifier notifier = new Notifier(em, utx);
                                 String title = "Meal Discontinuation Refund";
