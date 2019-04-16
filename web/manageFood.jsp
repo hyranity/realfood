@@ -52,7 +52,7 @@
                 ${queryResult}
         </table>
     </div>
-        <div><a class="nextButton" href="dashboardCanteenStaff.jsp" type="butoon" >Back</a></div>
+        <div style="margin-bottom: 30px;"><a class="backBt" href="dashboardCanteenStaff.jsp" type="butoon" >Back</a></div>
         <%}%>
 </body>
 

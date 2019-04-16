@@ -51,7 +51,7 @@
                 </table>
                             
             </div>
-            <div><a class="nextButton" href="dashboardCanteenStaff.jsp" type="submit" >Back</a></div><br/><br/>
+                <div style="margin-bottom: 30px;"><a class="backBt" href="dashboardCanteenStaff.jsp" type="submit" >Back</a></div><br/><br/>
         
         <%}%>
     </body>

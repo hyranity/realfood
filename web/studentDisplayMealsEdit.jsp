@@ -17,6 +17,7 @@
         <link href="CSS/student.css" rel="stylesheet">
         <link href="CSS/commonStyles.css" rel="stylesheet">
         <link href="CSS/students.css" rel="stylesheet">
+        <link href="CSS/manageRecords.css" rel="stylesheet">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Choose meals.</title>
     </head>
@@ -106,7 +107,7 @@
 
             </div>
             <div>
-                <a class="nextButton" href="DisplayOrdersServlet" >Back</a>
+                <a class="backBt" href="DisplayOrdersServlet" >Back</a>
                 <button class="nextButton">Next step</button>
                 <br/><br/><br/>
             </div>
@@ -116,7 +117,7 @@
         } else {
         %>
         <h1 style="color: white; font-size: 40px; margin-top: 300px;">It seems like there's no meal available yet. Stay tuned!</h1>
-        <a class="nextButton"  href="DisplayOrdersServlet">Back</a>
+        <a class="backBt"  href="DisplayOrdersServlet">Back</a>
         <%}%>
         <!-- Display student's credits -->
         <h6 class="credits"><%=credits%> credits</h6>

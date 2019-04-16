@@ -12,6 +12,9 @@
     <title>Order Preparation Info</title>
     <link href="CSS/reportGenerated.css" rel="stylesheet">
     <link href="CSS/orderPrep.css" rel="stylesheet">
+    <link href="CSS/commonStyles.css" rel="stylesheet">
+    <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
 </head>
 
 <body>
@@ -71,7 +74,7 @@
       <th scope="col">${totalFood}</th>
     </tr>    
 </table>
-    
+    <div style="margin-top: 30px ;margin-bottom: 30px;"><a class="backBt" href="selectOrderPrepDate.jsp" type="submit" >Back</a></div><br/><br/>
     <%}%>
 </body>
 

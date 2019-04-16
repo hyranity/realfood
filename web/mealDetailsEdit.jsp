@@ -176,7 +176,9 @@
                 <br/>
             </div>
         </div>
+        <a class="backBt" href="dashboardCanteenStaff.jsp">Return To DashBoard</a><br/><br/>
         <a class="backBt" href="SelectFoodServletForEdit?load=true">Back</a><br/><br/>
+        
         <div class="toggleConfirmation">
             <%
                 if (!isDiscontinued) {

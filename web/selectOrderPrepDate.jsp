@@ -91,7 +91,7 @@
                         %>
                     </select>
 
-                    <a href="dashboardCanteenStaff.jsp"><div class="nextButton" >Back</div></a>
+                    <a href="dashboardCanteenStaff.jsp"><div class="backBt" >Back</div></a>
                     <button class="nextButton" type="submit" target="_blank" value="Generate Order Preparation Info"/>Get Order Preparation Info</button>
 
                 </form>
