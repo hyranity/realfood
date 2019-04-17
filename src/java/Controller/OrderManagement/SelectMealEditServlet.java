@@ -147,6 +147,7 @@ public class SelectMealEditServlet extends HttpServlet {
                         // If the new one doesn't exist, store the NEW data into the new list
                         Ordermeal newOm = new Ordermeal();
                         newOm.setMealid(meal);
+                        newOm.setQuantity(1);
                         newOrderMealList.add(newOm);
                         
                     }
