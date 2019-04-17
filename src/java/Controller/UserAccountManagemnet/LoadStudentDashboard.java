@@ -76,9 +76,10 @@ public class LoadStudentDashboard extends HttpServlet {
                 // Update the student in session
                 utx.begin();
                 stud = em.find(Student.class, stud.getStudentid());
-                em.merge(stud);
+                session.setAttribute("stud", stud);
                 utx.commit();
-                response.sendRedirect("dashboardStudent.jsp");
+                request.setAttribute("notificationCount", stud.getNotificationList().size());
+                request.getRequestDispatcher("dashboardStudent.jsp").forward(request, response);
                 return;
             } catch (Exception ex) {
                 ex.printStackTrace();

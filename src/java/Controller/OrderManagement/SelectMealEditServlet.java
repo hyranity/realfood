@@ -136,6 +136,7 @@ public class SelectMealEditServlet extends HttpServlet {
                     
                     // If there's the same one, store the EXISTING data into the new list
                     if(meal.getMealid().equals(om.getMealid().getMealid())){
+                        
                         newOrderMealList.add(om);
                         found = true;
                         break;
@@ -170,6 +171,7 @@ public class SelectMealEditServlet extends HttpServlet {
             
             //Prints the query results and format it 
             for (Ordermeal om : newOrderMealList) {
+                System.out.println(om.getQuantity());
                 queryResultQuantity += "<div class=\"recordQuantity\">\n"
                         + "                <div class=\"frontPart\">\n"
                         + "                    <p class=\"name\" style=\"color: black;\">" + om.getMealid().getMealname() + "</p>\n"
@@ -177,7 +179,7 @@ public class SelectMealEditServlet extends HttpServlet {
                         + "                <div class=\"quantityEditor\">\n"
                         + "                    <p class=\"value\" id=\"price" + om.getMealid().getMealid() + "\" data-price=\"" +  om.getMealid().getPrice() + "\">" + om.getMealid().getPrice() + " credits</p>\n"
                         + "                    <p class=\"symbol\" id=\"sub" + om.getMealid().getMealid() + "\" onclick=\"subtract()\">-</p>\n"
-                        + "                    <input type=\"number\" class=\"quantity\" id=\"" + om.getMealid().getMealid() + "\" name=\"" + om.getMealid().getMealid() + "\" value=\"1\" readonly=\"\">\n"
+                        + "                    <input type=\"number\" class=\"quantity\" id=\"" + om.getMealid().getMealid() + "\" name=\"" + om.getMealid().getMealid() + "\" value=\"" + om.getQuantity() +"\" readonly=\"\">\n"
                         + "                    <p class=\"symbol\" id=\"add" + om.getMealid().getMealid() + "\">+</p>\n"
                         + "                </div>\n"
                         + "            </div>"

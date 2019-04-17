@@ -32,18 +32,12 @@ create table Notification(
     title VARCHAR(30) NOT NULL,
     description VARCHAR(500) NOT NULL,
     dateIssued TIMESTAMP NOT NULL,
+    isRead BOOLEAN NOT NULL,
+studentID VARCHAR(10) references student(studentID) NOT NULL,
 
     primary key (notificationID)
 );
 
-create table NotificationStudent (
-    notificationStudentID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    studentID VARCHAR(10) references student(studentID) NOT NULL,
-    notificationID VARCHAR(10) references notification(notificationID) NOT NULL,
-    isRead BOOLEAN NOT NULL,
-
-    primary key (notificationStudentID)
-);
 
 
 create table StudentOrder (

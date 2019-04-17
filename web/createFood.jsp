@@ -51,7 +51,7 @@
                 <form action="CreateFoodServlet" method="POST" class="form" id="createForm">
 
                     <div>
-                        <input type="text" id="foodName" placeholder="Food Name" value="" name="foodName" required/>
+                        <input type="text" id="foodName" placeholder="Food Name" value="" name="foodName" maxlength="20" required/>
                     </div>
                     <div>   
                         <input type="number" value="" placeholder="Calories" id="calories" name="calories" oninput="validity.valid || (value = '');" min="0" step="1" maxlength="4" required/>

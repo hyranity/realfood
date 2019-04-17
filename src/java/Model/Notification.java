@@ -7,22 +7,20 @@ package Model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -36,7 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Notification.findByNotificationid", query = "SELECT n FROM Notification n WHERE n.notificationid = :notificationid")
     , @NamedQuery(name = "Notification.findByTitle", query = "SELECT n FROM Notification n WHERE n.title = :title")
     , @NamedQuery(name = "Notification.findByDescription", query = "SELECT n FROM Notification n WHERE n.description = :description")
-    , @NamedQuery(name = "Notification.findByDateissued", query = "SELECT n FROM Notification n WHERE n.dateissued = :dateissued")})
+    , @NamedQuery(name = "Notification.findByDateissued", query = "SELECT n FROM Notification n WHERE n.dateissued = :dateissued")
+    , @NamedQuery(name = "Notification.findByIsread", query = "SELECT n FROM Notification n WHERE n.isread = :isread")})
 public class Notification implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,8 +60,13 @@ public class Notification implements Serializable {
     @Column(name = "DATEISSUED")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateissued;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "notificationid")
-    private List<Notificationstudent> notificationstudentList;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ISREAD")
+    private Boolean isread;
+    @JoinColumn(name = "STUDENTID", referencedColumnName = "STUDENTID")
+    @ManyToOne(optional = false)
+    private Student studentid;
 
     public Notification() {
     }
@@ -71,11 +75,12 @@ public class Notification implements Serializable {
         this.notificationid = notificationid;
     }
 
-    public Notification(String notificationid, String title, String description, Date dateissued) {
+    public Notification(String notificationid, String title, String description, Date dateissued, Boolean isread) {
         this.notificationid = notificationid;
         this.title = title;
         this.description = description;
         this.dateissued = dateissued;
+        this.isread = isread;
     }
 
     public String getNotificationid() {
@@ -110,13 +115,20 @@ public class Notification implements Serializable {
         this.dateissued = dateissued;
     }
 
-    @XmlTransient
-    public List<Notificationstudent> getNotificationstudentList() {
-        return notificationstudentList;
+    public Boolean getIsread() {
+        return isread;
     }
 
-    public void setNotificationstudentList(List<Notificationstudent> notificationstudentList) {
-        this.notificationstudentList = notificationstudentList;
+    public void setIsread(Boolean isread) {
+        this.isread = isread;
+    }
+
+    public Student getStudentid() {
+        return studentid;
+    }
+
+    public void setStudentid(Student studentid) {
+        this.studentid = studentid;
     }
 
     @Override

@@ -36,8 +36,8 @@ import util.Auto;
  *
  * @author mast3
  */
-@WebServlet(name = "MealDiscontinuationServlet", urlPatterns = {"/MealDiscontinuationServlet"})
-public class MealDiscontinuationServlet extends HttpServlet {
+@WebServlet(name = "DiscontinueMealZeroFood", urlPatterns = {"/DiscontinueMealZeroFood"})
+public class DiscontinueMealZeroFood extends HttpServlet {
 
     @PersistenceContext
     EntityManager em;
@@ -208,7 +208,7 @@ public class MealDiscontinuationServlet extends HttpServlet {
                 //Update the meal in session
                 session.setAttribute("meal", meal);
 
-                request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
+                request.getRequestDispatcher("ManageFoodServlet.jsp").forward(request, response);
                 return;
 
             } catch (ConstraintViolationException e) {
@@ -216,7 +216,7 @@ public class MealDiscontinuationServlet extends HttpServlet {
             } catch (Exception ex) {
                 System.out.println("ERROR: Could not discontinue meal: " + ex.getMessage());
                 request.setAttribute("errorMsg", "Oops! Meal discontinuation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
+                request.getRequestDispatcher("ManageFoodServlet.jsp").forward(request, response);
                 ex.printStackTrace();
                 return;
             }

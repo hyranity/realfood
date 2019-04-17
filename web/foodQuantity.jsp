@@ -32,7 +32,7 @@
         %>
         <!-- Steps -->
         <div class="stepsContainer">
-            <h1>steps</h1>
+            <h1>Create a Meal</h1>
             <div class="steps">
                 <div>1. Select food components.</div>
                 <div class="currentStep">2. Edit food quantity</div>
@@ -48,7 +48,7 @@
                 <p id="totalCal">Total: ${caloriesSum} calories</p>
             </div>
             <div style="margin-top: 90px;">
-            <a class="nextButton" href="DisplayFoodSelectionServlet">Back</a>
+            <a class="backBt" href="DisplayFoodSelectionServlet">Back</a>
             <input class="nextButton" form="mealForm" type="submit" value="Next Step">
         </div>
     </form>

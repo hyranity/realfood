@@ -146,9 +146,14 @@ public class DisplayFoodSelectionServletForEdit extends HttpServlet {
                     }
                 }
                 
+                // If null results, don't show on JSP
+                boolean nullResults = false;
+                if(foodList.size()==0)
+                    nullResults = true;
+                
                 // Send the formatted list to JSP
                 request.setAttribute("queryResult", queryResult);
-                request.getRequestDispatcher("foodSelectionEdit.jsp").forward(request, response);
+                request.getRequestDispatcher("foodSelectionEdit.jsp?nullResults="+nullResults).forward(request, response);
                 return;
                 
 

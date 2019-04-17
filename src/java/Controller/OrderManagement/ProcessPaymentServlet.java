@@ -102,17 +102,7 @@ public class ProcessPaymentServlet extends HttpServlet {
                 // Get student from session, which won't be null if the previous validations are passed
                 Student student = (Student) session.getAttribute("stud");
 
-                // Get the latest student details
-                student = em.find(Student.class, student.getStudentid());
                 
-                 // Charge the student
-                    student.setCredits(student.getCredits() - (studOrder.getTotalprice()));
-                    
-                
-                // Add to database
-                    utx.begin();
-                    em.merge(student);
-                    utx.commit();
 
                 //For generating ID
                 TypedQuery<Studentorder> query = em.createQuery("SELECT s FROM Studentorder s", Studentorder.class);
@@ -121,6 +111,18 @@ public class ProcessPaymentServlet extends HttpServlet {
                 // Create duplicate date objects, depending on how many dates have been chosen
                 List<Date> chosenDates = (List<Date>) session.getAttribute("chosenDates");
                 int dayCount = chosenDates.size();
+                
+                // Get the latest student details
+                student = em.find(Student.class, student.getStudentid());
+                
+                 // Charge the student
+                    student.setCredits(student.getCredits() - ((studOrder.getTotalprice()) * dayCount));
+                    
+                
+                // Add to database
+                    utx.begin();
+                    em.merge(student);
+                    utx.commit();
                 
 
 

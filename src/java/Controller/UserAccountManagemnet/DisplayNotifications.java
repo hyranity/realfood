@@ -82,7 +82,7 @@ public class DisplayNotifications extends HttpServlet {
                   }
             
             try {
-               List<Notificationstudent> nsList = em.createQuery("SELECT ns FROM Notificationstudent ns WHERE ns.studentid = :id ORDER BY ns.isread DESC").setParameter("id", stud).getResultList();
+               List<Notification> nsList = em.createQuery("SELECT ns FROM Notification ns WHERE ns.studentid = :id ORDER BY ns.isread ASC").setParameter("id", stud).getResultList();
                
                session.setAttribute("nsList", nsList);
                 request.getRequestDispatcher("notification.jsp").forward(request, response);

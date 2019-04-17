@@ -23,7 +23,7 @@
     <body>
         <!-- Steps -->
         <div class="stepsContainer">
-            <h1>steps</h1>
+            <h1>Create a Meal</h1>
             <div class="steps">
                 <div class="currentStep">1. Select food components.</div>
                 <div>2. Edit food quantity</div>
@@ -44,7 +44,7 @@
                     ${queryResult}
                 </table>
                 <div>
-                    <a class="nextButton" href="ManageMealsServlet">Back</a>
+                    <a class="backBt" href="ManageMealsServlet">Back</a>
                     <input type="submit" value="Next step" class="nextButton">
                 </div>
             </form>

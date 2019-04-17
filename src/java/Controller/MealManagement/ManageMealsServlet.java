@@ -112,6 +112,7 @@ public class ManageMealsServlet extends HttpServlet {
                         if(j>0)
                             components += ", ";
                         
+                        if(!mf.getIsdiscontinued())
                         components += mf.getFoodid().getFoodname();
                     }
 

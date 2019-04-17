@@ -22,6 +22,7 @@ import Model.*;
 import java.text.SimpleDateFormat;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpSession;
+import util.Auto;
 
 /**
  *
@@ -101,9 +102,19 @@ public class DisplayOrdersServlet extends HttpServlet {
                    if(soList.get(i).getOrdermealList().size() > 1)
                        mealCount += "s";
                    
-                   String cancelStatus = "";
+                   String status = "";
                    if(soList.get(i).getIscanceled())
-                        cancelStatus = " <p style=\"color: red; font-weight: bold;\">CANCELLED</p>";
+                        status = " <p style=\"color: darkred; font-weight: bold;\">CANCELLED</p>";
+                   
+                   if(soList.get(i).getIsredeemed())
+                        status = " <p style=\"color: green; font-weight: bold;\">REDEEMED</p>";
+                   
+
+                   Calendar cal = Calendar.getInstance();
+                   cal.setTime(soList.get(i).getChosendate());
+                   
+                   if(Auto.daysBetween(Auto.dateToCal(Auto.getToday()), cal)<0 && !soList.get(i).getIscanceled() && !soList.get(i).getIsredeemed())
+                    status = " <p style=\"color: red; font-weight: bold;\">EXPIRED</p>";
 
                     queryResult += "<td>\n"
                             + "                    <div class=\"record\">\n"
@@ -111,7 +122,7 @@ public class DisplayOrdersServlet extends HttpServlet {
                             + "                        <p>" + chosenDate + "</p>\n"
                             + "                        <p><b>" + mealCount + "</b></p>\n"
                             + "                        <p>" + soList.get(i).getTotalprice() + " credits</p>\n"
-                            + cancelStatus
+                             + "<br/> "+ status
                             + "                        <a href=\"ViewOrderServlet?orderId=" + soList.get(i).getOrderid() + "\"><div class=\"editButton\">Manage</div></a>\n"
                             + "                    </div>\n"
                             + "                </td>";

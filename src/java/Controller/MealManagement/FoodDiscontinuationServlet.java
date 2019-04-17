@@ -70,7 +70,6 @@ public class FoodDiscontinuationServlet extends HttpServlet {
             return;
         }
 
-        
         // Allow staff only
         if (!permission.equalsIgnoreCase("canteenStaff") && !permission.equals("manager")) {
             request.setAttribute("errorMsg", "You are not allowed to visit that page.");
@@ -80,11 +79,22 @@ public class FoodDiscontinuationServlet extends HttpServlet {
 
             try {
 
-                utx.begin();
-
                 // Obtain food object from database
                 Food food = em.find(Food.class, foodId);
                 System.out.println(food.getFoodid());
+
+                if (!food.getIsdiscontinued()) {
+
+                    List<Meal> mList = (List<Meal>) em.createQuery("SELECT m FROM Meal m, Mealfood mf WHERE m = mf.mealid AND mf.foodid = :foodid").setParameter("foodid", food).getResultList();
+                    for (Meal meal : mList) {
+                        List<Mealfood> mfList = (List<Mealfood>) em.createQuery("SELECT mf FROM Mealfood mf WHERE mf.isdiscontinued = false AND mf.mealid = :mealid").setParameter("mealid", meal).getResultList();
+                        if (mfList.size() <= 1) {
+                            request.setAttribute("errorMsg", "Oops! This is the last food for meal " + meal.getMealid() + ". You can't discontinue that.");
+                            request.getRequestDispatcher("EditFoodServlet?foodId=" + foodId).forward(request, response);
+                            return;
+                        }
+                    }
+                }
 
                 // If the food is currently discontinued
                 if (food.getIsdiscontinued()) {
@@ -95,10 +105,11 @@ public class FoodDiscontinuationServlet extends HttpServlet {
                     // If the food is currently not discontinued
                     // Toggle it
                     food.setIsdiscontinued(true);
-                   food.setDatediscontinued(Auto.getToday());
+                    food.setDatediscontinued(Auto.getToday());
                 }
-                
+
                 // Update the food object
+                utx.begin();
                 em.merge(food);
                 utx.commit();
 
@@ -116,17 +127,18 @@ public class FoodDiscontinuationServlet extends HttpServlet {
                         // If the mealFood is currently not discontinued
                         // Toggle it
                         mf.setIsdiscontinued(true);
-                    }   
-                    
-                    
+                        System.out.println("Discontinuing " + mf.getMealfoodid());
+                    }
+
                     //Update the objects
                     em.merge(mf);
                 }
 
                 utx.commit();
-                
+
                 request.setAttribute("successMsg", "Food has been edited.");
                 request.getRequestDispatcher("EditFoodServlet?foodId=" + foodId).forward(request, response);
+                return;
 
             } catch (ConstraintViolationException e) {
                 System.out.println(e.getConstraintViolations());
