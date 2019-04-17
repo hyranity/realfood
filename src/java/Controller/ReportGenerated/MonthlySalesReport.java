@@ -129,7 +129,7 @@ public class MonthlySalesReport extends HttpServlet {
                 }
                 
                 request.setAttribute("month", month.toUpperCase());
-                request.setAttribute("totalAmount", totalAmount);
+                request.setAttribute("totalPrice", totalAmount);
                 request.setAttribute("outputMonthly", outputMonthly);
                 request.getRequestDispatcher("monthlySalesReport.jsp").forward(request, response);
             } catch (Exception ex) {
