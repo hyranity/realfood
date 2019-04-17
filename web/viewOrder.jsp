@@ -96,9 +96,14 @@
                 <br/>
                 <div class="orderDetails">
                     
+                    <%
+                    if(so.getIsredeemed()){
+                    %>
+                    <h2 id="orderId" style="color: green;"><%=orderId%></h2>
+                    <div style="color: green; font-weight: bold;">(REDEEMED)</div>
                     
                     <%
-                    if(so.getIscanceled()){
+                    } else if(so.getIscanceled()){
                     %>
                     <h2 id="orderId" style="color: red;"><%=orderId%></h2>
                     <div style="color: red; font-weight: bold;">(CANCELLED)</div>
@@ -169,7 +174,7 @@
                         }
                     %>
                     <%
-                        if (isBlockedFromCanceling) {
+                        if (isBlockedFromCanceling && !so.getIsredeemed() && !so.getIscanceled()) {
                     %>
                      <div style="color: red; font-weight: bold; margin: 10px;">Can't cancel nor edit (Must cancel 1 day earlier)</div>
                     <%
