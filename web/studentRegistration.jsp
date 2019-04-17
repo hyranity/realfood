@@ -23,7 +23,7 @@
         <div class="left">
             <ul>
                 <a href="login.jsp"  class="right"">Login</a>
-                <a href="studentRegistration.jsp"  class="right" style="background-color: #ffffff; color: #000000;">Register</a>
+                <a href="studentRegistration.jsp"  class="right" style="background-color: #ffffff; color: #000000;">Student Registration</a>
                 <a href="home.jsp"  class="right">Home</a>
             </ul>
         </div>
@@ -48,7 +48,7 @@
                     <input type="hidden" value="student" name="userType"/>
                     
                     <div class="formGroup">
-                        <input type="text" class="formInput" id="userID" name="id" placeholder="Student ID (or existing Student ID)" minlength="5" maxlength="10" required/>
+                        <input type="text" class="formInput" id="userID" name="id" placeholder="Excisting Student ID" minlength="5" maxlength="10" required/>
                     </div>
 
                     <div class="formGroup">
