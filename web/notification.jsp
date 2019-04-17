@@ -113,7 +113,7 @@
                 <p class="date"><%=displayTime%></p>
                 <p class="description"><%=ns.getDescription()%></p>
                 <div class="close" data-notificationid="no<%=ns.getNotificationid()%>">x</div>
-                <a href="ReadNotification?nsId=<%=ns.getNotificationid()%>"><div class="readBt">I have read and understood this.</div></a>
+                <a href="ReadNotification?nsId=<%=ns.getNotificationid()%>"><div class="readBt" style="margin-left:140px;">I have read and understood this.</div></a>
             </div><br/>
             <%
                 }

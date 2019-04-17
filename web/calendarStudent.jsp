@@ -18,7 +18,7 @@ and open the template in the editor.
     <head>
         <title>Choose A Date</title>
         <link href="CSS/calendar.css" rel="stylesheet">
-        <link href="CSS/student.css" rel="stylesheet">
+        <link href="CSS/students.css" rel="stylesheet">
         <link href="CSS/commonStyles.css" rel="stylesheet">
         <!-- Attribution: https://fonts.google.com/specimen/Montserrat?selection.family=Montserrat:100,200,400 -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,400" rel="stylesheet">
@@ -286,8 +286,9 @@ and open the template in the editor.
                 %>
             </div>
         </div>
-
+<h6 class="credits" style="font-size: 18px;"><%=credits%> credits</h6>
         <%}%>
+        
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="calendarStudent.js" type="text/javascript"></script>
