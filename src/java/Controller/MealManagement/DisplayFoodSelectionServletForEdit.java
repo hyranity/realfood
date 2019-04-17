@@ -94,7 +94,7 @@ public class DisplayFoodSelectionServletForEdit extends HttpServlet {
                 session.setAttribute("meal", meal);
                 
                 // Get all food
-                TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f where f.isdiscontinued = false", Food.class);
+                TypedQuery<Food> query = em.createQuery("SELECT f FROM Food f", Food.class);
                 List<Food> foodList = query.getResultList();
                 
 
@@ -122,8 +122,14 @@ public class DisplayFoodSelectionServletForEdit extends HttpServlet {
                             isChecked = true;
                     }
                     
+                   String discontinued = "";
+                    
                     // If this food is already part of the meal, keep it checked
-                    if(isChecked)
+                     if(food.getIsdiscontinued() && isChecked){
+                        checkbox = "<input type=\"checkbox\" name= \"componentId\" value=\"" + food.getFoodid() +"\" id=\"" + food.getFoodid() +"\" disabled/>";
+                        discontinued = "<br/><p style=\"background-color: red; font-weight: bold;\">DISCONTINUED</p>";
+                     }
+                   else if(isChecked)
                         checkbox = "<input type=\"checkbox\"  name= \"componentId\" value=\"" + food.getFoodid() +"\" id=\"" + food.getFoodid() +"\" checked/>";
                     else
                         checkbox = "<input type=\"checkbox\"  name= \"componentId\" value=\"" + food.getFoodid() +"\" id=\"" + food.getFoodid() +"\"/>";
@@ -138,7 +144,7 @@ public class DisplayFoodSelectionServletForEdit extends HttpServlet {
                     String labelClose = "</label>";
                     String outsideClose = "</td>";
                     
-                    queryResult += outsideOpen + checkbox + labelOpen + divOpen + id + breaks + calories + name + divClose + labelClose + outsideClose;
+                    queryResult += outsideOpen + checkbox + labelOpen + divOpen + id + breaks + calories + name + discontinued + divClose + labelClose + outsideClose;
                     
                     if(fourCount == 4){
                         queryResult += "</tr>";
