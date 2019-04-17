@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
 import util.Auto;
 import util.CodeGenerator;
+import util.Notifier;
 
 /**
  *
@@ -127,7 +128,7 @@ public class ProcessPaymentServlet extends HttpServlet {
 
 
                 List<Studentorder> currentOrderList = student.getStudentorderList();     // Get the current order list
-
+                int totalPrice = 0;
                 // Create the orders. One order for each date
                 for (int i = 0; i < chosenDates.size(); i++) {
                     
@@ -189,7 +190,8 @@ public class ProcessPaymentServlet extends HttpServlet {
                         // If code is unique, add into the list
                         if (!codeExists) {
                             studOrder.setCouponcode(couponCode);
-                            currentOrderList.add(studOrder);
+                           // currentOrderList.add(studOrder);
+                            System.out.println("nani?");
                         } else {
                             System.out.println("ERROR: Cannot add code " + couponCode + " as it already exists.");
                         }
@@ -202,13 +204,14 @@ public class ProcessPaymentServlet extends HttpServlet {
                     studOrder.setCouponcode(couponCode);
                     studOrder.setIsredeemed(false);
                     studOrder.setTotalprice(studOrder.getTotalprice());
+                    totalPrice += studOrder.getTotalprice();
                     
                     studOrder.setOrderid(Auto.generateID("O", 10, count + i));    // Set order ID 
                     
                     for(Ordermeal om : studOrder.getOrdermealList()){
                         om.setOrderid(studOrder);
                     }
-               
+                    System.out.println("added stud order");
                     currentOrderList.add(studOrder);
                     
 
@@ -225,6 +228,12 @@ public class ProcessPaymentServlet extends HttpServlet {
                 //Update session
                 session.setAttribute("stud", student);
                 session.setAttribute("studOrder", null);
+                
+                // Get the latest student data
+                student = em.find(Student.class, student.getStudentid());
+                
+                Notifier notifier = new Notifier(em, utx);
+                notifier.notify("Thank you for your purchase!", "Thank your for ordering with us! Your payment of " + totalPrice + " credits for the orders of " + chosenDates.size() + " day(s) has been successful. You may get details about your orders at \"My orders\" page, including your coupon code.", student);
 
                 //Redirect to my orders page
                 request.setAttribute("successMsg", "You have successfully made an order.");
