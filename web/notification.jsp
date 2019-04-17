@@ -80,7 +80,7 @@
                         hour= cal.get(Calendar.HOUR) + "";
                     
                     String marker = "";
-                    if (cal.get(Calendar.AM_PM) == cal.get(Calendar.PM)) {
+                    if (cal.get(Calendar.HOUR_OF_DAY)>12) {
                         marker = "PM";
                     } else {
                         marker = "AM";
