@@ -97,7 +97,7 @@ public class AdminReset {
             // Set default values
             
             //Generate ID
-            Query query = em.createQuery("SELECT s FROM Staff s");
+            Query query = em.createQuery("SELECT s FROM Staff s WHERE s.staffrole = :role").setParameter("role", "manager");
             int count = query.getResultList().size();
             staff.setStaffid(Auto.generateID("EMPM", 8, count));    // Set manager ID
             staff.setEmail("youremailhere@mail.com");
