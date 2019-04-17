@@ -20,6 +20,7 @@ import javax.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.transaction.*;
 import util.Hasher;
+import java.util.*;
 
 /**
  *
@@ -78,7 +79,13 @@ public class LoadStudentDashboard extends HttpServlet {
                 stud = em.find(Student.class, stud.getStudentid());
                 session.setAttribute("stud", stud);
                 utx.commit();
-                request.setAttribute("notificationCount", stud.getNotificationList().size());
+                // Display notification count
+                List<Notification> nList = new ArrayList();
+                for(Notification n : stud.getNotificationList()){
+                    if(!n.getIsread())
+                        nList.add(n);
+                }
+                request.setAttribute("notificationCount", nList.size());
                 request.getRequestDispatcher("dashboardStudent.jsp").forward(request, response);
                 return;
             } catch (Exception ex) {
