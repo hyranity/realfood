@@ -92,16 +92,18 @@ public class DisplayMealsServlet extends HttpServlet {
                     components = "";
                     Meal meal = mealList.get(i);
                     
+                    int count = 0;
                     // Create the food components string
                     for(int j=0; j< meal.getMealfoodList().size(); j++){
                         Mealfood mf = meal.getMealfoodList().get(j);
                         
-                        // If the current iteration is more than the first one, put comma.
-                        if(j>0)
-                            components += " ,";
-                        
-                        components += mf.getFoodid().getFoodname();
+                          if(!mf.getIsdiscontinued()){
+                            if(count>0)
+                                components += ", ";  // If the current iteration is more than the first one, put comma.
+                            components += mf.getFoodid().getFoodname();
+                            count++;
                     }
+                }
 
                     // Formatting when to show on new row
                     if (i != 0 && i % 4 == 0 && i != mealList.size() - 1) {

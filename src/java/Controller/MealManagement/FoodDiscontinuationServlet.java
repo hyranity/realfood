@@ -82,7 +82,7 @@ public class FoodDiscontinuationServlet extends HttpServlet {
                 // Obtain food object from database
                 Food food = em.find(Food.class, foodId);
                 System.out.println(food.getFoodid());
-
+                boolean toggleType = false;
                 if (!food.getIsdiscontinued()) {
 
                     List<Meal> mList = (List<Meal>) em.createQuery("SELECT m FROM Meal m, Mealfood mf WHERE m = mf.mealid AND mf.foodid = :foodid").setParameter("foodid", food).getResultList();
@@ -100,11 +100,13 @@ public class FoodDiscontinuationServlet extends HttpServlet {
                 if (food.getIsdiscontinued()) {
                     // Toggle it
                     food.setIsdiscontinued(false);
+                    toggleType = false;
                     food.setDatediscontinued(null);
                 } else {
                     // If the food is currently not discontinued
                     // Toggle it
                     food.setIsdiscontinued(true);
+                    toggleType = true;
                     food.setDatediscontinued(Auto.getToday());
                 }
 
@@ -120,7 +122,7 @@ public class FoodDiscontinuationServlet extends HttpServlet {
 
                 for (Mealfood mf : mealFoodList) {
                     // If the mealFood is currently discontinued
-                    if (mf.getIsdiscontinued()) {
+                    if (!toggleType) {
                         // Toggle it
                         mf.setIsdiscontinued(false);
                     } else {
