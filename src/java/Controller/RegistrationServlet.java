@@ -232,7 +232,7 @@ public class RegistrationServlet extends HttpServlet {
                 staff = new Staff();
 
                 //Generate ID
-                staffQuery = em.createQuery("SELECT s FROM Staff s", Staff.class);
+                staffQuery = em.createQuery("SELECT s FROM Staff s WHERE s.staffrole = :role", Staff.class).setParameter("role", "canteenStaff");
                 int count = staffQuery.getResultList().size();
 
                 //Transfer existing student details into the new account

@@ -136,9 +136,19 @@
                     <div>
                         <input type="text" value="<%=description%>" id="description" placeholder="Meal Description" name="description" maxlength="35" required/>
                     </div>
-                    <div>
-                        <input pattern="[0-9]{10}" value="<%=price%>" id="price" placeholder="Price" maxlength="10" name="price"/>
+                     <%                        if (!isDiscontinued) {
+                    %>
+                        <div>
+                        <input type="number" value="<%=price%>" id="price" placeholder="Price" name="price" style="background-color: darkgray;" readonly/>
                     </div>
+                    <%
+                    } else {
+                    %>
+                    <div>
+                        <input type="number" value="<%=price%>" id="price" placeholder="Price" name="price" />
+                    </div>
+                    <%}%>
+                
                     <div>
                         <input type="text"  value="<%=imageLink%>" id="imageLink" placeholder="Image Link" name="imageLink" maxlength="200" required/>
                     </div>
@@ -225,7 +235,7 @@
                                 $("#subtitle").css("color", "white");
                             });
                             $("#price").hover(function () {
-                                $("#subtitle").html("That's how much credits the meal will cost.");
+                                $("#subtitle").html("That's how much credits the meal will cost. You can only update it if meal is discontinued.");
                                 $("#subtitle").css("color", "gold");
                             }, function () {
                                 $("#subtitle").html("Here's where you can edit the meal's details.");

@@ -186,7 +186,7 @@ public class MealDiscontinuationServlet extends HttpServlet {
                 //Update the meal in session
                 session.setAttribute("meal", meal);
 
-                request.getRequestDispatcher("mealDetailsEdit.jsp").forward(request, response);
+                request.getRequestDispatcher("ManageMealsServlet").forward(request, response);
                 return;
 
             } catch (ConstraintViolationException e) {

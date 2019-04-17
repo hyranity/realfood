@@ -90,6 +90,9 @@ public class MealDetailsEditServlet extends HttpServlet {
             if (meal == null) {
                 response.sendRedirect("DisplayFoodSelectionServlet");
             }
+            
+            // Get old meal 
+            Meal currentMeal = em.find(Meal.class, meal.getMealid());
 
             try {
 
@@ -172,7 +175,11 @@ public class MealDetailsEditServlet extends HttpServlet {
                     }
 
                     // Set values
-                    meal.setIsdiscontinued(false);
+                    if(currentMeal.getIsdiscontinued())
+                        meal.setIsdiscontinued(true);
+                    else
+                        meal.setIsdiscontinued(false);
+                    
                     meal.setMealname(mealName);
                     meal.setDescription(description);
                     meal.setDateadded(Auto.getToday());

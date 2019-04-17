@@ -62,7 +62,7 @@ public class ManageMealsServlet extends HttpServlet {
             
         } catch (NullPointerException ex) {
             request.setAttribute("errorMsg", "Please login.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 

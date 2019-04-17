@@ -227,9 +227,6 @@ public class MealFinalizationServlet extends HttpServlet {
                 System.out.println("ERROR: Could not finalize meal: " + ex.getMessage());
                 request.setAttribute("errorMsg", "Oops! Meal creation did not succeed for some reason.");
                 request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
-                ex.printStackTrace();
-                request.setAttribute("errorMsg", "Oops! Meal creation did not succeed for some reason.");
-                request.getRequestDispatcher("mealDetailsFinalization.jsp").forward(request, response);
                 return;
             }
         }
