@@ -57,6 +57,7 @@
       <th scope="col">Quantity</th>
       <th scope="col">Amount (RM)</th>
   </thead>
+  <tbody>
     ${outputOverall}
   </tbody>
   
