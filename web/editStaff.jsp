@@ -108,8 +108,8 @@
                     </div>
                     <div id="nameDiv"> 
                         <label>Username</label><br/>
-                        <input type="text" class="name" placeholder="First Name" value="<%=firstName%>"  name="fname" required/>
-                        <input type="text" class="name" placeholder="Last Name" value="<%=lastName%>" name="lname" required/>
+                        <input type="text" class="name" placeholder="First Name" value="<%=firstName%>" maxlength="25"  name="fname" required/>
+                        <input type="text" class="name" placeholder="Last Name" value="<%=lastName%>" maxlength="25" name="lname" required/>
                     </div>
                     <div>
                         <label>Gender</label><br/>
@@ -117,7 +117,7 @@
                     </div>
                     <div>
                         <label>Email</label><br/>
-                        <input type="text" value="<%=email%>" placeholder="Email" id="email" name="email" required/>
+                        <input type="text" value="<%=email%>" placeholder="Email" id="email" maxlength="50" name="email" required/>
                     </div>
                     <div>
                         <label>Mykad Number</label><br/>
@@ -133,7 +133,7 @@
                     </div>
                     <div>
                         <label>Password</label><br/>
-                        <input type="password"  placeholder="Manager Password" id="managerPassword" name="managerPassword" required/>
+                        <input type="password"  placeholder="Manager Password" id="managerPassword" maxlength="20" name="managerPassword" required/>
                     </div>
                     <br/>
                     <button type="submit" class="submitBtn">Submit changes</button>
