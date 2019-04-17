@@ -131,10 +131,10 @@
                         <input type="text" value="<%=id%>" style="background-color: darkgray;"  id="mealId" name="mealId" readonly/>
                     </div>
                     <div>
-                        <input type="text" id="mealName" value="<%=name%>" placeholder="Meal Name" name="mealName"  required/>
+                        <input type="text" id="mealName" value="<%=name%>" placeholder="Meal Name" name="mealName" maxlength="20" required/>
                     </div>
                     <div>
-                        <input type="text" value="<%=description%>" id="description" placeholder="Meal Description" name="description" required/>
+                        <input type="text" value="<%=description%>" id="description" placeholder="Meal Description" name="description" maxlength="35" required/>
                     </div>
                      <%                        if (!isDiscontinued) {
                     %>

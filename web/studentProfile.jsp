@@ -82,7 +82,7 @@
                     </div>
                     <div>
                         <label>Email</label><br/>
-                        <input type="text" value="<%=email%>" placeholder="Email" id="email" name="email"/>
+                        <input type="text" value="<%=email%>" placeholder="Email" maxlength="50" id="email" name="email"/>
                     </div>
                     <div>
                         <label>MyKad Number</label><br/>
