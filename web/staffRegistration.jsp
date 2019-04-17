@@ -77,7 +77,7 @@
                         </div>
                         
                         <div class="formButton" style="text-align: center;">
-                            <input type="submit" name="submit" id="submit" class="submitButton" value="Sign up" style="text-align: center; cursor: pointer;" /><br/>
+                            <input type="submit" name="submit" id="submit" class="submitButton" value="Create Account" style="text-align: center; cursor: pointer;" /><br/>
                             <a href="dashboardManager.jsp"><div class="submitButton" style="margin-top: 16px; margin-left: 134px;">Return To DashBoard</div></a>
                             
                         </div>
