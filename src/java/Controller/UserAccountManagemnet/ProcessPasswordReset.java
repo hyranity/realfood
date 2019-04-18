@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.UserTransaction;
+import util.Email;
 import util.Hasher;
+import util.Notifier;
 
 /**
  *
@@ -95,6 +97,9 @@ public class ProcessPasswordReset extends HttpServlet {
                 em.merge(staff);
                 utx.commit();
                 
+                Email email = new Email(staff.getEmail(), "Password Reset Alert", "Your password has been reset recently. If that was you, great! But if it was not you, we suggest you change your email AND RealFood staff account now.");
+        email.sendEmail();
+                
                 
             } else if (type.equalsIgnoreCase("student")) {
                 // If user is staff, reset password of staff
@@ -103,13 +108,20 @@ public class ProcessPasswordReset extends HttpServlet {
                 stud.setPasswordsalt(hasher.getSalt());
                 utx.begin();
                 em.merge(stud);
+                System.out.println(stud.getCredits());
                 utx.commit();
+                
+                Email email = new Email(stud.getEmail(), "Password Reset Alert", "Your password has been reset recently. If that was you, great! But if it was not you, we suggest you change your email AND RealFood student account now.");
+        email.sendEmail();
+                
             } else {
                 //ERROR, unknown user detected
                 request.setAttribute("errorMsg", "Oops! Something went wrong during resetting password.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
+            
+
             
             //Password success
             System.out.println("Password reset!");
