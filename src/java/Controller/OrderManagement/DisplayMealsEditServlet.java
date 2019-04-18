@@ -120,12 +120,6 @@ public class DisplayMealsEditServlet extends HttpServlet {
                             count++;
                         }
                     }
-
-                    // Formatting when to show on new row
-                    if (i != 0 && i % 4 == 0 && i != mealList.size() - 1) {
-                        queryResult += "<tr>";
-                        fourCount++;
-                    }
                     
                      // Determine meal time (breakfast or lunch)
                     if(meal.getIsbreakfast() && meal.getIslunch()){

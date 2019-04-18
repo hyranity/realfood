@@ -106,7 +106,15 @@ public class ManageMealsServlet extends HttpServlet {
         
                     // Create the food components string
                     int count = 0;
+                    
+                    if(fourCount == 0){
+                            queryResult += "<tr>"; 
+                        }
+                        
+                    
                     for (int j = 0; j < meal.getMealfoodList().size(); j++) {
+                        
+                        
                         Mealfood mf = meal.getMealfoodList().get(j);
 
                         if (!mf.getIsdiscontinued()) {
@@ -117,12 +125,6 @@ public class ManageMealsServlet extends HttpServlet {
                             count++;
                             System.out.println(mf.getFoodid().getFoodname() + " , which discontinued = " + mf.getFoodid().getIsdiscontinued());
                         }
-                    }
-
-                    // Formatting when to show on new row
-                    if (i != 0 && i % 4 == 0 && i != mealList.size() - 1) {
-                        queryResult += "<tr>";
-                        fourCount++;
                     }
                     
                      // Determine meal time (breakfast or lunch)
@@ -150,6 +152,7 @@ public class ManageMealsServlet extends HttpServlet {
                     queryResult += "<td>\n"
                             + "                            <label class=\"meal\" for=\""+ meal.getMealid() +"\" " + discontinuedStyle +">\n"
                             + "                                <h5>"+ meal.getMealname() +"</h5>\n"
+                            +                                   + fourCount+"\n"
                             + "                                <div style=\"position: relative;\">\n"
                             + "                                    <h6 class=\""+ mealTimeClass +"\">"+ mealTime +"</h6>\n"
                             + "                                    <img src=\""+ meal.getMealimagelink()+"\" alt=\"\"/>\n"
@@ -165,7 +168,8 @@ public class ManageMealsServlet extends HttpServlet {
                             + "                                <a href=\"DisplayFoodSelectionServletForEdit?mealId="+ meal.getMealid() + "\"><div class=\"editMealButton\">Manage</div></a>\n"
                             + "                            </label>\n"
                             + "                        </td>";
-
+                    
+                    System.out.println(fourCount + " " + meal.getMealid());
                    if (fourCount == 4) {
                         queryResult += "</tr>";
                         fourCount = 0;
