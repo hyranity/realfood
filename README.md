@@ -3,7 +3,7 @@
 */ Welcome /*
 (if the table database does not work or got problem. Please open the CoreFiles and use sql.txt to create the table)
 
-1.First run the database which is the name is realfood
+1.First move the files to your derby, find and run the database which is call realfood
 2.The database username and password both are "taruc"
 3.To get dummy data in the database, please run AddDummyStudentData.java
 4.The AddDummyStudentData.java inside Source Packages and located in <default package>
